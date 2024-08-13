@@ -1,21 +1,17 @@
 import pygame
 
+from src.engine import Engine
+from src.screens.main_menu_screen import MainMenuScreen
+
 pygame.init()
-screen = pygame.display.set_mode((1280, 720), flags=pygame.RESIZABLE)
+
 clock = pygame.time.Clock()
-running = True
+window = pygame.display.set_mode((1280, 720), flags=pygame.RESIZABLE)
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+pygame.display.set_caption('Nonogram')
 
-    screen.fill("purple")
-
-    # render here
-
-    pygame.display.flip()
-
-    clock.tick(60)
+engine = Engine()
+engine.set_screen(MainMenuScreen(engine))
+engine.run(window, clock)
 
 pygame.quit()
