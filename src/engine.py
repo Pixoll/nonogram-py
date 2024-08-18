@@ -21,7 +21,9 @@ class Engine:
                     running = False
 
             window.fill("purple")
-            self.screen.render()
+            if self.screen:
+                self.screen.render()
+
             pygame.display.flip()
 
             clock.tick(60)
