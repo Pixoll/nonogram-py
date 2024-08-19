@@ -2,7 +2,6 @@ import pygame
 
 from src.screens.screen import Screen
 
-
 class Engine:
     screen: Screen
 
@@ -12,7 +11,7 @@ class Engine:
     def set_screen(self, screen: Screen) -> None:
         self.screen = screen
 
-    def run(self, window: pygame.Surface | pygame.SurfaceType, clock: pygame.time.Clock) -> None:
+    def run(self, window: pygame.Surface, clock: pygame.time.Clock) -> None:
         running = True
 
         while running:
@@ -20,10 +19,10 @@ class Engine:
                 if event.type == pygame.QUIT:
                     running = False
 
-            window.fill("purple")
-            if self.screen:
-                self.screen.render()
+                self.screen.run_logic(event)
 
+            window.fill("purple")
+            self.screen.render()
             pygame.display.flip()
 
             clock.tick(60)

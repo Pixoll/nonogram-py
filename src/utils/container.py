@@ -8,15 +8,17 @@ class Container(Element):
         self.size = size
         self.surface = pygame.Surface(size)
         self.background_color = (255, 255, 255)
+        self.border_color = (255, 255, 255)
+
         self.surface.fill(self.background_color)
+
+        pygame.draw.rect(self.surface, self.border_color, self.surface.get_rect(), 1)
 
         self.position = (0, 0)
         self.child = None
 
         self.area = Area((self.width, self.height))
         self.align = "center"
-
-        self.border_color = (0, 0, 0)
 
 
     """OPCIONES DE CONTAINER"""
