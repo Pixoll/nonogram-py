@@ -54,15 +54,3 @@ class Game:
             skipped = False
 
         return hints
-
-
-r = (255, 0, 0)
-g = (0, 255, 0)
-b = (0, 0, 255)
-n = None
-
-game = Game([
-    [n, b, r],
-    [n, g, n],
-    [b, r, n],
-])
