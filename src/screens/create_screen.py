@@ -22,7 +22,7 @@ class CreateScreen(Screen):
 
         self.menu.set_child(self.button1)
 
-    def run_logic(self, event: Event) -> None:
+    def on_event(self, event: Event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = pygame.mouse.get_pos()
 

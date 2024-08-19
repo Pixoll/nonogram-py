@@ -20,7 +20,7 @@ class MainMenuScreen(Screen):
         self.design.alignment("center")
 
 
-    def run_logic(self, event: Event) -> None:
+    def on_event(self, event: Event) -> None:
         pass
 
     def render(self) -> None:

@@ -2,6 +2,7 @@ import pygame
 
 from src.screens.screen import Screen
 
+
 class Engine:
     screen: Screen
 
@@ -16,10 +17,10 @@ class Engine:
 
         while running:
             for event in pygame.event.get():
+                self.screen.on_event(event)
+
                 if event.type == pygame.QUIT:
                     running = False
-
-                self.screen.run_logic(event)
 
             window.fill("purple")
             self.screen.render()

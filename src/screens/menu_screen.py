@@ -54,7 +54,7 @@ class MenuScreen(Screen):
         self.button2 = button2
         self.button3 = button3
 
-    def run_logic(self, event: Event) -> None:
+    def on_event(self, event: Event) -> None:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = pygame.mouse.get_pos()
 
