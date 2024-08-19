@@ -1,6 +1,6 @@
 import pygame
-from src.utils.area import Area
-from src.utils.element import Element
+from src.components.area import Area
+from src.components.element import Element
 
 class Container(Element):
     def __init__(self, size: tuple[int, int]):

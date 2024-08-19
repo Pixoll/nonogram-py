@@ -1,4 +1,4 @@
-# src/utils/area.py
+# src/components/area.py
 
 class Area:
     def __init__(self, dimensions: tuple[int, int]):

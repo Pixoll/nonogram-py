@@ -1,8 +1,8 @@
 from pygame.event import Event
 import pygame
 
-from src.utils.container import Container
-from src.utils.text import Text
+from src.components.container import Container
+from src.components.text import Text
 from src.engine import Engine
 from src.screens.screen import Screen
 

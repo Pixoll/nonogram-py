@@ -1,5 +1,5 @@
 import pygame
-from src.utils.element import Element
+from src.components.element import Element
 
 class Text(Element):
     def __init__(self, text: str, font: pygame.font.Font, color: tuple[int, int, int]):

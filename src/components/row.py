@@ -1,7 +1,6 @@
-from src.utils.element import Element
-from src.utils.area import Area
+from src.components.element import Element
 
-class Column(Element):
+class Row(Element):
     def __init__(self):
         super().__init__(0, 0)
         self.elements = []
@@ -9,15 +8,10 @@ class Column(Element):
         self.update_size()
 
 
-    """OPCIONES DE CONTAINER"""
+    """OPCIONES DE ROW"""
     def add_child(self, element: Element):
         self.elements.append(element)
         self.update_size()
-        self.__update_positions()
-
-    def set_position(self, new_position: tuple[int, int]):
-        self.position = new_position
-        self.__update_positions()
 
     def get_size(self) -> tuple[int, int]:
         return self.width, self.height
@@ -25,24 +19,28 @@ class Column(Element):
 
     """OPCIONES DE RENDER"""
     def render(self, window):
+        current_x = 0
         for element in self.elements:
+            element.set_position((self.position[0] + current_x, self.position[1]))
             element.render(window)
+            current_x += element.width
 
 
-    """FUNCIONES COMPLEMENTARIAS"""
-
+    """FUNCIONES DE COMPLEMENTARIAS"""
     def update_size(self):
         if not self.elements:
             self.width = 0
             self.height = 0
             return
+        self.width = sum(el.width for el in self.elements)
+        self.height = max(el.height for el in self.elements)
 
-        self.width = max(el.width for el in self.elements)
-        self.height = sum(el.height for el in self.elements)
+    def set_position(self, new_position: tuple[int, int]):
+        self.position = new_position
+        self.__update_positions()
 
     def __update_positions(self):
-        current_y = 0
+        current_x = 0
         for element in self.elements:
-            element_position = (self.position[0], self.position[1] + current_y)
-            element.set_position(element_position)
-            current_y += element.height
+            element.set_position((self.position[0] + current_x, self.position[1]))
+            current_x += element.width
