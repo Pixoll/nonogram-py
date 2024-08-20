@@ -39,7 +39,7 @@ class Engine:
     def _parse_event(event: pygame.event.Event) -> Event:
         match event.type:
             case pygame.QUIT:
-                return QuitEvent()
+                return QuitEvent(event)
             case pygame.KEYDOWN | pygame.KEYUP:
                 return KeyEvent(event)
             case _:

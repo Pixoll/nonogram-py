@@ -1,7 +1,8 @@
+from enum import Enum
+from typing import Literal, Self
+
 import pygame
 
-from typing import Literal, Self
-from enum import Enum
 from events.event_type import EventType
 
 
@@ -201,4 +202,4 @@ class KeyEvent:
         self.scancode = event.scancode
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}: {self.__dict__}>  "
+        return f"<{self.__class__.__name__}: {self.__dict__}>"

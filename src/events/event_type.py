@@ -1,12 +1,12 @@
-import pygame
-
 from enum import Enum
+
+import pygame
 
 
 class EventType(Enum):
     ACTIVE_EVENT = pygame.ACTIVEEVENT  # gain, state (DEPRECATED)
-    AUDIO_DEVICE_ADDED = pygame.AUDIODEVICEADDED  # which, iscapture (SDL backend >= 2.0.4)  
-    AUDIO_DEVICE_REMOVED = pygame.AUDIODEVICEREMOVED  # which, iscapture (SDL backend >= 2.0.4)  
+    AUDIO_DEVICE_ADDED = pygame.AUDIODEVICEADDED  # which, iscapture (SDL backend >= 2.0.4)
+    AUDIO_DEVICE_REMOVED = pygame.AUDIODEVICEREMOVED  # which, iscapture (SDL backend >= 2.0.4)
     CLIPBOARD_UPDATE = pygame.CLIPBOARDUPDATE  #
     CONTROLLER_DEVICE_ADDED = pygame.CONTROLLERDEVICEADDED  # device_index
     CONTROLLER_DEVICE_REMAPPED = pygame.CONTROLLERDEVICEREMAPPED  # instance_id
@@ -34,7 +34,7 @@ class EventType(Enum):
     MOUSE_BUTTON_DOWN = pygame.MOUSEBUTTONDOWN  # pos, button, touch
     MOUSE_BUTTON_UP = pygame.MOUSEBUTTONUP  # pos, button, touch
     MOUSE_MOTION = pygame.MOUSEMOTION  # pos, rel, buttons, touch
-    MOUSE_WHEEL = pygame.MOUSEWHEEL  # which, flipped, x, y, touch, precise_x, precise_y  
+    MOUSE_WHEEL = pygame.MOUSEWHEEL  # which, flipped, x, y, touch, precise_x, precise_y
     MULTI_GESTURE = pygame.MULTIGESTURE  # touch_id, x, y, pinched, rotated, num_fingers  
     QUIT = pygame.QUIT  # none
     RENDER_DEVICE_RESET = pygame.RENDER_DEVICE_RESET  # (SDL backend >= 2.0.4)
