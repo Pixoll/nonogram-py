@@ -28,8 +28,8 @@ class PlayScreen(Screen):
 
             if self.button1.position[0] <= mouse_pos[0] <= self.button1.position[0] + self.button1.width and \
                     self.button1.position[1] <= mouse_pos[1] <= self.button1.position[1] + self.button1.height:
-                from screens.menu_screen import MenuScreen  # Importación diferida
-                self.engine.set_screen(MenuScreen(self.engine))
+                from screens.main_menu_screen import MainMenuScreen  # Importación diferida
+                self.engine.set_screen(MainMenuScreen(self.engine))
 
     def on_key_event(self, key_event: KeyEvent) -> None:
         pass

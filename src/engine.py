@@ -29,7 +29,7 @@ class Engine:
                 if event.type == EventType.QUIT:
                     running = False
 
-            window.fill("purple")
+            window.fill("white")
             self.screen.render()
             pygame.display.flip()
 
