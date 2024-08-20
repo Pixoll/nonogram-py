@@ -60,8 +60,6 @@ type Event = (ActiveEvent
               | AudioDeviceEvent
               | ClipboardUpdateEvent
               | ControllerDeviceEvent
-              | ControllerDeviceRemappedEvent
-              | ControllerDeviceRemovedEvent
               | DropBeginEvent
               | DropCompleteEvent
               | DropFileEvent

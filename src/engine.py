@@ -44,12 +44,8 @@ class Engine:
                 return events.AudioDeviceEvent(event)
             case pygame.CLIPBOARDUPDATE:
                 return events.ClipboardUpdateEvent(event)
-            case pygame.CONTROLLERDEVICEADDED:
+            case pygame.CONTROLLERDEVICEADDED | pygame.CONTROLLERDEVICEREMAPPED | pygame.CONTROLLERDEVICEREMOVED:
                 return events.ControllerDeviceEvent(event)
-            case pygame.CONTROLLERDEVICEREMAPPED:
-                return events.ControllerDeviceRemappedEvent(event)
-            case pygame.CONTROLLERDEVICEREMOVED:
-                return events.ControllerDeviceRemovedEvent(event)
             case pygame.DROPBEGIN:
                 return events.DropBeginEvent(event)
             case pygame.DROPCOMPLETE:
