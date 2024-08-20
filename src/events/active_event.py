@@ -14,6 +14,10 @@ class State(Enum):
 
 
 class ActiveEvent:
+    """
+    **DEPRECATED**
+    """
+
     type: Literal[EventType.ACTIVE_EVENT]
     gain: bool
     state: State

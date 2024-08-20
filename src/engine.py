@@ -40,14 +40,12 @@ class Engine:
         match event.type:
             case pygame.ACTIVEEVENT:
                 return events.ActiveEvent(event)
-            case pygame.AUDIODEVICEADDED:
-                return events.AudioDeviceAddedEvent(event)
-            case pygame.AUDIODEVICEREMOVED:
-                return events.AudioDeviceRemovedEvent(event)
+            case pygame.AUDIODEVICEADDED | pygame.AUDIODEVICEREMOVED:
+                return events.AudioDeviceEvent(event)
             case pygame.CLIPBOARDUPDATE:
                 return events.ClipboardUpdateEvent(event)
             case pygame.CONTROLLERDEVICEADDED:
-                return events.ControllerDeviceAddedEvent(event)
+                return events.ControllerDeviceEvent(event)
             case pygame.CONTROLLERDEVICEREMAPPED:
                 return events.ControllerDeviceRemappedEvent(event)
             case pygame.CONTROLLERDEVICEREMOVED:

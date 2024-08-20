@@ -1,10 +1,7 @@
 from events.active_event import *
-from events.audio_device_added_event import *
-from events.audio_device_removed_event import *
+from events.audio_device_event import *
 from events.clipboard_update_event import *
-from events.controller_device_added_event import *
-from events.controller_device_remapped_event import *
-from events.controller_device_removed_event import *
+from events.controller_device_event import *
 from events.drop_begin_event import *
 from events.drop_complete_event import *
 from events.drop_file_event import *
@@ -60,10 +57,9 @@ from events.window_size_changed_event import *
 from events.window_take_focus_event import *
 
 type Event = (ActiveEvent
-              | AudioDeviceAddedEvent
-              | AudioDeviceRemovedEvent
+              | AudioDeviceEvent
               | ClipboardUpdateEvent
-              | ControllerDeviceAddedEvent
+              | ControllerDeviceEvent
               | ControllerDeviceRemappedEvent
               | ControllerDeviceRemovedEvent
               | DropBeginEvent

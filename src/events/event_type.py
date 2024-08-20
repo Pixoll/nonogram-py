@@ -26,6 +26,10 @@ class EventType(Enum):
     """
 
     CLIPBOARD_UPDATE = pygame.CLIPBOARDUPDATE
+    """
+    Attributes: none
+    """
+
     CONTROLLER_DEVICE_ADDED = pygame.CONTROLLERDEVICEADDED
     """
     Attributes: device_index
