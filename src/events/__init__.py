@@ -6,9 +6,7 @@ from events.drop_file_event import *
 from events.drop_status_event import *
 from events.drop_text_event import *
 from events.event_type import *
-from events.finger_down_event import *
-from events.finger_motion_event import *
-from events.finger_up_event import *
+from events.finger_event import *
 from events.joy_axis_motion_event import *
 from events.joy_ball_motion_event import *
 from events.joy_button_down_event import *
@@ -62,9 +60,7 @@ type Event = (ActiveEvent
               | DropFileEvent
               | DropStatusEvent
               | DropTextEvent
-              | FingerDownEvent
-              | FingerMotionEvent
-              | FingerUpEvent
+              | FingerEvent
               | JoyAxisMotionEvent
               | JoyBallMotionEvent
               | JoyButtonDownEvent

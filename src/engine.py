@@ -52,12 +52,8 @@ class Engine:
                 return events.DropFileEvent(event)
             case pygame.DROPTEXT:
                 return events.DropTextEvent(event)
-            case pygame.FINGERDOWN:
-                return events.FingerDownEvent(event)
-            case pygame.FINGERMOTION:
-                return events.FingerMotionEvent(event)
-            case pygame.FINGERUP:
-                return events.FingerUpEvent(event)
+            case pygame.FINGERDOWN | pygame.FINGERMOTION | pygame.FINGERUP:
+                return events.FingerEvent(event)
             case pygame.JOYAXISMOTION:
                 return events.JoyAxisMotionEvent(event)
             case pygame.JOYBALLMOTION:
