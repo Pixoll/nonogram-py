@@ -72,10 +72,8 @@ class Engine:
                 return events.LocaleChangedEvent()
             case pygame.MIDIIN | pygame.MIDIOUT:
                 return events.MidiEvent(event)
-            case pygame.MOUSEBUTTONDOWN:
-                return events.MouseButtonDownEvent(event)
-            case pygame.MOUSEBUTTONUP:
-                return events.MouseButtonUpEvent(event)
+            case pygame.MOUSEBUTTONDOWN | pygame.MOUSEBUTTONUP:
+                return events.MouseButtonEvent(event)
             case pygame.MOUSEMOTION:
                 return events.MouseMotionEvent(event)
             case pygame.MOUSEWHEEL:

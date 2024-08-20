@@ -16,8 +16,7 @@ from events.key_event import *
 from events.keymap_changed_event import *
 from events.locale_changed_event import *
 from events.midi_event import *
-from events.mouse_button_down_event import *
-from events.mouse_button_up_event import *
+from events.mouse_button_event import *
 from events.mouse_motion_event import *
 from events.mouse_wheel_event import *
 from events.multi_gesture_event import *
@@ -65,8 +64,7 @@ type Event = (ActiveEvent
               | KeyEvent
               | LocaleChangedEvent
               | MidiEvent
-              | MouseButtonDownEvent
-              | MouseButtonUpEvent
+              | MouseButtonEvent
               | MouseMotionEvent
               | MouseWheelEvent
               | MultiGestureEvent
