@@ -9,10 +9,8 @@ from events.event_type import *
 from events.finger_event import *
 from events.joy_axis_motion_event import *
 from events.joy_ball_motion_event import *
-from events.joy_button_down_event import *
-from events.joy_button_up_event import *
-from events.joy_device_added_event import *
-from events.joy_device_removed_event import *
+from events.joy_button_event import *
+from events.joy_device_event import *
 from events.joy_hat_motion_event import *
 from events.key_down_event import *
 from events.key_event import *
@@ -63,10 +61,8 @@ type Event = (ActiveEvent
               | FingerEvent
               | JoyAxisMotionEvent
               | JoyBallMotionEvent
-              | JoyButtonDownEvent
-              | JoyButtonUpEvent
-              | JoyDeviceAddedEvent
-              | JoyDeviceRemovedEvent
+              | JoyButtonEvent
+              | JoyDeviceEvent
               | JoyHatMotionEvent
               | KeymapChangedEvent
               | KeyDownEvent

@@ -5,6 +5,9 @@ from events.event_type import EventType
 
 class ClipboardUpdateEvent:
     type: Literal[EventType.CLIPBOARD_UPDATE]
+    """
+    EventType.CLIPBOARD_UPDATE
+    """
 
     def __init__(self):
         self.type = EventType.CLIPBOARD_UPDATE

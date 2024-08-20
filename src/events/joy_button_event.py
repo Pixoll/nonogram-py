@@ -5,10 +5,10 @@ from pygame.event import Event
 from events.event_type import EventType
 
 
-class JoyBallMotionEvent:
-    type: Literal[EventType.JOY_BALL_MOTION]
+class JoyButtonEvent:
+    type: Literal[EventType.JOY_BUTTON_DOWN] | Literal[EventType.JOY_BUTTON_UP]
     """
-    EventType.JOY_BALL_MOTION
+    Either EventType.JOY_BUTTON_DOWN or EventType.JOY_BUTTON_UP
     """
 
     instance_id: int
@@ -16,21 +16,15 @@ class JoyBallMotionEvent:
     The joystick instance id
     """
 
-    ball: int
+    button: int
     """
-    The joystick trackball index
-    """
-
-    rel: int
-    """
-    The relative motion
+    The joystick button index
     """
 
     def __init__(self, event: Event):
-        self.type = EventType.JOY_BALL_MOTION
+        self.type = EventType(event.type)
         self.instance_id = event.instance_id
-        self.ball = event.ball
-        self.rel = event.rel
+        self.button = event.button
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.__dict__}>"

@@ -58,14 +58,10 @@ class Engine:
                 return events.JoyAxisMotionEvent(event)
             case pygame.JOYBALLMOTION:
                 return events.JoyBallMotionEvent(event)
-            case pygame.JOYBUTTONDOWN:
-                return events.JoyButtonDownEvent(event)
-            case pygame.JOYBUTTONUP:
-                return events.JoyButtonUpEvent(event)
-            case pygame.JOYDEVICEADDED:
-                return events.JoyDeviceAddedEvent(event)
-            case pygame.JOYDEVICEREMOVED:
-                return events.JoyDeviceRemovedEvent(event)
+            case pygame.JOYBUTTONDOWN | pygame.JOYBUTTONUP:
+                return events.JoyButtonEvent(event)
+            case pygame.JOYDEVICEADDED | pygame.JOYDEVICEREMOVED:
+                return events.JoyDeviceEvent(event)
             case pygame.JOYHATMOTION:
                 return events.JoyHatMotionEvent(event)
             case pygame.KEYMAPCHANGED:

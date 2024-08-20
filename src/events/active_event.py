@@ -19,6 +19,10 @@ class ActiveEvent:
     """
 
     type: Literal[EventType.ACTIVE_EVENT]
+    """
+    EventType.ACTIVE_EVENT
+    """
+
     gain: bool
     state: State
 
