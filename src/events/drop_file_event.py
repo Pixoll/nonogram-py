@@ -7,7 +7,14 @@ from events.event_type import EventType
 
 class DropFileEvent:
     type: Literal[EventType.DROP_FILE]
-    file: Any
+    """
+    EventType.DROP_FILE
+    """
+
+    file: str
+    """
+    Path of the dropped file
+    """
 
     def __init__(self, event: Event):
         self.type = EventType.DROP_FILE

@@ -6,8 +6,19 @@ from events.event_type import EventType
 
 
 class DropTextEvent:
+    """
+    Only available on Linux with X11
+    """
+
     type: Literal[EventType.DROP_TEXT]
-    text: Any
+    """
+    EventType.DROP_TEXT
+    """
+
+    text: str
+    """
+    Plain text that was dropped
+    """
 
     def __init__(self, event: Event):
         self.type = EventType.DROP_TEXT

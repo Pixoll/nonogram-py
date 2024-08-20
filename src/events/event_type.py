@@ -62,7 +62,7 @@ class EventType(Enum):
 
     DROP_TEXT = pygame.DROPTEXT
     """
-    **SDL backend >= 2.0.5 | X11**
+    **SDL backend >= 2.0.5 | X11 | Linux**
     
     Attributes: text
     """

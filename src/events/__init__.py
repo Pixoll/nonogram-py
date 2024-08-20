@@ -2,9 +2,8 @@ from events.active_event import *
 from events.audio_device_event import *
 from events.clipboard_update_event import *
 from events.controller_device_event import *
-from events.drop_begin_event import *
-from events.drop_complete_event import *
 from events.drop_file_event import *
+from events.drop_status_event import *
 from events.drop_text_event import *
 from events.event_type import *
 from events.finger_down_event import *
@@ -60,9 +59,8 @@ type Event = (ActiveEvent
               | AudioDeviceEvent
               | ClipboardUpdateEvent
               | ControllerDeviceEvent
-              | DropBeginEvent
-              | DropCompleteEvent
               | DropFileEvent
+              | DropStatusEvent
               | DropTextEvent
               | FingerDownEvent
               | FingerMotionEvent

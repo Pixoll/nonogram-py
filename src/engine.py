@@ -46,10 +46,8 @@ class Engine:
                 return events.ClipboardUpdateEvent(event)
             case pygame.CONTROLLERDEVICEADDED | pygame.CONTROLLERDEVICEREMAPPED | pygame.CONTROLLERDEVICEREMOVED:
                 return events.ControllerDeviceEvent(event)
-            case pygame.DROPBEGIN:
-                return events.DropBeginEvent(event)
-            case pygame.DROPCOMPLETE:
-                return events.DropCompleteEvent(event)
+            case pygame.DROPBEGIN | pygame.DROPCOMPLETE:
+                return events.DropStatusEvent(event)
             case pygame.DROPFILE:
                 return events.DropFileEvent(event)
             case pygame.DROPTEXT:
