@@ -1,11 +1,10 @@
-from pygame.event import Event
 import pygame
 
-from src.components.container import Container
-from src.components.text import Text
-from src.engine import Engine
-from src.screens.screen import Screen
-from src.events import Event, QuitEvent, KeyEvent
+from components.container import Container
+from components.text import Text
+from engine import Engine
+from screens.screen import Screen
+from events import Event, QuitEvent, KeyEvent
 
 
 class PlayScreen(Screen):
@@ -29,7 +28,7 @@ class PlayScreen(Screen):
 
             if self.button1.position[0] <= mouse_pos[0] <= self.button1.position[0] + self.button1.width and \
                     self.button1.position[1] <= mouse_pos[1] <= self.button1.position[1] + self.button1.height:
-                from src.screens.menu_screen import MenuScreen  # Importación diferida
+                from screens.menu_screen import MenuScreen  # Importación diferida
                 self.engine.set_screen(MenuScreen(self.engine))
 
     def on_key_event(self, key_event: KeyEvent) -> None:

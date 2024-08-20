@@ -1,5 +1,6 @@
 import pygame
-from src.components.element import Element
+
+from components.element import Element
 
 
 class Text(Element):

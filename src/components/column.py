@@ -1,4 +1,4 @@
-from src.components.element import Element
+from components.element import Element
 
 
 class Column(Element):

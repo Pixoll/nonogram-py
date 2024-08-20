@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.events import Event, KeyEvent, QuitEvent
+from events import Event, KeyEvent, QuitEvent
 
 
 class Screen(ABC):

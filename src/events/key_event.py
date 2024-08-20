@@ -2,7 +2,7 @@ import pygame
 
 from typing import Literal, Self
 from enum import Enum
-from src.events.event_type import EventType
+from events.event_type import EventType
 
 
 class Key(Enum):

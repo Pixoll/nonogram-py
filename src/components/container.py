@@ -1,6 +1,7 @@
 import pygame
-from src.components.area import Area
-from src.components.element import Element
+
+from components.area import Area
+from components.element import Element
 
 
 class Container(Element):
@@ -64,6 +65,8 @@ class Container(Element):
     def __update_position(self):
         if self.child:
             obj_size = self.child.get_size()
+            aux: tuple[int, int] = (0, 0)
+
             if self.align == "center":
                 aux = self.area.center(obj_size)
             elif self.align == "topCenter":

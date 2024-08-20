@@ -1,6 +1,6 @@
 from typing import Literal
 
-from src.events.event_type import EventType
+from events.event_type import EventType
 
 
 class QuitEvent:

@@ -1,9 +1,9 @@
 import pygame
 
-from src.components.container import Container
-from src.engine import Engine
-from src.screens.screen import Screen
-from src.events import Event, QuitEvent, KeyEvent
+from components import Container
+from engine import Engine
+from screens.screen import Screen
+from events import Event, QuitEvent, KeyEvent
 
 
 class MainMenuScreen(Screen):

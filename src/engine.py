@@ -1,8 +1,7 @@
 import pygame
 
-from events import QuitEvent, KeyEvent, EventType
-from src.events import Event
-from src.screens.screen import Screen
+from events import Event, EventType, KeyEvent, QuitEvent
+from screens.screen import Screen
 
 
 class Engine:

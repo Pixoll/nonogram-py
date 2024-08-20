@@ -1,7 +1,7 @@
 import pygame
 
-from src.engine import Engine
-from src.screens.menu_screen import MenuScreen
+from engine import Engine
+from screens.menu_screen import MenuScreen
 
 pygame.init()
 
