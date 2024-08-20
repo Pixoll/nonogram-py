@@ -3,8 +3,8 @@ import pygame
 from components.container import Container
 from components.text import Text
 from engine import Engine
+from events import Event, EventType, KeyEvent, QuitEvent
 from screens.screen import Screen
-from events import Event, QuitEvent, KeyEvent
 
 
 class PlayScreen(Screen):
@@ -23,7 +23,7 @@ class PlayScreen(Screen):
         self.menu.set_child(self.button1)
 
     def on_event(self, event: Event) -> None:
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # Detecta clic izquierdo
+        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == 1:  # Detecta clic izquierdo
             mouse_pos = pygame.mouse.get_pos()
 
             if self.button1.position[0] <= mouse_pos[0] <= self.button1.position[0] + self.button1.width and \

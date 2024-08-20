@@ -59,4 +59,62 @@ from events.window_shown_event import *
 from events.window_size_changed_event import *
 from events.window_take_focus_event import *
 
-type Event = ActiveEvent | AudioDeviceAddedEvent | AudioDeviceRemovedEvent | ClipboardUpdateEvent | ControllerDeviceAddedEvent | ControllerDeviceRemappedEvent | ControllerDeviceRemovedEvent | DropBeginEvent | DropCompleteEvent | DropFileEvent | DropTextEvent | FingerDownEvent | FingerMotionEvent | FingerUpEvent | JoyAxisMotionEvent | JoyBallMotionEvent | JoyButtonDownEvent | JoyButtonUpEvent | JoyDeviceAddedEvent | JoyDeviceRemovedEvent | JoyHatMotionEvent | KeymapChangedEvent | KeyDownEvent | KeyEvent | KeyUpEvent | LocaleChangedEvent | MidiInEvent | MidiOutEvent | MouseButtonDownEvent | MouseButtonUpEvent | MouseMotionEvent | MouseWheelEvent | MultiGestureEvent | QuitEvent | RenderDeviceResetEvent | RenderTargetsResetEvent | TextEditingEvent | TextInputEvent | UserEvent | VideoExposeEvent | VideoResizeEvent | WindowCloseEvent | WindowDisplayChangedEvent | WindowEnterEvent | WindowExposedEvent | WindowFocusGainedEvent | WindowFocusLostEvent | WindowHiddenEvent | WindowHitTestEvent | WindowIccProfileChangedEvent | WindowLeaveEvent | WindowMaximizedEvent | WindowMinimizedEvent | WindowMovedEvent | WindowResizedEvent | WindowRestoredEvent | WindowShownEvent | WindowSizeChangedEvent | WindowTakeFocusEvent | pygame.event.Event
+type Event = (ActiveEvent
+              | AudioDeviceAddedEvent
+              | AudioDeviceRemovedEvent
+              | ClipboardUpdateEvent
+              | ControllerDeviceAddedEvent
+              | ControllerDeviceRemappedEvent
+              | ControllerDeviceRemovedEvent
+              | DropBeginEvent
+              | DropCompleteEvent
+              | DropFileEvent
+              | DropTextEvent
+              | FingerDownEvent
+              | FingerMotionEvent
+              | FingerUpEvent
+              | JoyAxisMotionEvent
+              | JoyBallMotionEvent
+              | JoyButtonDownEvent
+              | JoyButtonUpEvent
+              | JoyDeviceAddedEvent
+              | JoyDeviceRemovedEvent
+              | JoyHatMotionEvent
+              | KeymapChangedEvent
+              | KeyDownEvent
+              | KeyEvent
+              | KeyUpEvent
+              | LocaleChangedEvent
+              | MidiInEvent
+              | MidiOutEvent
+              | MouseButtonDownEvent
+              | MouseButtonUpEvent
+              | MouseMotionEvent
+              | MouseWheelEvent
+              | MultiGestureEvent
+              | QuitEvent
+              | RenderDeviceResetEvent
+              | RenderTargetsResetEvent
+              | TextEditingEvent
+              | TextInputEvent
+              | UserEvent
+              | VideoExposeEvent
+              | VideoResizeEvent
+              | WindowCloseEvent
+              | WindowDisplayChangedEvent
+              | WindowEnterEvent
+              | WindowExposedEvent
+              | WindowFocusGainedEvent
+              | WindowFocusLostEvent
+              | WindowHiddenEvent
+              | WindowHitTestEvent
+              | WindowIccProfileChangedEvent
+              | WindowLeaveEvent
+              | WindowMaximizedEvent
+              | WindowMinimizedEvent
+              | WindowMovedEvent
+              | WindowResizedEvent
+              | WindowRestoredEvent
+              | WindowShownEvent
+              | WindowSizeChangedEvent
+              | WindowTakeFocusEvent)

@@ -20,8 +20,8 @@ class EventType(Enum):
     FINGER_UP = pygame.FINGERUP  # touch_id, finger_id, x, y, dx, dy  
     JOY_AXIS_MOTION = pygame.JOYAXISMOTION  # instance_id, axis, value
     JOY_BALL_MOTION = pygame.JOYBALLMOTION  # instance_id, ball, rel
-    JOY_BUTTON_UP = pygame.JOYBUTTONUP  # instance_id, button
     JOY_BUTTON_DOWN = pygame.JOYBUTTONDOWN  # instance_id, button
+    JOY_BUTTON_UP = pygame.JOYBUTTONUP  # instance_id, button
     JOY_DEVICE_ADDED = pygame.JOYDEVICEADDED  # device_index
     JOY_DEVICE_REMOVED = pygame.JOYDEVICEREMOVED  # instance_id
     JOY_HAT_MOTION = pygame.JOYHATMOTION  # instance_id, hat, value
