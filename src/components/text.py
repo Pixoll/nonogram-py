@@ -1,6 +1,7 @@
 import pygame
 from src.components.element import Element
 
+
 class Text(Element):
     def __init__(self, text: str, font: pygame.font.Font, color: tuple[int, int, int]):
         self.text = text
@@ -17,8 +18,8 @@ class Text(Element):
     def render(self, window):
         window.blit(self.text_surface, self.position)
 
-
     """OPCIONES DE TEXTO"""
+
     def get_size(self) -> tuple[int, int]:
         return self.width, self.height
 

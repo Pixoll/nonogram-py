@@ -1,10 +1,10 @@
-from pygame.event import Event
 import pygame
 
 from src.components.container import Container
 from src.components.text import Text
 from src.engine import Engine
 from src.screens.screen import Screen
+from src.events import Event, QuitEvent, KeyEvent
 
 
 class SettingsScreen(Screen):
@@ -18,7 +18,7 @@ class SettingsScreen(Screen):
         self.button1 = Container((200, 100))
         self.button1.set_color((207, 178, 171))
         self.button1.set_border((0, 0, 0))
-        self.button1.set_child(Text("CTM", pygame.font.SysFont('Arial', 30),(0, 0, 0)))
+        self.button1.set_child(Text("CTM", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
 
         self.menu.set_child(self.button1)
 
@@ -30,6 +30,12 @@ class SettingsScreen(Screen):
                     self.button1.position[1] <= mouse_pos[1] <= self.button1.position[1] + self.button1.height:
                 from src.screens.menu_screen import MenuScreen
                 self.engine.set_screen(MenuScreen(self.engine))
+
+    def on_key_event(self, key_event: KeyEvent) -> None:
+        pass
+
+    def on_quit_event(self, key_event: QuitEvent) -> None:
+        pass
 
     def render(self) -> None:
         window = pygame.display.get_surface()

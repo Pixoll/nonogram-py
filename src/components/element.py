@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Element(ABC):
     def __init__(self, width: int, height: int):
         self.width = width

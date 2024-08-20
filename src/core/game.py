@@ -11,7 +11,7 @@ class Hint:
         self.color = color
 
     def __repr__(self):
-        return f'Hint({self.value}, {self.color})'
+        return f"Hint({self.value}, {self.color})  "
 
 
 class Game:

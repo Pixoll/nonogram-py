@@ -1,4 +1,3 @@
-from pygame.event import Event
 import pygame
 
 from src.components.column import Column
@@ -6,6 +5,7 @@ from src.components.container import Container
 from src.components.text import Text
 from src.engine import Engine
 from src.screens.screen import Screen
+from src.events import Event, QuitEvent, KeyEvent
 
 
 class MenuScreen(Screen):
@@ -18,7 +18,7 @@ class MenuScreen(Screen):
         self.menu.alignment("center")
 
         title1 = Container((200, 100))
-        text = Text("NANOGRAM", pygame.font.SysFont('Arial', 30),(99, 99, 224))
+        text = Text("NANOGRAM", pygame.font.SysFont("Arial", 30), (99, 99, 224))
         text.set_color((152, 99, 224))
         title1.set_child(text)
         title1.set_border((255, 255, 255))
@@ -26,18 +26,17 @@ class MenuScreen(Screen):
         button1 = Container((200, 100))
         button1.set_color((207, 178, 171))
         button1.set_border((0, 0, 0))
-        button1.set_child(Text("PLAY", pygame.font.SysFont('Arial', 30),(0, 0, 0)))
+        button1.set_child(Text("PLAY", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
 
         button2 = Container((200, 100))
         button2.set_color((207, 224, 99))
         button2.set_border((0, 0, 0))
-        button2.set_child(Text("CREATE PUZZLE", pygame.font.SysFont('Arial', 30),(0, 0, 0)))
+        button2.set_child(Text("CREATE PUZZLE", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
 
         button3 = Container((200, 100))
         button3.set_color((224, 99, 159))
         button3.set_border((0, 0, 0))
-        button3.set_child(Text("SETTINGS", pygame.font.SysFont('Arial', 30),(0, 0, 0)))
-
+        button3.set_child(Text("SETTINGS", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
 
         column = Column()
         column.add_child(title1)
@@ -73,6 +72,11 @@ class MenuScreen(Screen):
                 from src.screens.settings_screen import SettingsScreen
                 self.engine.set_screen(SettingsScreen(self.engine))
 
+    def on_key_event(self, key_event: KeyEvent) -> None:
+        pass
+
+    def on_quit_event(self, key_event: QuitEvent) -> None:
+        pass
 
     def render(self) -> None:
         window = pygame.display.get_surface()

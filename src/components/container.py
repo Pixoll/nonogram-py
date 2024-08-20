@@ -2,6 +2,7 @@ import pygame
 from src.components.area import Area
 from src.components.element import Element
 
+
 class Container(Element):
     def __init__(self, size: tuple[int, int]):
         super().__init__(size[0], size[1])
@@ -20,8 +21,8 @@ class Container(Element):
         self.area = Area((self.width, self.height))
         self.align = "center"
 
-
     """OPCIONES DE CONTAINER"""
+
     def set_color(self, new_color: tuple[int, int, int]):
         self.background_color = new_color
         self.surface.fill(self.background_color)
@@ -51,15 +52,15 @@ class Container(Element):
             self.align = alignment
             self.__update_position()
 
-
     """OPCIONES DE RENDER"""
+
     def render(self, window: pygame.Surface):
         window.blit(self.surface, self.position)
         if self.child:
             self.child.render(window)
 
-
     """FUNCIONES COMPLEMENTARIA"""
+
     def __update_position(self):
         if self.child:
             obj_size = self.child.get_size()

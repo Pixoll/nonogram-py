@@ -1,12 +1,9 @@
-from pygame.event import Event
 import pygame
 
-from src.components.column import Column
 from src.components.container import Container
-from src.components.text import Text
-from src.components.row import Row
 from src.engine import Engine
 from src.screens.screen import Screen
+from src.events import Event, QuitEvent, KeyEvent
 
 
 class MainMenuScreen(Screen):
@@ -19,8 +16,13 @@ class MainMenuScreen(Screen):
         self.design.set_color((0, 255, 255))
         self.design.alignment("center")
 
-
     def on_event(self, event: Event) -> None:
+        pass
+
+    def on_key_event(self, key_event: KeyEvent) -> None:
+        pass
+
+    def on_quit_event(self, key_event: QuitEvent) -> None:
         pass
 
     def render(self) -> None:

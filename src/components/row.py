@@ -1,5 +1,6 @@
 from src.components.element import Element
 
+
 class Row(Element):
     def __init__(self):
         super().__init__(0, 0)
@@ -7,8 +8,8 @@ class Row(Element):
         self.position = (0, 0)
         self.update_size()
 
-
     """OPCIONES DE ROW"""
+
     def add_child(self, element: Element):
         self.elements.append(element)
         self.update_size()
@@ -16,8 +17,8 @@ class Row(Element):
     def get_size(self) -> tuple[int, int]:
         return self.width, self.height
 
-
     """OPCIONES DE RENDER"""
+
     def render(self, window):
         current_x = 0
         for element in self.elements:
@@ -25,8 +26,8 @@ class Row(Element):
             element.render(window)
             current_x += element.width
 
-
     """FUNCIONES DE COMPLEMENTARIAS"""
+
     def update_size(self):
         if not self.elements:
             self.width = 0

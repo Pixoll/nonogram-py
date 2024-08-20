@@ -1,5 +1,5 @@
 from src.components.element import Element
-from src.components.area import Area
+
 
 class Column(Element):
     def __init__(self):
@@ -8,8 +8,8 @@ class Column(Element):
         self.position = (0, 0)
         self.update_size()
 
-
     """OPCIONES DE CONTAINER"""
+
     def add_child(self, element: Element):
         self.elements.append(element)
         self.update_size()
@@ -22,12 +22,11 @@ class Column(Element):
     def get_size(self) -> tuple[int, int]:
         return self.width, self.height
 
-
     """OPCIONES DE RENDER"""
+
     def render(self, window):
         for element in self.elements:
             element.render(window)
-
 
     """FUNCIONES COMPLEMENTARIAS"""
 
