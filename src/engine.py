@@ -66,10 +66,8 @@ class Engine:
                 return events.JoyHatMotionEvent(event)
             case pygame.KEYMAPCHANGED:
                 return events.KeymapChangedEvent(event)
-            case pygame.KEYDOWN:
-                return events.KeyDownEvent(event)
-            case pygame.KEYUP:
-                return events.KeyUpEvent(event)
+            case pygame.KEYDOWN | pygame.KEYUP:
+                return events.KeyEvent(event)
             case pygame.LOCALECHANGED:
                 return events.LocaleChangedEvent(event)
             case pygame.MIDIIN:

@@ -12,9 +12,7 @@ from events.joy_ball_motion_event import *
 from events.joy_button_event import *
 from events.joy_device_event import *
 from events.joy_hat_motion_event import *
-from events.key_down_event import *
 from events.key_event import *
-from events.key_up_event import *
 from events.keymap_changed_event import *
 from events.locale_changed_event import *
 from events.midi_in_event import *
@@ -65,9 +63,7 @@ type Event = (ActiveEvent
               | JoyDeviceEvent
               | JoyHatMotionEvent
               | KeymapChangedEvent
-              | KeyDownEvent
               | KeyEvent
-              | KeyUpEvent
               | LocaleChangedEvent
               | MidiInEvent
               | MidiOutEvent
