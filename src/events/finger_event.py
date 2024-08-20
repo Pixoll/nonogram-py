@@ -1,6 +1,5 @@
 from typing import Literal
 
-import pygame
 from pygame.event import Event
 
 from events.event_type import EventType
@@ -43,14 +42,7 @@ class FingerEvent:
     """
 
     def __init__(self, event: Event):
-        match event.type:
-            case pygame.FINGERDOWN:
-                self.type = EventType.FINGER_DOWN
-            case pygame.FINGERMOTION:
-                self.type = EventType.FINGER_MOTION
-            case pygame.FINGERUP:
-                self.type = EventType.FINGER_UP
-
+        self.type = EventType(event.type)
         self.touch_id = event.touch_id
         self.finger_id = event.finger_id
         self.x = event.x

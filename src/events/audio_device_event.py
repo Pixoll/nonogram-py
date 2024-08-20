@@ -1,6 +1,5 @@
 from typing import Literal
 
-import pygame
 from pygame.event import Event
 
 from events.event_type import EventType
@@ -25,8 +24,7 @@ class AudioDeviceEvent:
     """
 
     def __init__(self, event: Event):
-        self.type = (EventType.AUDIO_DEVICE_ADDED if event.type == pygame.AUDIODEVICEADDED
-                     else EventType.AUDIO_DEVICE_REMOVED)
+        self.type = EventType(event.type)
         self.which = event.which
         self.is_capture = event.iscapture
 

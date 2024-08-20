@@ -1,6 +1,5 @@
 from typing import Literal
 
-import pygame
 from pygame.event import Event
 
 from events.event_type import EventType
@@ -21,14 +20,7 @@ class ControllerDeviceEvent:
     """
 
     def __init__(self, event: Event):
-        match event.type:
-            case pygame.CONTROLLERDEVICEADDED:
-                self.type: EventType.CONTROLLER_DEVICE_ADDED
-            case pygame.CONTROLLERDEVICEREMAPPED:
-                self.type: EventType.CONTROLLER_DEVICE_REMAPPED
-            case pygame.CONTROLLERDEVICEREMOVED:
-                self.type: EventType.CONTROLLER_DEVICE_REMOVED
-
+        self.type = EventType(event.type)
         self.which = event.device_index if self.type == EventType.CONTROLLER_DEVICE_ADDED else event.instance_id
 
     def __repr__(self):

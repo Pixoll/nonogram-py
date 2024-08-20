@@ -1,14 +1,12 @@
 from typing import Literal
 
-from pygame.event import Event
-
 from events.event_type import EventType
 
 
 class ClipboardUpdateEvent:
     type: Literal[EventType.CLIPBOARD_UPDATE]
 
-    def __init__(self, event: Event):
+    def __init__(self):
         self.type = EventType.CLIPBOARD_UPDATE
 
     def __repr__(self):
