@@ -5,15 +5,13 @@ from pygame.event import Event
 from events.event_type import EventType
 
 
-class ActiveEventEvent:
-    type: Literal[EventType.ACTIVE_EVENT]
-    gain: Any
-    state: Any
+class UserEvent:
+    type: Literal[EventType.USER_EVENT]
+    code: Any
 
     def __init__(self, event: Event):
-        self.type = EventType.ACTIVE_EVENT
-        self.gain = event.gain
-        self.state = event.state
+        self.type = EventType.USER_EVENT
+        self.code = event.code
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.__dict__}>"
