@@ -34,7 +34,7 @@ class JoyAxisMotionEvent:
 
     value: float
     """
-    The axis value (range: -32768 to 32767)
+    The axis value (range: -1.0 to 1.0)
     """
 
     def __init__(self, event: Event):
