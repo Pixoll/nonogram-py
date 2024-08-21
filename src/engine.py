@@ -1,6 +1,7 @@
 import pygame
 
 import events
+from events import EventType
 from screens.screen import Screen
 
 
@@ -21,8 +22,13 @@ class Engine:
 
         while running:
             for raw_event in pygame.event.get():
+                print(raw_event)
                 event = Engine._parse_event(raw_event)
                 print(event)
+                print()
+
+                if event is None:
+                    continue
 
                 self.screen.on_event(event)
 
@@ -36,7 +42,7 @@ class Engine:
             clock.tick(60)
 
     @staticmethod
-    def _parse_event(event: pygame.event.Event) -> events.Event:
+    def _parse_event(event: pygame.event.Event) -> events.Event | None:
         match event.type:
             case pygame.ACTIVEEVENT:
                 return events.ActiveEvent(event)
@@ -115,3 +121,6 @@ class Engine:
                   | pygame.WINDOWSIZECHANGED
                   | pygame.WINDOWTAKEFOCUS):
                 return events.WindowEvent(event)
+            case _:
+                print(f"Unknown event: {event}")
+                return None
