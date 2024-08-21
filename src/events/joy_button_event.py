@@ -8,6 +8,7 @@ from events.event_type import EventType
 
 
 class JoyButton(Enum):
+    INVALID = pygame.CONTROLLER_BUTTON_INVALID
     A = pygame.CONTROLLER_BUTTON_A
     B = pygame.CONTROLLER_BUTTON_B
     X = pygame.CONTROLLER_BUTTON_X

@@ -11,11 +11,11 @@ class JoyHat(Enum):
     CENTERED = pygame.HAT_CENTERED
     DOWN = pygame.HAT_DOWN
     LEFT = pygame.HAT_LEFT
-    LEFTDOWN = pygame.HAT_LEFTDOWN
-    LEFTUP = pygame.HAT_LEFTUP
+    LEFT_DOWN = pygame.HAT_LEFTDOWN
+    LEFT_UP = pygame.HAT_LEFTUP
     RIGHT = pygame.HAT_RIGHT
-    RIGHTDOWN = pygame.HAT_RIGHTDOWN
-    RIGHTUP = pygame.HAT_RIGHTUP
+    RIGHT_DOWN = pygame.HAT_RIGHTDOWN
+    RIGHT_UP = pygame.HAT_RIGHTUP
     UP = pygame.HAT_UP
 
 
