@@ -1,14 +1,15 @@
-from typing import Any, Literal
-
-from pygame.event import Event
+from typing import Literal
 
 from events.event_type import EventType
 
 
 class KeymapChangedEvent:
     type: Literal[EventType.KEYMAP_CHANGED]
+    """
+    EventType.KEYMAP_CHANGED
+    """
 
-    def __init__(self, event: Event):
+    def __init__(self):
         self.type = EventType.KEYMAP_CHANGED
 
     def __repr__(self):

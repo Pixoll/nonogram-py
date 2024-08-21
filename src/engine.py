@@ -70,7 +70,7 @@ class Engine:
             case pygame.JOYHATMOTION:
                 return events.JoyHatMotionEvent(event)
             case pygame.KEYMAPCHANGED:
-                return events.KeymapChangedEvent(event)
+                return events.KeymapChangedEvent()
             case pygame.KEYDOWN | pygame.KEYUP:
                 return events.KeyEvent(event)
             case pygame.LOCALECHANGED:
