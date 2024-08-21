@@ -7,6 +7,7 @@ from events.event_type import EventType
 
 
 class Key(Enum):
+    INVALID = -1
     N0 = pygame.K_0
     N1 = pygame.K_1
     N2 = pygame.K_2
@@ -162,6 +163,7 @@ class Key(Enum):
 
 
 class KeyScan(Enum):
+    INVALID = -1
     N0 = pygame.KSCAN_0
     N1 = pygame.KSCAN_1
     N2 = pygame.KSCAN_2
@@ -361,6 +363,11 @@ class KeyEvent:
     Key that was pressed
     """
 
+    key_code: int
+    """
+    Code of the key that was pressed
+    """
+
     mods: list[KeyMod]
     """
     All the modifiers that were pressed
@@ -376,17 +383,33 @@ class KeyEvent:
     The physical location of a key
     """
 
+    scancode_code: int
+    """
+    The code of the physical location of a key
+    """
+
     def __init__(self, event: pygame.event.Event):
         self.type = EventType(event.type)
-        self.key = Key(event.key)
 
+        try:
+            self.key = Key(event.key)
+        except ValueError:
+            self.key = Key.INVALID
+
+        self.key_code = event.key
         self.mod = []
         for mod in list(KeyMod):
             if event.mod & mod != 0:
                 self.mod.append(mod)
 
         self.unicode = event.unicode
-        self.scancode = KeyScan(event.scancode)
+
+        try:
+            self.scancode = KeyScan(event.scancode)
+        except ValueError:
+            self.scancode = KeyScan.INVALID
+
+        self.scancode_code = event.scancode
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.__dict__}>"
