@@ -161,6 +161,164 @@ class Key(Enum):
     Z = pygame.K_z
 
 
+class KeyScan(Enum):
+    N0 = pygame.KSCAN_0
+    N1 = pygame.KSCAN_1
+    N2 = pygame.KSCAN_2
+    N3 = pygame.KSCAN_3
+    N4 = pygame.KSCAN_4
+    N5 = pygame.KSCAN_5
+    N6 = pygame.KSCAN_6
+    N7 = pygame.KSCAN_7
+    N8 = pygame.KSCAN_8
+    N9 = pygame.KSCAN_9
+    A = pygame.KSCAN_A
+    AC_BACK = pygame.KSCAN_AC_BACK
+    APOSTROPHE = pygame.KSCAN_APOSTROPHE
+    B = pygame.KSCAN_B
+    BACKSLASH = pygame.KSCAN_BACKSLASH
+    BACKSPACE = pygame.KSCAN_BACKSPACE
+    BREAK = pygame.KSCAN_BREAK
+    C = pygame.KSCAN_C
+    CAPSLOCK = pygame.KSCAN_CAPSLOCK
+    CLEAR = pygame.KSCAN_CLEAR
+    COMMA = pygame.KSCAN_COMMA
+    CURRENCY_SUBUNIT = pygame.KSCAN_CURRENCYSUBUNIT
+    CURRENCY_UNIT = pygame.KSCAN_CURRENCYUNIT
+    D = pygame.KSCAN_D
+    DELETE = pygame.KSCAN_DELETE
+    DOWN = pygame.KSCAN_DOWN
+    E = pygame.KSCAN_E
+    END = pygame.KSCAN_END
+    EQUALS = pygame.KSCAN_EQUALS
+    ESCAPE = pygame.KSCAN_ESCAPE
+    EURO = pygame.KSCAN_EURO
+    F = pygame.KSCAN_F
+    F1 = pygame.KSCAN_F1
+    F10 = pygame.KSCAN_F10
+    F11 = pygame.KSCAN_F11
+    F12 = pygame.KSCAN_F12
+    F13 = pygame.KSCAN_F13
+    F14 = pygame.KSCAN_F14
+    F15 = pygame.KSCAN_F15
+    F2 = pygame.KSCAN_F2
+    F3 = pygame.KSCAN_F3
+    F4 = pygame.KSCAN_F4
+    F5 = pygame.KSCAN_F5
+    F6 = pygame.KSCAN_F6
+    F7 = pygame.KSCAN_F7
+    F8 = pygame.KSCAN_F8
+    F9 = pygame.KSCAN_F9
+    G = pygame.KSCAN_G
+    GRAVE = pygame.KSCAN_GRAVE
+    H = pygame.KSCAN_H
+    HELP = pygame.KSCAN_HELP
+    HOME = pygame.KSCAN_HOME
+    I = pygame.KSCAN_I
+    INSERT = pygame.KSCAN_INSERT
+    INTERNATIONAL1 = pygame.KSCAN_INTERNATIONAL1
+    INTERNATIONAL2 = pygame.KSCAN_INTERNATIONAL2
+    INTERNATIONAL3 = pygame.KSCAN_INTERNATIONAL3
+    INTERNATIONAL4 = pygame.KSCAN_INTERNATIONAL4
+    INTERNATIONAL5 = pygame.KSCAN_INTERNATIONAL5
+    INTERNATIONAL6 = pygame.KSCAN_INTERNATIONAL6
+    INTERNATIONAL7 = pygame.KSCAN_INTERNATIONAL7
+    INTERNATIONAL8 = pygame.KSCAN_INTERNATIONAL8
+    INTERNATIONAL9 = pygame.KSCAN_INTERNATIONAL9
+    J = pygame.KSCAN_J
+    K = pygame.KSCAN_K
+    KP0 = pygame.KSCAN_KP0
+    KP1 = pygame.KSCAN_KP1
+    KP2 = pygame.KSCAN_KP2
+    KP3 = pygame.KSCAN_KP3
+    KP4 = pygame.KSCAN_KP4
+    KP5 = pygame.KSCAN_KP5
+    KP6 = pygame.KSCAN_KP6
+    KP7 = pygame.KSCAN_KP7
+    KP8 = pygame.KSCAN_KP8
+    KP9 = pygame.KSCAN_KP9
+    KP_0 = pygame.KSCAN_KP_0
+    KP_1 = pygame.KSCAN_KP_1
+    KP_2 = pygame.KSCAN_KP_2
+    KP_3 = pygame.KSCAN_KP_3
+    KP_4 = pygame.KSCAN_KP_4
+    KP_5 = pygame.KSCAN_KP_5
+    KP_6 = pygame.KSCAN_KP_6
+    KP_7 = pygame.KSCAN_KP_7
+    KP_8 = pygame.KSCAN_KP_8
+    KP_9 = pygame.KSCAN_KP_9
+    KP_DIVIDE = pygame.KSCAN_KP_DIVIDE
+    KP_ENTER = pygame.KSCAN_KP_ENTER
+    KP_EQUALS = pygame.KSCAN_KP_EQUALS
+    KP_MINUS = pygame.KSCAN_KP_MINUS
+    KP_MULTIPLY = pygame.KSCAN_KP_MULTIPLY
+    KP_PERIOD = pygame.KSCAN_KP_PERIOD
+    KP_PLUS = pygame.KSCAN_KP_PLUS
+    L = pygame.KSCAN_L
+    L_ALT = pygame.KSCAN_LALT
+    LANG1 = pygame.KSCAN_LANG1
+    LANG2 = pygame.KSCAN_LANG2
+    LANG3 = pygame.KSCAN_LANG3
+    LANG4 = pygame.KSCAN_LANG4
+    LANG5 = pygame.KSCAN_LANG5
+    LANG6 = pygame.KSCAN_LANG6
+    LANG7 = pygame.KSCAN_LANG7
+    LANG8 = pygame.KSCAN_LANG8
+    LANG9 = pygame.KSCAN_LANG9
+    L_CTRL = pygame.KSCAN_LCTRL
+    LEFT = pygame.KSCAN_LEFT
+    LEFT_BRACKET = pygame.KSCAN_LEFTBRACKET
+    L_GUI = pygame.KSCAN_LGUI
+    L_META = pygame.KSCAN_LMETA
+    L_SHIFT = pygame.KSCAN_LSHIFT
+    L_SUPER = pygame.KSCAN_LSUPER
+    M = pygame.KSCAN_M
+    MENU = pygame.KSCAN_MENU
+    MINUS = pygame.KSCAN_MINUS
+    MODE = pygame.KSCAN_MODE
+    N = pygame.KSCAN_N
+    NON_US_BACKSLASH = pygame.KSCAN_NONUSBACKSLASH
+    NON_US_HASH = pygame.KSCAN_NONUSHASH
+    NUM_LOCK = pygame.KSCAN_NUMLOCK
+    NUM_LOCK_CLEAR = pygame.KSCAN_NUMLOCKCLEAR
+    O = pygame.KSCAN_O
+    P = pygame.KSCAN_P
+    PAGEDOWN = pygame.KSCAN_PAGEDOWN
+    PAGEUP = pygame.KSCAN_PAGEUP
+    PAUSE = pygame.KSCAN_PAUSE
+    PERIOD = pygame.KSCAN_PERIOD
+    POWER = pygame.KSCAN_POWER
+    PRINT = pygame.KSCAN_PRINT
+    PRINT_SCREEN = pygame.KSCAN_PRINTSCREEN
+    Q = pygame.KSCAN_Q
+    R = pygame.KSCAN_R
+    R_ALT = pygame.KSCAN_RALT
+    R_CTRL = pygame.KSCAN_RCTRL
+    RETURN = pygame.KSCAN_RETURN
+    R_GUI = pygame.KSCAN_RGUI
+    RIGHT = pygame.KSCAN_RIGHT
+    RIGHT_BRACKET = pygame.KSCAN_RIGHTBRACKET
+    R_META = pygame.KSCAN_RMETA
+    R_SHIFT = pygame.KSCAN_RSHIFT
+    R_SUPER = pygame.KSCAN_RSUPER
+    S = pygame.KSCAN_S
+    SCROLL_LOCK = pygame.KSCAN_SCROLLLOCK
+    SEMICOLON = pygame.KSCAN_SEMICOLON
+    SLASH = pygame.KSCAN_SLASH
+    SPACE = pygame.KSCAN_SPACE
+    SYS_REQ = pygame.KSCAN_SYSREQ
+    T = pygame.KSCAN_T
+    TAB = pygame.KSCAN_TAB
+    U = pygame.KSCAN_U
+    UNKNOWN = pygame.KSCAN_UNKNOWN
+    UP = pygame.KSCAN_UP
+    V = pygame.KSCAN_V
+    W = pygame.KSCAN_W
+    X = pygame.KSCAN_X
+    Y = pygame.KSCAN_Y
+    Z = pygame.KSCAN_Z
+
+
 class KeyMod(Enum):
     NONE = pygame.KMOD_NONE  # no modifier keys pressed
     L_SHIFT = pygame.KMOD_LSHIFT  # left shift
@@ -213,7 +371,7 @@ class KeyEvent:
     16-bit unicode value of the key
     """
 
-    scancode: int
+    scancode: KeyScan
     """
     The physical location of a key
     """
@@ -228,7 +386,7 @@ class KeyEvent:
                 self.mod.append(mod)
 
         self.unicode = event.unicode
-        self.scancode = event.scancode
+        self.scancode = KeyScan(event.scancode)
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.__dict__}>"
