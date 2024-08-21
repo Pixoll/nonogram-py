@@ -1,8 +1,22 @@
+from enum import Enum, auto
 from typing import Literal
 
 from pygame.event import Event
 
 from events.event_type import EventType
+
+
+class JoyButton(Enum):
+    A = 0
+    B = auto()
+    X = auto()
+    Y = auto()
+    LEFT_SHOULDER = auto()
+    RIGHT_SHOULDER = auto()
+    BACK = auto()
+    START = auto()
+    LEFT_STICK = auto()
+    RIGHT_STICK = auto()
 
 
 class JoyButtonEvent:
@@ -16,15 +30,15 @@ class JoyButtonEvent:
     The joystick instance id
     """
 
-    button: int
+    button: JoyButton
     """
-    The joystick button index
+    The joystick button
     """
 
     def __init__(self, event: Event):
         self.type = EventType(event.type)
         self.instance_id = event.instance_id
-        self.button = event.button
+        self.button = JoyButton(event.button)
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.__dict__}>"
