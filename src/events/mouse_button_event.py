@@ -1,8 +1,20 @@
+from enum import Enum, auto
 from typing import Literal
 
+import pygame
 from pygame.event import Event
 
 from events.event_type import EventType
+
+
+class MouseButton(Enum):
+    LEFT = pygame.BUTTON_LEFT
+    MIDDLE = pygame.BUTTON_MIDDLE
+    RIGHT = pygame.BUTTON_RIGHT
+    WHEEL_DOWN = pygame.BUTTON_WHEELDOWN
+    WHEEL_UP = pygame.BUTTON_WHEELUP
+    X1 = pygame.BUTTON_X1
+    X2 = pygame.BUTTON_X2
 
 
 class MouseButtonEvent:
@@ -21,9 +33,9 @@ class MouseButtonEvent:
     Y coordinate, relative to window
     """
 
-    button: int
+    button: MouseButton
     """
-    The mouse button index
+    The mouse button
     """
 
     touch: bool
@@ -35,7 +47,7 @@ class MouseButtonEvent:
         self.type = EventType(event.type)
         self.x = event.pos[0]
         self.y = event.pos[1]
-        self.button = event.button
+        self.button = MouseButton(event.button)
         self.touch = event.touch
 
     def __repr__(self):
