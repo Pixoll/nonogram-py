@@ -81,11 +81,11 @@ class Engine:
             case pygame.MULTIGESTURE:
                 return events.MultiGestureEvent(event)
             case pygame.QUIT:
-                return events.QuitEvent(event)
+                return events.QuitEvent()
             case pygame.RENDER_DEVICE_RESET:
-                return events.RenderDeviceResetEvent(event)
+                return events.RenderDeviceResetEvent()
             case pygame.RENDER_TARGETS_RESET:
-                return events.RenderTargetsResetEvent(event)
+                return events.RenderTargetsResetEvent()
             case pygame.TEXTEDITING:
                 return events.TextEditingEvent(event)
             case pygame.TEXTINPUT:
@@ -93,7 +93,7 @@ class Engine:
             case pygame.USEREVENT:
                 return events.UserEvent(event)
             case pygame.VIDEOEXPOSE:
-                return events.VideoExposeEvent(event)
+                return events.VideoExposeEvent()
             case pygame.VIDEORESIZE:
                 return events.VideoResizeEvent(event)
             case pygame.WINDOWCLOSE:

@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Literal
 
 from pygame.event import Event
 
@@ -7,13 +7,22 @@ from events.event_type import EventType
 
 class VideoResizeEvent:
     type: Literal[EventType.VIDEO_RESIZE]
-    size: Any
-    w: Any
-    h: Any
+    """
+    EventType.VIDEO_RESIZE
+    """
+
+    w: int
+    """
+    New video width
+    """
+
+    h: int
+    """
+    New video height
+    """
 
     def __init__(self, event: Event):
         self.type = EventType.VIDEO_RESIZE
-        self.size = event.size
         self.w = event.w
         self.h = event.h
 

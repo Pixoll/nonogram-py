@@ -7,12 +7,20 @@ from events.event_type import EventType
 
 class MultiGestureEvent:
     type: Literal[EventType.MULTI_GESTURE]
-    touch_id: Any
-    x: Any
-    y: Any
+    """
+    EventType.MULTI_GESTURE
+    """
+
+    touch_id: int
+    """
+    The touch device id
+    """
+
+    x: float
+    y: float
     pinched: Any
     rotated: Any
-    num_fingers: Any
+    num_fingers: int
 
     def __init__(self, event: Event):
         self.type = EventType.MULTI_GESTURE

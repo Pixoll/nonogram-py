@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Literal
 
 from pygame.event import Event
 
@@ -7,7 +7,14 @@ from events.event_type import EventType
 
 class UserEvent:
     type: Literal[EventType.USER_EVENT]
-    code: Any
+    """
+    EventType.USER_EVENT
+    """
+
+    code: int
+    """
+    User defined event code
+    """
 
     def __init__(self, event: Event):
         self.type = EventType.USER_EVENT

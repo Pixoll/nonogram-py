@@ -1,14 +1,15 @@
-from typing import Any, Literal
-
-from pygame.event import Event
+from typing import Literal
 
 from events.event_type import EventType
 
 
 class RenderDeviceResetEvent:
     type: Literal[EventType.RENDER_DEVICE_RESET]
+    """
+    EventType.RENDER_DEVICE_RESET
+    """
 
-    def __init__(self, event: Event):
+    def __init__(self):
         self.type = EventType.RENDER_DEVICE_RESET
 
     def __repr__(self):
