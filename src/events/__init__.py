@@ -28,24 +28,7 @@ from events.text_input_event import *
 from events.user_event import *
 from events.video_expose_event import *
 from events.video_resize_event import *
-from events.window_close_event import *
-from events.window_display_changed_event import *
-from events.window_enter_event import *
-from events.window_exposed_event import *
-from events.window_focus_gained_event import *
-from events.window_focus_lost_event import *
-from events.window_hidden_event import *
-from events.window_hit_test_event import *
-from events.window_icc_profile_changed_event import *
-from events.window_leave_event import *
-from events.window_maximized_event import *
-from events.window_minimized_event import *
-from events.window_moved_event import *
-from events.window_resized_event import *
-from events.window_restored_event import *
-from events.window_shown_event import *
-from events.window_size_changed_event import *
-from events.window_take_focus_event import *
+from events.window_event import *
 
 type Event = (ActiveEvent
               | AudioDeviceEvent
@@ -76,21 +59,4 @@ type Event = (ActiveEvent
               | UserEvent
               | VideoExposeEvent
               | VideoResizeEvent
-              | WindowCloseEvent
-              | WindowDisplayChangedEvent
-              | WindowEnterEvent
-              | WindowExposedEvent
-              | WindowFocusGainedEvent
-              | WindowFocusLostEvent
-              | WindowHiddenEvent
-              | WindowHitTestEvent
-              | WindowIccProfileChangedEvent
-              | WindowLeaveEvent
-              | WindowMaximizedEvent
-              | WindowMinimizedEvent
-              | WindowMovedEvent
-              | WindowResizedEvent
-              | WindowRestoredEvent
-              | WindowShownEvent
-              | WindowSizeChangedEvent
-              | WindowTakeFocusEvent)
+              | WindowEvent)
