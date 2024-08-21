@@ -1,8 +1,22 @@
+from enum import Enum
 from typing import Literal
 
+import pygame
 from pygame.event import Event
 
 from events.event_type import EventType
+
+
+class JoyHat(Enum):
+    CENTERED = pygame.HAT_CENTERED
+    DOWN = pygame.HAT_DOWN
+    LEFT = pygame.HAT_LEFT
+    LEFTDOWN = pygame.HAT_LEFTDOWN
+    LEFTUP = pygame.HAT_LEFTUP
+    RIGHT = pygame.HAT_RIGHT
+    RIGHTDOWN = pygame.HAT_RIGHTDOWN
+    RIGHTUP = pygame.HAT_RIGHTUP
+    UP = pygame.HAT_UP
 
 
 class JoyHatMotionEvent:
@@ -16,9 +30,9 @@ class JoyHatMotionEvent:
     The joystick instance id
     """
 
-    hat: int
+    hat: JoyHat
     """
-    The joystick hat index
+    The joystick hat
     """
 
     value: tuple[int, int]
@@ -29,7 +43,7 @@ class JoyHatMotionEvent:
     def __init__(self, event: Event):
         self.type = EventType.JOY_HAT_MOTION
         self.instance_id = event.instance_id
-        self.hat = event.hat
+        self.hat = JoyHat(event.hat)
         self.value = event.value
 
     def __repr__(self):
