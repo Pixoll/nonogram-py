@@ -89,7 +89,7 @@ class EventType(Enum):
 
     JOY_BALL_MOTION = pygame.JOYBALLMOTION
     """
-    Attributes: instance_id, ball, rel
+    Attributes: instance_id, ball, rel_x, rel_y
     """
 
     JOY_BUTTON_DOWN = pygame.JOYBUTTONDOWN
@@ -124,12 +124,12 @@ class EventType(Enum):
 
     KEY_DOWN = pygame.KEYDOWN
     """
-    Attributes: key, mod, unicode, scancode
+    Attributes: key, mods, unicode, scancode
     """
 
     KEY_UP = pygame.KEYUP
     """
-    Attributes: key, mod, unicode, scancode
+    Attributes: key, mods, unicode, scancode
     """
 
     LOCALE_CHANGED = pygame.LOCALECHANGED
@@ -149,17 +149,17 @@ class EventType(Enum):
 
     MOUSE_BUTTON_DOWN = pygame.MOUSEBUTTONDOWN
     """
-    Attributes: pos, button, touch
+    Attributes: x, y, button, touch
     """
 
     MOUSE_BUTTON_UP = pygame.MOUSEBUTTONUP
     """
-    Attributes: pos, button, touch
+    Attributes: x, y, button, touch
     """
 
     MOUSE_MOTION = pygame.MOUSEMOTION
     """
-    Attributes: pos, rel, buttons, touch
+    Attributes: x, y, rel_x, rel_y, buttons, touch
     """
 
     MOUSE_WHEEL = pygame.MOUSEWHEEL
