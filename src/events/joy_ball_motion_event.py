@@ -35,8 +35,7 @@ class JoyBallMotionEvent:
         self.type = EventType.JOY_BALL_MOTION
         self.instance_id = event.instance_id
         self.ball = event.ball
-        self.rel_x = event.rel[0]
-        self.rel_y = event.rel[1]
+        [self.rel_x, self.rel_y] = event.rel
 
     def __repr__(self):
         return f"<{self.__class__.__name__}: {self.__dict__}>"

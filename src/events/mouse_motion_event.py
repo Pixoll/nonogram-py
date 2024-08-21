@@ -39,9 +39,9 @@ class MouseMotionEvent:
 
     def __init__(self, event: Event):
         self.type = EventType.MOUSE_MOTION
-        self.pos = event.pos
-        self.rel = event.rel
         self.buttons = event.buttons
+        [self.x, self.y] = event.pos
+        [self.rel_x, self.rel_y] = event.rel
         self.touch = event.touch
 
     def __repr__(self):
