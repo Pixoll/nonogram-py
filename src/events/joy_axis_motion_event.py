@@ -1,19 +1,21 @@
-from enum import Enum, auto
+from enum import Enum
 from typing import Literal
 
+import pygame
 from pygame.event import Event
 
 from events.event_type import EventType
 
 
 class JoyAxis(Enum):
-    LEFT_X = 0
-    LEFT_Y = auto()
-    RIGHT_X = auto()
-    RIGHT_Y = auto()
-    TRIGGER_LEFT = auto()
-    TRIGGER_RIGHT = auto()
-    MAX = auto()
+    INVALID = pygame.CONTROLLER_AXIS_INVALID
+    LEFT_X = pygame.CONTROLLER_AXIS_LEFTX
+    LEFT_Y = pygame.CONTROLLER_AXIS_LEFTY
+    RIGHT_X = pygame.CONTROLLER_AXIS_RIGHTX
+    RIGHT_Y = pygame.CONTROLLER_AXIS_RIGHTY
+    TRIGGER_LEFT = pygame.CONTROLLER_AXIS_TRIGGERLEFT
+    TRIGGER_RIGHT = pygame.CONTROLLER_AXIS_TRIGGERRIGHT
+    MAX = pygame.CONTROLLER_AXIS_MAX
 
 
 class JoyAxisMotionEvent:
