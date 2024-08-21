@@ -164,7 +164,13 @@ class KeyMod(Enum):
     def __or__(self, other: Self | int) -> int:
         return self.value | (other if type(other) is int else other.value)
 
+    def __ror__(self, other: Self | int) -> int:
+        return self.value | (other if type(other) is int else other.value)
+
     def __and__(self, other: int) -> int:
+        return self.value & other
+
+    def __rand__(self, other: int) -> int:
         return self.value & other
 
 
@@ -179,9 +185,9 @@ class KeyEvent:
     Key that was pressed
     """
 
-    mod: int
+    mods: list[KeyMod]
     """
-    Obtained from OR-ing with different KeyMods
+    All the modifiers that were pressed
     """
 
     unicode: str | int
@@ -197,7 +203,12 @@ class KeyEvent:
     def __init__(self, event: pygame.event.Event):
         self.type = EventType(event.type)
         self.key = Key(event.key)
-        self.mod = event.mod
+
+        self.mod = []
+        for mod in list(KeyMod):
+            if event.mod & mod != 0:
+                self.mod.append(mod)
+
         self.unicode = event.unicode
         self.scancode = event.scancode
 

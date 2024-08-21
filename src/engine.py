@@ -1,7 +1,6 @@
 import pygame
 
 import events
-from events import EventType
 from screens.screen import Screen
 
 
