@@ -22,7 +22,7 @@ class JoyHatMotionEvent:
     The joystick hat index
     """
 
-    value: int
+    value: tuple[int, int]
     """
     The hat position value
     """
