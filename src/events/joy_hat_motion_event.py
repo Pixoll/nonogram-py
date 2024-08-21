@@ -1,6 +1,5 @@
-from typing import Any, Literal
+from typing import Literal
 
-import pygame
 from pygame.event import Event
 
 from events.event_type import EventType

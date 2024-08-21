@@ -29,7 +29,7 @@ class JoyAxisMotionEvent:
 
     axis: JoyAxis
     """
-    The joystick axis index 
+    The joystick axis 
     """
 
     value: float
