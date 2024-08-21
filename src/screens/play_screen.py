@@ -1,7 +1,6 @@
 import pygame
 
-from components.container import Container
-from components.text import Text
+from components import Container, Text
 from engine import Engine
 from events import Event, EventType, KeyEvent, QuitEvent
 from screens.screen import Screen
