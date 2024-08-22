@@ -1,8 +1,8 @@
 import pygame
 
-from components import Column, Container, Text
+from components import Column, Container, Text, Row, row
 from engine import Engine
-from events import Event, EventType, KeyEvent, QuitEvent
+from events import Event, EventType, KeyEvent, QuitEvent, MouseButton
 from screens.screen import Screen
 
 
@@ -11,48 +11,70 @@ class MainMenuScreen(Screen):
 
     def __init__(self, engine: Engine):
         self.engine = engine
+        self.height = engine.get_window_size()[1]
+        self.width = engine.get_window_size()[0]
 
-        self.menu = Container((1280, 720))
-        self.menu.alignment("center")
+        self.base = Container((self.width, self.height))
+        self.base.alignment("center")
+        self.base.set_border((0, 132, 134))
+        self.base.set_color((0, 132, 134))
 
-        title1 = Container((200, 100))
-        text = Text("NANOGRAM", pygame.font.SysFont("Arial", 30), (99, 99, 224))
+        # OPCIONES DE MENU
+        column1 = Column()
+        column2 = Column()
+
+        title = Container((self.width * 0.3, self.height * 0.2))
+        text = Text("NANOGRAM", pygame.font.SysFont("Arial", 50), (99, 99, 224))
         text.set_color((152, 99, 224))
-        title1.set_child(text)
-        title1.set_border((255, 255, 255))
+        title.set_child(text)
+        title.set_border((255, 255, 255))
+        title.set_color((207, 224, 99))
+        column1.add_child(title)
 
-        button1 = Container((200, 100))
-        button1.set_color((207, 178, 171))
-        button1.set_border((0, 0, 0))
-        button1.set_child(Text("PLAY", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        self.button1 = Container((self.width * 0.3, self.height * 0.1))
+        self.button1.set_color((207, 178, 171))
+        self.button1.set_border((0, 0, 0))
+        self.button1.set_child(Text("PLAY", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        column2.add_child(self.button1)
 
-        button2 = Container((200, 100))
-        button2.set_color((207, 224, 99))
-        button2.set_border((0, 0, 0))
-        button2.set_child(Text("CREATE PUZZLE", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        self.button2 = Container((self.width * 0.3, self.height * 0.1))
+        self.button2.set_color((207, 224, 99))
+        self.button2.set_border((0, 0, 0))
+        self.button2.set_child(Text("CREATE PUZZLE", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        column2.add_child(self.button2)
 
-        button3 = Container((200, 100))
-        button3.set_color((224, 99, 159))
-        button3.set_border((0, 0, 0))
-        button3.set_child(Text("SETTINGS", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        self.button3 = Container((self.width * 0.3, self.height * 0.1))
+        self.button3.set_color((224, 99, 159))
+        self.button3.set_border((0, 0, 0))
+        self.button3.set_child(Text("SETTINGS", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        column2.add_child(self.button3)
 
-        column = Column()
-        column.add_child(title1)
-        column.add_child(Container((25, 50)))
-        column.add_child(button1)
-        column.add_child(Container((25, 25)))
-        column.add_child(button2)
-        column.add_child(Container((25, 25)))
-        column.add_child(button3)
+        column1.add_child(column2)
 
-        self.menu.set_child(column)
+        column1.set_separation(self.height * 0.2)
+        column2.set_separation(self.height * 0.03)
 
-        self.button1 = button1
-        self.button2 = button2
-        self.button3 = button3
+
+        # CONTAINERS Y ROWS QUE DIVIDEN EL MENU PRINCIPAL
+        container1 = Container((self.width * 0.3, self.height))
+        container1.set_border((0, 132, 134))
+        container1.set_color((0, 132, 134))
+        container1.set_child(column1)
+
+        container2 = Container((self.width * 0.5, self.height))
+        container2.set_border((0, 132, 134))
+        container2.set_color((0, 132, 134))
+
+        self.row1 = Row()
+        self.row1.add_child(container1)
+        self.row1.add_child(container2)
+        self.row1.set_separation(self.width * 0.03)
+
+        self.base.set_child(self.row1)
+
 
     def on_event(self, event: Event) -> None:
-        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == 1:
+        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:
             mouse_pos = pygame.mouse.get_pos()
 
             if self.button1.position[0] <= mouse_pos[0] <= self.button1.position[0] + self.button1.width and \
@@ -78,4 +100,4 @@ class MainMenuScreen(Screen):
 
     def render(self) -> None:
         window = pygame.display.get_surface()
-        self.menu.render(window)
+        self.base.render(window)

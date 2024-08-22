@@ -10,7 +10,8 @@ window = pygame.display.set_mode((1280, 720), flags=pygame.RESIZABLE)
 
 pygame.display.set_caption("Nonogram")
 
-engine = Engine()
+# Inicializa el Engine pasándole la ventana
+engine = Engine(window)
 engine.set_screen(MainMenuScreen(engine))
 engine.run(window, clock)
 

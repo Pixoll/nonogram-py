@@ -1,17 +1,18 @@
 import pygame
-
 import events
 from screens.screen import Screen
-
 
 class Engine:
     screen: Screen
 
-    def __init__(self):
-        pass
+    def __init__(self, window: pygame.Surface):
+        self.window_size = window.get_size()
 
     def set_screen(self, screen: Screen) -> None:
         self.screen = screen
+
+    def get_window_size(self) -> tuple[int, int]:
+        return self.window_size
 
     def run(self, window: pygame.Surface, clock: pygame.time.Clock) -> None:
         if not hasattr(self, "screen"):
@@ -34,7 +35,7 @@ class Engine:
                 if event.type == events.EventType.QUIT:
                     running = False
 
-            window.fill("white")
+            window.fill("purple")
             self.screen.render()
             pygame.display.flip()
 

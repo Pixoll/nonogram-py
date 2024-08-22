@@ -1,47 +1,53 @@
-from components.element import Element
-
+from components import Element
 
 class Column(Element):
     def __init__(self):
         super().__init__(0, 0)
         self.elements = []
         self.position = (0, 0)
-        self.update_size()
+        self.__update_size()
+        self.separation = 0
 
-    """OPCIONES DE CONTAINER"""
-
+    """OPCIONES DE COLUMN"""
     def add_child(self, element: Element):
         self.elements.append(element)
-        self.update_size()
+        self.__update_size()
         self.__update_positions()
 
     def set_position(self, new_position: tuple[int, int]):
         self.position = new_position
         self.__update_positions()
 
+    def set_separation(self, val: int):
+        self.separation = val
+        self.__update_positions()
+        self.__update_size()
+
     def get_size(self) -> tuple[int, int]:
         return self.width, self.height
 
-    """OPCIONES DE RENDER"""
+    def get_childs(self) -> list[Element]:
+        return self.elements
 
+
+    """OPCIONES DE RENDER"""
     def render(self, window):
         for element in self.elements:
             element.render(window)
 
-    """FUNCIONES COMPLEMENTARIAS"""
 
-    def update_size(self):
+    """FUNCIONES COMPLEMENTARIAS"""
+    def __update_size(self):
         if not self.elements:
             self.width = 0
             self.height = 0
             return
-
         self.width = max(el.width for el in self.elements)
-        self.height = sum(el.height for el in self.elements)
+        self.height = sum(el.height for el in self.elements) + self.separation*(len(self.elements)-1)
 
     def __update_positions(self):
         current_y = 0
         for element in self.elements:
             element_position = (self.position[0], self.position[1] + current_y)
             element.set_position(element_position)
-            current_y += element.height
+            current_y += element.height + self.separation

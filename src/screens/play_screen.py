@@ -1,9 +1,12 @@
+from pygame.event import Event
 import pygame
 
-from components import Container, Text
+from components.container import Container
+from components.board import Board
 from engine import Engine
-from events import Event, EventType, KeyEvent, QuitEvent
 from screens.screen import Screen
+from events import Event, EventType, KeyEvent, QuitEvent, MouseButton
+
 
 
 class PlayScreen(Screen):
@@ -13,22 +16,11 @@ class PlayScreen(Screen):
         self.engine = engine
         self.menu = Container((1280, 720))
         self.menu.alignment("center")
-
-        self.button1 = Container((200, 100))
-        self.button1.set_color((207, 178, 171))
-        self.button1.set_border((0, 0, 0))
-        self.button1.set_child(Text("JUEGUEN", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
-
-        self.menu.set_child(self.button1)
+        self.board = Board(5, 50, 5)
+        self.menu.set_child(self.board)
 
     def on_event(self, event: Event) -> None:
-        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == 1:  # Detecta clic izquierdo
-            mouse_pos = pygame.mouse.get_pos()
-
-            if self.button1.position[0] <= mouse_pos[0] <= self.button1.position[0] + self.button1.width and \
-                    self.button1.position[1] <= mouse_pos[1] <= self.button1.position[1] + self.button1.height:
-                from screens.main_menu_screen import MainMenuScreen  # Importación diferida
-                self.engine.set_screen(MainMenuScreen(self.engine))
+        self.board.run_logic(event)
 
     def on_key_event(self, key_event: KeyEvent) -> None:
         pass

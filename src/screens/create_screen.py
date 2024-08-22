@@ -2,7 +2,7 @@ import pygame
 
 from components import Container, Text
 from engine import Engine
-from events import Event, EventType, KeyEvent, QuitEvent
+from events import Event, EventType, KeyEvent, QuitEvent, MouseButton
 from screens.screen import Screen
 
 
@@ -22,7 +22,7 @@ class CreateScreen(Screen):
         self.menu.set_child(self.button1)
 
     def on_event(self, event: Event) -> None:
-        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == 1:
+        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:
             mouse_pos = pygame.mouse.get_pos()
 
             if self.button1.position[0] <= mouse_pos[0] <= self.button1.position[0] + self.button1.width and \

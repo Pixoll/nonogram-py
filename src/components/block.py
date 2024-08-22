@@ -1,14 +1,17 @@
 import pygame
-from components import Area
-from components import Element
+from components.area import Area
+from components.element import Element
+from pygame.event import Event
+from events import Event, EventType, MouseButton
 
-class Container(Element):
+
+class Block(Element):
     def __init__(self, size: tuple[int, int]):
         super().__init__(size[0], size[1])
         self.size = size
         self.surface = pygame.Surface(size)
         self.background_color = (255, 255, 255)
-        self.border_color = (255, 255, 255)
+        self.border_color = (0, 0, 0)
 
         self.surface.fill(self.background_color)
 
@@ -19,6 +22,9 @@ class Container(Element):
 
         self.area = Area((self.width, self.height))
         self.align = "center"
+
+        self.state = 0
+        self.x_mark_visible = False  # Estado para la marca de "X"
 
 
     """OPCIONES DE CONTAINER"""
@@ -51,6 +57,25 @@ class Container(Element):
             self.align = alignment
             self.__update_position()
 
+    def change_state(self, state: int):
+        if state == 1:
+            if self.state == 1:
+                self.state = 0
+                self.set_color((255, 255, 255))
+            else:
+                if self.state == 3:
+                    self.toggle_x_mark()
+                self.state = 1
+                self.set_color((0, 0, 0))
+        else:
+            if self.state == 3:
+                self.toggle_x_mark()
+                self.state = 0
+                self.set_color((255, 255, 255))
+            else:
+                self.state = 3
+                self.set_color((255, 255, 255))
+                self.toggle_x_mark()
 
     """OPCIONES DE RENDER"""
     def render(self, window: pygame.Surface):
@@ -58,6 +83,30 @@ class Container(Element):
         if self.child:
             self.child.render(window)
 
+    def toggle_x_mark(self):
+        if self.x_mark_visible:
+            self.surface.fill(self.background_color)
+            pygame.draw.rect(self.surface, self.border_color, self.surface.get_rect(), 1)
+            self.x_mark_visible = False
+        else:
+            center_x, center_y = self.surface.get_width() // 2, self.surface.get_height() // 2
+            pygame.draw.line(self.surface, (0, 0, 0), (center_x - 10, center_y - 10), (center_x + 10, center_y + 10), 3)
+            pygame.draw.line(self.surface, (0, 0, 0), (center_x + 10, center_y - 10), (center_x - 10, center_y + 10), 3)
+            self.x_mark_visible = True
+
+    def on_event(self, event: Event) -> None:
+        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:
+            mouse_pos = pygame.mouse.get_pos()
+
+            if self.position[0] <= mouse_pos[0] <= self.position[0] + self.width and \
+                    self.position[1] <= mouse_pos[1] <= self.position[1] + self.height:
+                self.change_state(1)
+        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.RIGHT:
+            mouse_pos = pygame.mouse.get_pos()
+
+            if self.position[0] <= mouse_pos[0] <= self.position[0] + self.width and \
+                    self.position[1] <= mouse_pos[1] <= self.position[1] + self.height:
+                self.change_state(0)
 
     """FUNCIONES COMPLEMENTARIA"""
     def __update_position(self):
