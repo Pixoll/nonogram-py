@@ -13,7 +13,10 @@ class Nonogram:
             self._color = color
 
         def __repr__(self):
-            return f"Hint({self._value}, {self._color})"
+            br, bg, bb = self._color
+            luminance = br * 0.2126 + bg * 0.7152 + bb * 0.0722
+            fr, fg, fb = (255, 255, 255) if luminance < 140 else (0, 0, 0)
+            return f"{Nonogram.Hint.__name__} \033[48;2;{br};{bg};{bb}m\033[38;2;{fr};{fg};{fb}m {self._value} \033[0m"
 
         @property
         def value(self) -> int:
@@ -46,16 +49,41 @@ class Nonogram:
         self._used_colors = tuple(used_colors)
 
     def __repr__(self):
-        title = f"Nonogram {self._size[0]}x{self._size[1]}:"
-        offset = len(title) + 1
-        grid = "\n".join(
-            " " * offset + "".join(
-                "   " if cell is None
-                else " ❌ " if cell == "x"
-                else f"\033[48;2;{cell[0]};{cell[1]};{cell[2]}m   \033[0m"
-                for cell in row
-            ) for row in self._player_grid
-        )
+        title = f"{Nonogram.__name__} {self._size[0]}x{self._size[1]}:"
+        max_horizontal_hints = max(len(hints) for hints in self._horizontal_hints)
+        max_vertical_hints = max(len(hints) for hints in self._vertical_hints)
+        grid = ""
+
+        for i in reversed(range(max_vertical_hints)):
+            grid += " " * max_horizontal_hints * 3
+
+            for hints in self._vertical_hints:
+                if len(hints) > 0 and i < len(hints):
+                    grid += hints[i].__repr__().replace(Nonogram.Hint.__name__ + " ", "")
+                else:
+                    grid += "   "
+
+            grid += "\n"
+
+        for y in range(self._size[1]):
+            hints = self._horizontal_hints[y]
+            for i in reversed(range(max_horizontal_hints)):
+                if len(hints) > 0 and i < len(hints):
+                    grid += hints[i].__repr__().replace(Nonogram.Hint.__name__ + " ", "")
+                else:
+                    grid += "   "
+
+            for x in range(self._size[0]):
+                cell = self._player_grid[y][x]
+
+                if cell is None:
+                    grid += "   "
+                elif cell == "x":
+                    grid += f"\033[38;2;255;64;64m X \033[0m"
+                else:
+                    grid += f"\033[48;2;{cell[0]};{cell[1]};{cell[2]}m   \033[0m"
+
+            grid += "\n"
 
         return title + "\n" + grid
 
