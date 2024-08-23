@@ -1,4 +1,6 @@
-from typing import Literal
+from typing import Literal, Self
+
+from PIL import Image
 
 type rgb_t = tuple[int, int, int]
 
@@ -50,6 +52,24 @@ class Nonogram:
                     used_colors.append(color)
 
         self._used_colors = tuple(used_colors)
+
+    @classmethod
+    def from_image(cls, path: str, colors: int = 256, max_size: int = 100) -> Self:
+        image = Image.open(path).convert("P", palette=Image.ADAPTIVE, colors=colors).convert("RGB")
+
+        if image.width > max_size or image.height > max_size:
+            factor = image.width / max_size if image.width > image.height else image.height / max_size
+            image = image.resize((int(image.width / factor), int(image.height / factor)), Image.NEAREST)
+
+        pixels = image.load()
+        nonogram_data = []
+
+        for i in range(image.height):
+            nonogram_data.append([])
+            for j in range(image.width):
+                nonogram_data[i].append(pixels[j, i])
+
+        return cls(nonogram_data)
 
     @property
     def used_colors(self) -> tuple[rgb_t, ...]:

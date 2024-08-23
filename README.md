@@ -6,3 +6,4 @@ University Programming Project in Python
 
 - Python 3.12
 - Pygame 2.6.0
+- PIL 10.40.0
