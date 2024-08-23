@@ -108,17 +108,10 @@ class Nonogram:
         self._assert_bounds(x, y)
         return self._player_grid[y][x]
 
-    def set_cross(self, x: int, y: int) -> None:
+    def __setitem__(self, index: tuple[int, int], value: rgb_t | Literal["x"] | None) -> None:
+        x, y = index
         self._assert_bounds(x, y)
-        self._player_grid[y][x] = "x"
-
-    def set_color(self, x: int, y: int, color: rgb_t) -> None:
-        self._assert_bounds(x, y)
-        self._player_grid[y][x] = color
-
-    def set_none(self, x: int, y: int) -> None:
-        self._assert_bounds(x, y)
-        self._player_grid[y][x] = None
+        self._player_grid[y][x] = value
 
     def _assert_bounds(self, x: int, y: int) -> None:
         if x < 0 or y < 0 or x >= self._size[0] or y >= self._size[1]:
