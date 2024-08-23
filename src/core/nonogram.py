@@ -119,4 +119,4 @@ class Nonogram:
 
             skipped = False
 
-        return tuple(hints)
+        return tuple(hints)[::-1]
