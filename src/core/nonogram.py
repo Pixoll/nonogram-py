@@ -46,7 +46,7 @@ class Nonogram:
         self._used_colors = tuple(used_colors)
 
     def __repr__(self):
-        title = f"Game {self._size[0]}x{self._size[1]}:"
+        title = f"Nonogram {self._size[0]}x{self._size[1]}:"
         offset = len(title) + 1
         grid = "\n".join(
             " " * offset + "".join(
