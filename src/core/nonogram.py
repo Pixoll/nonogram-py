@@ -48,6 +48,30 @@ class Nonogram:
 
         self._used_colors = tuple(used_colors)
 
+    @property
+    def used_colors(self) -> tuple[rgb_t, ...]:
+        return self._used_colors
+
+    @property
+    def horizontal_hints(self) -> tuple[tuple[Hint, ...], ...]:
+        return self._horizontal_hints
+
+    @property
+    def vertical_hints(self) -> tuple[tuple[Hint, ...], ...]:
+        return self._vertical_hints
+
+    @property
+    def size(self) -> tuple[int, int]:
+        return self._size
+
+    def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
+        x, y = index
+        return self._player_grid[y][x]
+
+    def __setitem__(self, index: tuple[int, int], value: rgb_t | Literal["x"] | None) -> None:
+        x, y = index
+        self._player_grid[y][x] = value
+
     def __repr__(self):
         title = f"{Nonogram.__name__} {self._size[0]}x{self._size[1]}:"
         max_horizontal_hints = max(len(hints) for hints in self._horizontal_hints)
@@ -86,37 +110,6 @@ class Nonogram:
             grid += "\n"
 
         return title + "\n" + grid
-
-    @property
-    def used_colors(self) -> tuple[rgb_t, ...]:
-        return self._used_colors
-
-    @property
-    def horizontal_hints(self) -> tuple[tuple[Hint, ...], ...]:
-        return self._horizontal_hints
-
-    @property
-    def vertical_hints(self) -> tuple[tuple[Hint, ...], ...]:
-        return self._vertical_hints
-
-    @property
-    def size(self) -> tuple[int, int]:
-        return self._size
-
-    def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
-        x, y = index
-        self._assert_bounds(x, y)
-        return self._player_grid[y][x]
-
-    def __setitem__(self, index: tuple[int, int], value: rgb_t | Literal["x"] | None) -> None:
-        x, y = index
-        self._assert_bounds(x, y)
-        self._player_grid[y][x] = value
-
-    def _assert_bounds(self, x: int, y: int) -> None:
-        if x < 0 or y < 0 or x >= self._size[0] or y >= self._size[1]:
-            print("what are you doing")
-            exit(1)
 
     @staticmethod
     def _get_hints(row_or_column: list[rgb_t]) -> tuple[Hint, ...]:
