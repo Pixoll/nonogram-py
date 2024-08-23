@@ -34,14 +34,14 @@ class Nonogram:
     _size: tuple[int, int]
 
     def __init__(self, nonogram: list[list[rgb_t | None]]):
-        self._original = nonogram
-        self._player_grid = [[None for _ in range(len(nonogram[0]))] for _ in range(len(nonogram))]
-        self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in nonogram])
-        self._vertical_hints = tuple([Nonogram._get_hints(column) for column in list(zip(*nonogram))])
-        self._size = (len(nonogram[0]), len(nonogram))
+        self._original = [[None if color == (255, 255, 255) else color for color in row] for row in nonogram]
+        self._player_grid = [[None for _ in range(len(self._original[0]))] for _ in range(len(self._original))]
+        self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in self._original])
+        self._vertical_hints = tuple([Nonogram._get_hints(column) for column in list(zip(*self._original))])
+        self._size = (len(self._original[0]), len(self._original))
         used_colors = []
 
-        for row in nonogram:
+        for row in self._original:
             for color in row:
                 if color is not None and color not in used_colors:
                     used_colors.append(color)
