@@ -3,7 +3,7 @@ from typing import Literal
 type rgb_t = tuple[int, int, int]
 
 
-class Game:
+class Nonogram:
     class Hint:
         _value: int
         _color: rgb_t
@@ -33,8 +33,8 @@ class Game:
     def __init__(self, nonogram: list[list[rgb_t | None]]):
         self._original = nonogram
         self._player_grid = [[None for _ in range(len(nonogram[0]))] for _ in range(len(nonogram))]
-        self._horizontal_hints = tuple([Game._get_hints(row) for row in nonogram])
-        self._vertical_hints = tuple([Game._get_hints(column) for column in list(zip(*nonogram))])
+        self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in nonogram])
+        self._vertical_hints = tuple([Nonogram._get_hints(column) for column in list(zip(*nonogram))])
         self._size = (len(nonogram[0]), len(nonogram))
         used_colors = []
 
@@ -99,7 +99,7 @@ class Game:
 
     @staticmethod
     def _get_hints(row_or_column: list[rgb_t]) -> tuple[Hint, ...]:
-        hints: list[Game.Hint] = []
+        hints: list[Nonogram.Hint] = []
         skipped: bool = False
 
         for color in row_or_column:
@@ -108,14 +108,14 @@ class Game:
                 continue
 
             if len(hints) == 0:
-                hints.append(Game.Hint(color))
+                hints.append(Nonogram.Hint(color))
                 skipped = False
                 continue
 
             if hints[-1].color == color and not skipped:
                 hints[-1]._value += 1
             else:
-                hints.append(Game.Hint(color))
+                hints.append(Nonogram.Hint(color))
 
             skipped = False
 
