@@ -18,9 +18,10 @@ class Nonogram:
             br, bg, bb = self._color
             luminance = br * 0.2126 + bg * 0.7152 + bb * 0.0722
             fr, fg, fb = (255, 255, 255) if luminance < 140 else (0, 0, 0)
-            value_str = (f" {self._value} " if self._value < 10
-                         else f" {self._value}" if self._value < 100
-            else "100")
+            value_str = (
+                f" {self._value} " if self._value < 10
+                else f" {self._value}" if self._value < 100
+                else "100")
             return f"\033[48;2;{br};{bg};{bb}m\033[38;2;{fr};{fg};{fb}m{value_str}\033[0m"
 
         @property
