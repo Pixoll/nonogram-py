@@ -20,7 +20,7 @@ class Nonogram:
             fr, fg, fb = (255, 255, 255) if luminance < 140 else (0, 0, 0)
             value_str = (f" {self._value} " if self._value < 10
                          else f" {self._value}" if self._value < 100
-                         else "100")
+            else "100")
             return f"\033[48;2;{br};{bg};{bb}m\033[38;2;{fr};{fg};{fb}m{value_str}\033[0m"
 
         @property
@@ -39,7 +39,10 @@ class Nonogram:
     _size: tuple[int, int]
 
     def __init__(self, nonogram: list[list[rgb_t | None]]):
-        self._original = [[None if color == (255, 255, 255) else color for color in row] for row in nonogram]
+        self._original = [
+            [None if (((255 - r) ** 2 + (255 - g) ** 2 + (255 - b) ** 2) ** 0.5) < 10 else (r, g, b) for r, g, b in row]
+            for row in nonogram
+        ]
         self._player_grid = [[None for _ in range(len(self._original[0]))] for _ in range(len(self._original))]
         self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in self._original])
         self._vertical_hints = tuple([Nonogram._get_hints(column) for column in list(zip(*self._original))])
