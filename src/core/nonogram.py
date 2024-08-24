@@ -38,22 +38,32 @@ class Nonogram:
     _horizontal_hints: tuple[tuple[Hint, ...], ...]
     _vertical_hints: tuple[tuple[Hint, ...], ...]
     _size: tuple[int, int]
+    _number_of_cells: int
+    _correct_cells: int
 
     def __init__(self, nonogram: list[list[rgb_t | None]]):
         self._original = []
+        self._player_grid = []
+        self._correct_cells = 0
+
         for row in nonogram:
             self._original.append([])
+            self._player_grid.append([])
+
             for color in row:
                 if color is None or (
                         ((255 - color[0]) ** 2 + (255 - color[1]) ** 2 + (255 - color[2]) ** 2) ** 0.5) < 10:
                     self._original[-1].append(None)
+                    self._correct_cells += 1
                 else:
                     self._original[-1].append(color)
 
-        self._player_grid = [[None for _ in range(len(self._original[0]))] for _ in range(len(self._original))]
+                self._player_grid[-1].append(None)
+
         self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in self._original])
         self._vertical_hints = tuple([Nonogram._get_hints(column) for column in list(zip(*self._original))])
         self._size = (len(self._original[0]), len(self._original))
+        self._number_of_cells = self._size[0] * self._size[1]
         used_colors = []
 
         for row in self._original:
@@ -97,13 +107,28 @@ class Nonogram:
     def size(self) -> tuple[int, int]:
         return self._size
 
+    @property
+    def is_completed(self) -> bool:
+        return self._correct_cells == self._number_of_cells
+
     def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
         x, y = index
         return self._player_grid[y][x]
 
     def __setitem__(self, index: tuple[int, int], value: rgb_t | Literal["x"] | None) -> None:
         x, y = index
+        if self._player_grid[y][x] == value:
+            return
+
         self._player_grid[y][x] = value
+
+        if value == "x":
+            return
+
+        if value == self._original[y][x]:
+            self._correct_cells += 1
+        else:
+            self._correct_cells -= 1
 
     def __repr__(self):
         title = f"{Nonogram.__name__} {self._size[0]}x{self._size[1]}:"
