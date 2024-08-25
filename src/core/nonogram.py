@@ -223,39 +223,7 @@ class Nonogram:
 
         return tuple(hints)[::-1]
 
-    @staticmethod
-    def run_test() -> None:
-        a = (123, 48, 0)
-        b = (163, 98, 9)
-        c = (253, 198, 140)
-        d = (0, 88, 36)
-        e = (143, 198, 61)
-        n = None
 
-        nonogram_data = [
-            [n, n, n, n, n, n, n, b, b, b, b, b, b, n, n, n],
-            [n, n, n, n, n, n, b, b, b, b, b, b, b, b, b, n],
-            [n, n, n, n, n, b, b, a, a, a, b, b, a, b, a, b],
-            [n, n, n, n, n, b, c, c, c, c, a, a, b, a, b, a],
-            [n, n, n, n, n, c, c, c, c, c, c, c, a, b, a, a],
-            [n, n, n, n, n, n, c, c, n, n, n, c, c, a, a, a],
-            [n, n, n, n, n, n, n, n, c, c, n, n, c, c, a, a],
-            [n, n, n, n, n, n, n, c, c, c, c, n, n, c, a, n],
-            [n, n, n, n, n, n, n, c, n, c, c, c, c, a, n, n],
-            [n, n, d, n, n, n, c, c, n, c, c, n, n, n, n, n],
-            [n, n, d, n, n, n, c, n, n, c, c, n, n, n, n, n],
-            [n, n, d, d, n, c, c, n, c, c, c, n, n, n, n, n],
-            [e, e, n, d, n, c, n, n, e, c, n, n, d, n, n, n],
-            [n, e, e, n, d, c, n, c, e, c, n, e, d, n, n, n],
-            [n, d, e, e, e, c, c, e, c, c, e, d, n, n, n, n],
-            [e, e, d, d, e, e, e, e, e, d, n, n, n, n, n, n],
-            [n, n, e, e, n, n, d, d, d, n, e, n, n, n, n, n],
-            [n, e, e, n, n, n, n, n, n, n, n, n, n, n, n, n],
-        ]
-
-        nonogram = Nonogram(nonogram_data)
-        nonogram._player_grid = nonogram_data
-        print(nonogram)
-
-
-Nonogram.run_test()
+nonogram = Nonogram.from_pre_made(16647)
+nonogram._player_grid = nonogram._original
+print(nonogram)
