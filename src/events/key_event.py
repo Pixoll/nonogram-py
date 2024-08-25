@@ -353,7 +353,7 @@ class KeyMod(Enum):
 
 
 class KeyEvent:
-    type: Literal[EventType.KEY_UP] | Literal[EventType.KEY_DOWN]
+    type: Literal[EventType.KEY_UP, EventType.KEY_DOWN]
     """
     Either EventType.KEY_UP or EventType.KEY_DOWN
     """

@@ -6,7 +6,7 @@ from events.event_type import EventType
 
 
 class DropStatusEvent:
-    type: Literal[EventType.DROP_BEGIN] | Literal[EventType.DROP_COMPLETE]
+    type: Literal[EventType.DROP_BEGIN, EventType.DROP_COMPLETE]
     """
     Either EventType.DROP_BEGIN or EventType.DROP_COMPLETE
     """

@@ -6,7 +6,7 @@ from events.event_type import EventType
 
 
 class FingerEvent:
-    type: Literal[EventType.FINGER_DOWN] | Literal[EventType.FINGER_MOTION] | Literal[EventType.FINGER_UP]
+    type: Literal[EventType.FINGER_DOWN, EventType.FINGER_MOTION, EventType.FINGER_UP]
     """
     Either EventType.FINGER_DOWN, EventType.FINGER_MOTION or EventType.FINGER_UP
     """

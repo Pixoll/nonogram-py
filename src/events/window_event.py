@@ -6,25 +6,30 @@ from events.event_type import EventType
 
 
 class WindowEvent:
-    type: (Literal[EventType.WINDOW_CLOSE]
-           | Literal[EventType.WINDOW_CLOSE]
-           | Literal[EventType.WINDOW_DISPLAY_CHANGED]
-           | Literal[EventType.WINDOW_ENTER]
-           | Literal[EventType.WINDOW_EXPOSED]
-           | Literal[EventType.WINDOW_FOCUS_GAINED]
-           | Literal[EventType.WINDOW_FOCUS_LOST]
-           | Literal[EventType.WINDOW_HIDDEN]
-           | Literal[EventType.WINDOW_HIT_TEST]
-           | Literal[EventType.WINDOW_ICC_PROFILE_CHANGED]
-           | Literal[EventType.WINDOW_LEAVE]
-           | Literal[EventType.WINDOW_MAXIMIZED]
-           | Literal[EventType.WINDOW_MINIMIZED]
-           | Literal[EventType.WINDOW_MOVED]
-           | Literal[EventType.WINDOW_RESIZED]
-           | Literal[EventType.WINDOW_RESTORED]
-           | Literal[EventType.WINDOW_SHOWN]
-           | Literal[EventType.WINDOW_SIZE_CHANGED]
-           | Literal[EventType.WINDOW_TAKE_FOCUS])
+    type: Literal[
+        EventType.WINDOW_CLOSE,
+        EventType.WINDOW_CLOSE,
+        EventType.WINDOW_DISPLAY_CHANGED,
+        EventType.WINDOW_ENTER,
+        EventType.WINDOW_EXPOSED,
+        EventType.WINDOW_FOCUS_GAINED,
+        EventType.WINDOW_FOCUS_LOST,
+        EventType.WINDOW_HIDDEN,
+        EventType.WINDOW_HIT_TEST,
+        EventType.WINDOW_ICC_PROFILE_CHANGED,
+        EventType.WINDOW_LEAVE,
+        EventType.WINDOW_MAXIMIZED,
+        EventType.WINDOW_MINIMIZED,
+        EventType.WINDOW_MOVED,
+        EventType.WINDOW_RESIZED,
+        EventType.WINDOW_RESTORED,
+        EventType.WINDOW_SHOWN,
+        EventType.WINDOW_SIZE_CHANGED,
+        EventType.WINDOW_TAKE_FOCUS,
+    ]
+    """
+    EventType.WINDOW_*
+    """
 
     def __init__(self, event: Event):
         self.type = EventType(event.type)

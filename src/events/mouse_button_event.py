@@ -18,7 +18,7 @@ class MouseButton(Enum):
 
 
 class MouseButtonEvent:
-    type: Literal[EventType.MOUSE_BUTTON_DOWN] | Literal[EventType.MOUSE_BUTTON_UP]
+    type: Literal[EventType.MOUSE_BUTTON_DOWN, EventType.MOUSE_BUTTON_UP]
     """
     Either EventType.MOUSE_BUTTON_DOWN or EventType.MOUSE_BUTTON_UP
     """

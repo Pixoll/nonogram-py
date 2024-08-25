@@ -6,7 +6,7 @@ from events.event_type import EventType
 
 
 class MidiEvent:
-    type: Literal[EventType.MIDI_IN] | Literal[EventType.MIDI_OUT]
+    type: Literal[EventType.MIDI_IN, EventType.MIDI_OUT]
     """
     Either EventType.MIDI_IN or EventType.MIDI_OUT
     """

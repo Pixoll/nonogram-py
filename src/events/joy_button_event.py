@@ -28,7 +28,7 @@ class JoyButton(Enum):
 
 
 class JoyButtonEvent:
-    type: Literal[EventType.JOY_BUTTON_DOWN] | Literal[EventType.JOY_BUTTON_UP]
+    type: Literal[EventType.JOY_BUTTON_DOWN, EventType.JOY_BUTTON_UP]
     """
     Either EventType.JOY_BUTTON_DOWN or EventType.JOY_BUTTON_UP
     """

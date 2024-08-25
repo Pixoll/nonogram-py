@@ -6,7 +6,7 @@ from events.event_type import EventType
 
 
 class JoyDeviceEvent:
-    type: Literal[EventType.JOY_DEVICE_ADDED] | Literal[EventType.JOY_DEVICE_REMOVED]
+    type: Literal[EventType.JOY_DEVICE_ADDED, EventType.JOY_DEVICE_REMOVED]
     """
     Either EventType.JOY_DEVICE_ADDED or EventType.JOY_DEVICE_REMOVED
     """

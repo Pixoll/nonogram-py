@@ -6,7 +6,7 @@ from events.event_type import EventType
 
 
 class AudioDeviceEvent:
-    type: Literal[EventType.AUDIO_DEVICE_ADDED] | Literal[EventType.AUDIO_DEVICE_REMOVED]
+    type: Literal[EventType.AUDIO_DEVICE_ADDED, EventType.AUDIO_DEVICE_REMOVED]
     """
     Either EventType.AUDIO_DEVICE_ADDED or EventType.AUDIO_DEVICE_REMOVED
     """

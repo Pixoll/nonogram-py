@@ -6,9 +6,11 @@ from events.event_type import EventType
 
 
 class ControllerDeviceEvent:
-    type: (Literal[EventType.CONTROLLER_DEVICE_ADDED]
-           | Literal[EventType.CONTROLLER_DEVICE_REMAPPED]
-           | Literal[EventType.CONTROLLER_DEVICE_REMOVED])
+    type: Literal[
+        EventType.CONTROLLER_DEVICE_ADDED,
+        EventType.CONTROLLER_DEVICE_REMAPPED,
+        EventType.CONTROLLER_DEVICE_REMOVED,
+    ]
     """
     Either EventType.CONTROLLER_DEVICE_ADDED, EventType.CONTROLLER_DEVICE_REMAPPED
     or EventType.CONTROLLER_DEVICE_REMOVED
