@@ -1,4 +1,5 @@
-from typing import Literal, Self
+import json
+from typing import Any, Literal, Self
 
 from PIL import Image
 
@@ -72,6 +73,42 @@ class Nonogram:
                     used_colors.append(color)
 
         self._used_colors = tuple(used_colors)
+
+    @classmethod
+    def from_pre_made(cls, id: int) -> Self:
+        pre_made_nonogram: dict[str, Any] | None = None
+
+        with open("../../nonograms/pre-made.json") as pre_made_nonograms:
+            nonograms: list[dict[str, Any]] = json.load(pre_made_nonograms)
+            for nonogram in nonograms:
+                if nonogram["id"] == id:
+                    pre_made_nonogram = nonogram
+                    break
+
+        if pre_made_nonogram is None:
+            raise ValueError(f"No nonogram with id {id}")
+
+        mask: str = pre_made_nonogram["mask"]
+        width: int = pre_made_nonogram["width"]
+        palette: dict[str, rgb_t] = {}
+
+        for key, color_str in pre_made_nonogram["palette"].items():
+            r1, r2, g1, g2, b1, b2 = color_str
+            r = int(r1 + r2, 16)
+            g = int(g1 + g2, 16)
+            b = int(b1 + b2, 16)
+            palette[key] = (r, g, b)
+
+        nonogram_data: list[list[rgb_t | None]] = []
+
+        for i in range(len(mask)):
+            if i % width == 0:
+                nonogram_data.append([])
+
+            color = palette[mask[i]] if mask[i] in palette else None
+            nonogram_data[-1].append(color)
+
+        return cls(nonogram_data)
 
     @classmethod
     def from_image(cls, path: str, colors: int = 256, max_size: int = 100) -> Self:
