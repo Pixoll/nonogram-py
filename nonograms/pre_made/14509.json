@@ -1,0 +1,17 @@
+{
+  "id": 14509,
+  "mask": " 331  331  331  225 888778 667866678666788877",
+  "width": 5,
+  "height": 9,
+  "palette": {
+    "1": "7c7e7c",
+    "2": "fcca0c",
+    "3": "c4c2c4",
+    "5": "cc9e04",
+    "6": "fcd6fc",
+    "7": "6482d4",
+    "8": "bccaec"
+  },
+  "player_mask": null,
+  "completed": false
+}

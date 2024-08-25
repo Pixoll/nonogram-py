@@ -1,0 +1,11 @@
+{
+  "id": 5031,
+  "mask": "111      11      11 1     1111    111      11111     111       1",
+  "width": 8,
+  "height": 8,
+  "palette": {
+    "1": "000000"
+  },
+  "player_mask": null,
+  "completed": false
+}

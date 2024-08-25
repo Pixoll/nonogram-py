@@ -1,0 +1,15 @@
+{
+  "id": 15786,
+  "mask": "  44  44  444 44    242     2 42  114 44 1111    3111   5331    ",
+  "width": 8,
+  "height": 8,
+  "palette": {
+    "1": "fc1264",
+    "2": "24b24c",
+    "3": "fc96bc",
+    "4": "b4e61c",
+    "5": "c4c2c4"
+  },
+  "player_mask": null,
+  "completed": false
+}

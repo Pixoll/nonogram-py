@@ -1,0 +1,13 @@
+{
+  "id": 16640,
+  "mask": "3 3 3 131 21112 212   2 22 2 22 22  22  ",
+  "width": 5,
+  "height": 8,
+  "palette": {
+    "1": "ff0000",
+    "2": "8fc63d",
+    "3": "ffff00"
+  },
+  "player_mask": null,
+  "completed": false
+}
