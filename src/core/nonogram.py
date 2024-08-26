@@ -92,13 +92,14 @@ class Nonogram:
 
     @classmethod
     def from_pre_made(cls, nonogram_id: int) -> Self:
-        pre_made_nonogram: dict[str, Any]
+        nonogram_path = f"../../nonograms/pre_made/{nonogram_id}.json"
 
-        try:
-            with open(f"../../nonograms/pre_made/{nonogram_id}.json") as nonogram_file:
-                pre_made_nonogram = json.load(nonogram_file)
-        except FileNotFoundError:
+        if not path.exists(nonogram_path):
             raise ValueError(f"No nonogram with id {nonogram_id}")
+
+        pre_made_nonogram: dict[str, Any]
+        with open(nonogram_path) as nonogram_file:
+            pre_made_nonogram = json.load(nonogram_file)
 
         mask: str = pre_made_nonogram["mask"]
         width: int = pre_made_nonogram["width"]
@@ -237,18 +238,18 @@ class Nonogram:
             self._used_colors[i]: str(i + 1) for i in range(len(self._used_colors))
         }
 
-        with open(save_path + f"/{nonogram_id}.json", "w") as nonogram_file:
-            pre_made_nonogram = {
-                "id": nonogram_id,
-                "mask": "".join(["".join([
-                    " " if color is None else palette[color] for color in row
-                ]) for row in self._original]),
-                "width": self._size[0],
-                "height": self._size[1],
-                "player_mask": player_mask,
-                "completed": self.is_completed,
-            }
+        pre_made_nonogram = {
+            "id": nonogram_id,
+            "mask": "".join(["".join([
+                " " if color is None else palette[color] for color in row
+            ]) for row in self._original]),
+            "width": self._size[0],
+            "height": self._size[1],
+            "player_mask": player_mask,
+            "completed": self.is_completed,
+        }
 
+        with open(save_path + f"/{nonogram_id}.json", "w") as nonogram_file:
             json.dump(pre_made_nonogram, nonogram_file, indent=2)
 
     def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
