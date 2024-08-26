@@ -1,10 +1,12 @@
 import json
+import os.path as path
+from os import listdir, makedirs
 from typing import Any, Literal, Self
 
 from PIL import Image
 
 type rgb_t = tuple[int, int, int]
-type created_from_t = Literal["pre_made", "image", "custom"]
+type nonogram_type_t = Literal["pre_made", "image", "custom"]
 
 
 class Nonogram:
@@ -42,10 +44,10 @@ class Nonogram:
     _size: tuple[int, int]
     _number_of_cells: int
     _correct_cells: int
-    _created_from: created_from_t
+    _type: nonogram_type_t
     _id: int | None
 
-    def __init__(self, nonogram: list[list[rgb_t | None]], created_from: created_from_t, id: int | None = None):
+    def __init__(self, nonogram: list[list[rgb_t | None]], type: nonogram_type_t, id: int | None = None):
         self._original = []
         self._player_grid = []
         self._correct_cells = 0
@@ -68,7 +70,7 @@ class Nonogram:
         self._vertical_hints = tuple([Nonogram._get_hints(column) for column in list(zip(*self._original))])
         self._size = (len(self._original[0]), len(self._original))
         self._number_of_cells = self._size[0] * self._size[1]
-        self._created_from = created_from
+        self._type = type
         self._id = id
         used_colors = []
 
@@ -109,7 +111,10 @@ class Nonogram:
             color = palette[mask[i]] if mask[i] in palette else None
             nonogram_data[-1].append(color)
 
-        return cls(nonogram_data, "pre_made", id)
+        nonogram = cls(nonogram_data, "pre_made", id)
+        nonogram._used_colors = tuple(palette.values())
+
+        return nonogram
 
     @classmethod
     def from_image(cls, path: str, colors: int = 256, max_size: int = 100) -> Self:
@@ -167,6 +172,53 @@ class Nonogram:
             self._correct_cells += 1
         else:
             self._correct_cells -= 1
+
+    def save(self) -> None:
+        save_path = f"../../nonograms/{self._type}/"
+
+        player_mask = "".join(["".join([
+            " " if color is None
+            else "x" if color == "x"
+            else str(self._used_colors.index(color) + 1) for color in row
+        ]) for row in self._player_grid])
+
+        if self._id is not None:
+            pre_made_nonogram: Any
+
+            with open(save_path + f"/{self._id}.json") as nonogram_file:
+                pre_made_nonogram = json.load(nonogram_file)
+
+            pre_made_nonogram["player_mask"] = player_mask
+            pre_made_nonogram["completed"] = self.is_completed
+
+            with open(save_path + f"/{self._id}.json", "w") as nonogram_file:
+                json.dump(pre_made_nonogram, nonogram_file, indent=2)
+
+            return
+
+        if not path.exists(save_path):
+            makedirs(save_path)
+
+        saved_nonograms = listdir(save_path)
+        nonogram_id = saved_nonograms[-1].split(".")[0] if len(saved_nonograms) > 1 else "1"
+
+        palette: dict[rgb_t, str] = {
+            self._used_colors[i]: str(i + 1) for i in range(len(self._used_colors))
+        }
+
+        with open(save_path + f"/{nonogram_id}.json", "w") as nonogram_file:
+            pre_made_nonogram = {
+                "id": nonogram_id,
+                "mask": "".join(["".join([
+                    " " if color is None else palette[color] for color in row
+                ]) for row in self._original]),
+                "width": self._size[0],
+                "height": self._size[1],
+                "player_mask": player_mask,
+                "completed": self.is_completed,
+            }
+
+            json.dump(pre_made_nonogram, nonogram_file, indent=2)
 
     def __repr__(self):
         title = f"{Nonogram.__name__} {self._size[0]}x{self._size[1]}:"
