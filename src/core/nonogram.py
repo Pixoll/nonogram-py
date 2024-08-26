@@ -20,7 +20,7 @@ class Nonogram:
 
         def __repr__(self):
             br, bg, bb = self._color
-            luminance = br * 0.2126 + bg * 0.7152 + bb * 0.0722
+            luminance = Nonogram._get_color_luminance(self._color)
             fr, fg, fb = (255, 255, 255) if luminance < 140 else (0, 0, 0)
             value_str = (
                 f" {self._value} " if self._value < 10
@@ -59,19 +59,56 @@ class Nonogram:
         self._player_grid = []
         self._correct_cells = 0
 
+        used_colors: dict[rgb_t, int] = {}
+
         for row in nonogram:
             self._original.append([])
             self._player_grid.append([])
 
             for color in row:
-                if color is None or (
-                        ((255 - color[0]) ** 2 + (255 - color[1]) ** 2 + (255 - color[2]) ** 2) ** 0.5) < 10:
+                if nonogram_type == "pre_made":
+                    self._original[-1].append(color)
+
+                    if color is None:
+                        self._correct_cells += 1
+                    else:
+                        if color not in used_colors:
+                            used_colors[color] = 1
+                        else:
+                            used_colors[color] += 1
+
+                    continue
+
+                if color is None or color == (255, 255, 255):
                     self._original[-1].append(None)
                     self._correct_cells += 1
                 else:
                     self._original[-1].append(color)
 
+                    if color not in used_colors:
+                        used_colors[color] = 1
+                    else:
+                        used_colors[color] += 1
+
                 self._player_grid[-1].append(None)
+
+        if nonogram_type != "pre_made" and nonogram_id is None and len(used_colors) > 1:
+            lightest_color: rgb_t | None = None
+            highest_luminance = 0
+
+            for color in used_colors:
+                luminance = Nonogram._get_color_luminance(color)
+                if luminance > 200 and luminance > highest_luminance:
+                    highest_luminance = luminance
+                    lightest_color = color
+
+            if lightest_color is not None:
+                for row in self._original:
+                    for i in range(len(row)):
+                        if row[i] == lightest_color:
+                            row[i] = None
+
+            del used_colors[lightest_color]
 
         self._original_transposed = list(zip(*self._original))
         self._player_grid_transposed = list(zip(*self._player_grid))
@@ -81,14 +118,7 @@ class Nonogram:
         self._number_of_cells = self._size[0] * self._size[1]
         self._type = nonogram_type
         self._id = nonogram_id
-        used_colors = []
-
-        for row in self._original:
-            for color in row:
-                if color is not None and color not in used_colors:
-                    used_colors.append(color)
-
-        self._used_colors = tuple(used_colors)
+        self._used_colors = tuple(used_colors.keys())
 
     @classmethod
     def from_pre_made(cls, nonogram_id: int) -> Self:
@@ -341,3 +371,13 @@ class Nonogram:
             palette[key] = (r, g, b)
 
         return palette
+
+    @staticmethod
+    def _get_color_luminance(color: rgb_t) -> float:
+        r, g, b = color
+        return r * 0.2126 + g * 0.7152 + b * 0.0722
+
+
+nonogram = Nonogram.from_image("C:/Users/Pixoll/Desktop/gato.png")
+nonogram._player_grid = nonogram._original
+print(nonogram)
