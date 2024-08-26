@@ -134,6 +134,54 @@ class Nonogram:
 
         return cls(nonogram_data, "image")
 
+    @classmethod
+    def load(cls, type: nonogram_type_t, id: int) -> Self:
+        nonogram_path = f"../../nonograms/{type}/{id}.json"
+        if not path.exists(nonogram_path):
+            raise ValueError(f"No nonogram of type {type} with id {id}")
+
+        nonogram_json: Any
+        with open(nonogram_path) as nonogram_file:
+            nonogram_json = json.load(nonogram_file)
+
+        if nonogram_json["player_mask"] is None:
+            raise ValueError(f"Nonogram of type {type} with id {id} hasn't been played before")
+
+        if nonogram_json["completed"]:
+            raise ValueError(f"Nonogram of type {type} with id {id} has already been completed")
+
+        width: int = nonogram_json["width"]
+        mask: str = nonogram_json["mask"]
+        player_mask: str = nonogram_json["player_mask"]
+        palette: dict[str, rgb_t] = {}
+
+        for key, color_str in nonogram_json["palette"].items():
+            r1, r2, g1, g2, b1, b2 = color_str
+            r = int(r1 + r2, 16)
+            g = int(g1 + g2, 16)
+            b = int(b1 + b2, 16)
+            palette[key] = (r, g, b)
+
+        nonogram_data: list[list[rgb_t | None]] = []
+        player_grid: list[list[rgb_t | Literal["x"] | None]] = []
+
+        for i in range(width):
+            if i % width == 0:
+                nonogram_data.append([])
+                player_grid.append([])
+
+            nonogram_data[-1].append(palette[mask[i]] if mask[i] in palette else None)
+            player_grid[-1].append(
+                palette[player_mask[i]] if player_mask[i].isnumeric() and player_mask[i] in palette
+                else None if player_mask[i] == " "
+                else "x"
+            )
+
+        nonogram = cls(nonogram_data, type, id)
+        nonogram._player_grid = player_grid
+
+        return nonogram
+
     @property
     def used_colors(self) -> tuple[rgb_t, ...]:
         return self._used_colors
