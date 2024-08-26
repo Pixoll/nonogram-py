@@ -324,8 +324,3 @@ class Nonogram:
             skipped = False
 
         return tuple(hints)[::-1]
-
-
-nonogram = Nonogram.from_pre_made(16647)
-nonogram._player_grid = nonogram._original
-print(nonogram)
