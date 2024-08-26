@@ -179,6 +179,7 @@ class Nonogram:
 
         nonogram = cls(nonogram_data, type, id)
         nonogram._player_grid = player_grid
+        nonogram._used_colors = tuple(palette.values())
 
         return nonogram
 
