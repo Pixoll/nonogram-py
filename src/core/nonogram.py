@@ -37,7 +37,9 @@ class Nonogram:
             return self._color
 
     _original: list[list[rgb_t | None]]
+    _original_transposed: list[list[rgb_t | None]]
     _player_grid: list[list[rgb_t | Literal["x"] | None]]
+    _player_grid_transposed: list[list[rgb_t | Literal["x"] | None]]
     _used_colors: tuple[rgb_t, ...]
     _horizontal_hints: tuple[tuple[Hint, ...], ...]
     _vertical_hints: tuple[tuple[Hint, ...], ...]
@@ -71,8 +73,10 @@ class Nonogram:
 
                 self._player_grid[-1].append(None)
 
+        self._original_transposed = list(zip(*self._original))
+        self._player_grid_transposed = list(zip(*self._player_grid))
         self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in self._original])
-        self._vertical_hints = tuple([Nonogram._get_hints(column) for column in list(zip(*self._original))])
+        self._vertical_hints = tuple([Nonogram._get_hints(column) for column in self._original_transposed])
         self._size = (len(self._original[0]), len(self._original))
         self._number_of_cells = self._size[0] * self._size[1]
         self._type = nonogram_type
@@ -194,24 +198,11 @@ class Nonogram:
     def is_completed(self) -> bool:
         return self._correct_cells == self._number_of_cells
 
-    def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
-        x, y = index
-        return self._player_grid[y][x]
+    def is_row_complete(self, row: int) -> bool:
+        return self._player_grid[row] == self._original[row]
 
-    def __setitem__(self, index: tuple[int, int], value: rgb_t | Literal["x"] | None) -> None:
-        x, y = index
-        if self._player_grid[y][x] == value:
-            return
-
-        self._player_grid[y][x] = value
-
-        if value == "x":
-            return
-
-        if value == self._original[y][x]:
-            self._correct_cells += 1
-        else:
-            self._correct_cells -= 1
+    def is_column_complete(self, column: int) -> bool:
+        return self._player_grid_transposed[column] == self._original_transposed[column]
 
     def save(self) -> None:
         save_path = f"../../nonograms/{self._type}/"
@@ -259,6 +250,26 @@ class Nonogram:
             }
 
             json.dump(pre_made_nonogram, nonogram_file, indent=2)
+
+    def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
+        x, y = index
+        return self._player_grid[y][x]
+
+    def __setitem__(self, index: tuple[int, int], value: rgb_t | Literal["x"] | None) -> None:
+        x, y = index
+        if self._player_grid[y][x] == value:
+            return
+
+        self._player_grid[y][x] = value
+        self._player_grid_transposed[x][y] = value
+
+        if value == "x":
+            return
+
+        if value == self._original[y][x]:
+            self._correct_cells += 1
+        else:
+            self._correct_cells -= 1
 
     def __repr__(self):
         title = f"{Nonogram.__name__} {self._size[0]}x{self._size[1]}:"
