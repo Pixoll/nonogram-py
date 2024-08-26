@@ -47,7 +47,12 @@ class Nonogram:
     _type: nonogram_type_t
     _id: int | None
 
-    def __init__(self, nonogram: list[list[rgb_t | None]], type: nonogram_type_t, id: int | None = None):
+    def __init__(
+            self,
+            nonogram: list[list[rgb_t | None]],
+            nonogram_type: nonogram_type_t,
+            nonogram_id: int | None = None
+    ):
         self._original = []
         self._player_grid = []
         self._correct_cells = 0
@@ -70,8 +75,8 @@ class Nonogram:
         self._vertical_hints = tuple([Nonogram._get_hints(column) for column in list(zip(*self._original))])
         self._size = (len(self._original[0]), len(self._original))
         self._number_of_cells = self._size[0] * self._size[1]
-        self._type = type
-        self._id = id
+        self._type = nonogram_type
+        self._id = nonogram_id
         used_colors = []
 
         for row in self._original:
@@ -82,25 +87,18 @@ class Nonogram:
         self._used_colors = tuple(used_colors)
 
     @classmethod
-    def from_pre_made(cls, id: int) -> Self:
+    def from_pre_made(cls, nonogram_id: int) -> Self:
         pre_made_nonogram: dict[str, Any]
 
         try:
-            with open(f"../../nonograms/pre_made/{id}.json") as nonogram_file:
+            with open(f"../../nonograms/pre_made/{nonogram_id}.json") as nonogram_file:
                 pre_made_nonogram = json.load(nonogram_file)
         except FileNotFoundError:
-            raise ValueError(f"No nonogram with id {id}")
+            raise ValueError(f"No nonogram with id {nonogram_id}")
 
         mask: str = pre_made_nonogram["mask"]
         width: int = pre_made_nonogram["width"]
-        palette: dict[str, rgb_t] = {}
-
-        for key, color_str in pre_made_nonogram["palette"].items():
-            r1, r2, g1, g2, b1, b2 = color_str
-            r = int(r1 + r2, 16)
-            g = int(g1 + g2, 16)
-            b = int(b1 + b2, 16)
-            palette[key] = (r, g, b)
+        palette = Nonogram._get_palette(pre_made_nonogram["palette"])
 
         nonogram_data: list[list[rgb_t | None]] = []
 
@@ -111,14 +109,14 @@ class Nonogram:
             color = palette[mask[i]] if mask[i] in palette else None
             nonogram_data[-1].append(color)
 
-        nonogram = cls(nonogram_data, "pre_made", id)
+        nonogram = cls(nonogram_data, "pre_made", nonogram_id)
         nonogram._used_colors = tuple(palette.values())
 
         return nonogram
 
     @classmethod
-    def from_image(cls, path: str, colors: int = 256, max_size: int = 100) -> Self:
-        image = Image.open(path).convert("P", palette=Image.ADAPTIVE, colors=colors).convert("RGB")
+    def from_image(cls, image_path: str, colors: int = 256, max_size: int = 100) -> Self:
+        image = Image.open(image_path).convert("P", palette=Image.ADAPTIVE, colors=colors).convert("RGB")
 
         if image.width > max_size or image.height > max_size:
             factor = image.width / max_size if image.width > image.height else image.height / max_size
@@ -135,32 +133,25 @@ class Nonogram:
         return cls(nonogram_data, "image")
 
     @classmethod
-    def load(cls, type: nonogram_type_t, id: int) -> Self:
-        nonogram_path = f"../../nonograms/{type}/{id}.json"
+    def load(cls, nonogram_type: nonogram_type_t, nonogram_id: int) -> Self:
+        nonogram_path = f"../../nonograms/{nonogram_type}/{nonogram_id}.json"
         if not path.exists(nonogram_path):
-            raise ValueError(f"No nonogram of type {type} with id {id}")
+            raise ValueError(f"No nonogram of type {nonogram_type} with id {nonogram_id}")
 
         nonogram_json: Any
         with open(nonogram_path) as nonogram_file:
             nonogram_json = json.load(nonogram_file)
 
         if nonogram_json["player_mask"] is None:
-            raise ValueError(f"Nonogram of type {type} with id {id} hasn't been played before")
+            raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} hasn't been played before")
 
         if nonogram_json["completed"]:
-            raise ValueError(f"Nonogram of type {type} with id {id} has already been completed")
+            raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} has already been completed")
 
         width: int = nonogram_json["width"]
         mask: str = nonogram_json["mask"]
         player_mask: str = nonogram_json["player_mask"]
-        palette: dict[str, rgb_t] = {}
-
-        for key, color_str in nonogram_json["palette"].items():
-            r1, r2, g1, g2, b1, b2 = color_str
-            r = int(r1 + r2, 16)
-            g = int(g1 + g2, 16)
-            b = int(b1 + b2, 16)
-            palette[key] = (r, g, b)
+        palette = Nonogram._get_palette(nonogram_json["palette"])
 
         nonogram_data: list[list[rgb_t | None]] = []
         player_grid: list[list[rgb_t | Literal["x"] | None]] = []
@@ -177,7 +168,7 @@ class Nonogram:
                 else "x"
             )
 
-        nonogram = cls(nonogram_data, type, id)
+        nonogram = cls(nonogram_data, nonogram_type, nonogram_id)
         nonogram._player_grid = player_grid
         nonogram._used_colors = tuple(palette.values())
 
@@ -317,6 +308,7 @@ class Nonogram:
                 continue
 
             if hints[-1].color == color and not skipped:
+                # noinspection PyProtectedMember
                 hints[-1]._value += 1
             else:
                 hints.append(Nonogram.Hint(color))
@@ -324,3 +316,16 @@ class Nonogram:
             skipped = False
 
         return tuple(hints)[::-1]
+
+    @staticmethod
+    def _get_palette(palette_json: dict[str, str]) -> dict[str, rgb_t]:
+        palette: dict[str, rgb_t] = {}
+
+        for key, color_str in palette_json.items():
+            r1, r2, g1, g2, b1, b2 = color_str
+            r = int(r1 + r2, 16)
+            g = int(g1 + g2, 16)
+            b = int(b1 + b2, 16)
+            palette[key] = (r, g, b)
+
+        return palette
