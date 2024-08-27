@@ -18,7 +18,7 @@ class MainMenuScreen(Screen):
         self.base.alignment("center")
         self.base.set_border((0, 132, 134))
         self.base.set_color((0, 132, 134))
-        self.base.set_image("assets/2.jpg")
+        self.base.set_image("assets/images/2.jpg")
 
         # OPCIONES DE MENU
         column1 = Column()
