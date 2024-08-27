@@ -8,27 +8,27 @@ class Container(Element):
         super().__init__(size[0], size[1])
         self.size = size
         self.surface = pygame.Surface(size, pygame.SRCALPHA)
-        self.background_color = (255, 255, 255, 255)  # Color por defecto blanco opaco
-        self.border_color = (255, 255, 255, 255)  # Borde blanco opaco
+        self.background_color = (255, 255, 255, 0)
+        self.border_color = (255, 255, 255)
 
         self.surface.fill(self.background_color)
         pygame.draw.rect(self.surface, self.border_color, self.surface.get_rect(), 1)
 
         self.position = (0, 0)
         self.child = None
-        self.image = None
 
         self.area = Area((self.width, self.height))
         self.align = "center"
+        self.image = None
+
 
     """OPCIONES DE CONTAINER"""
-
     def set_color(self, new_color: tuple[int, int, int, int]):
         self.background_color = new_color
         self.surface.fill(self.background_color)
         pygame.draw.rect(self.surface, self.border_color, self.surface.get_rect(), 1)
 
-    def set_border(self, border_color: tuple[int, int, int, int]):
+    def set_border(self, border_color: tuple[int, int, int]):
         self.border_color = border_color
         pygame.draw.rect(self.surface, self.border_color, self.surface.get_rect(), 1)
 
@@ -41,12 +41,9 @@ class Container(Element):
         self.__update_position()
 
     def set_image(self, image_path: str):
-        try:
-            self.image = pygame.image.load(image_path)
-            self.image = pygame.transform.scale(self.image, self.size)
-        except pygame.error as e:
-            print(f"Error al cargar la imagen: {e}")
-            self.image = None
+        self.image = pygame.image.load(image_path)
+        self.image = pygame.transform.scale(self.image, self.size)
+        self.surface.blit(self.image, (0, 0))
 
     def get_size(self) -> tuple[int, int]:
         return self.size
@@ -60,19 +57,17 @@ class Container(Element):
             self.align = alignment
             self.__update_position()
 
-    """OPCIONES DE RENDER"""
 
+    """OPCIONES DE RENDER"""
     def render(self, window: pygame.Surface):
         if self.image:
-            window.blit(self.image, self.position)
-        else:
-            window.blit(self.surface, self.position)
-
+            self.surface.blit(self.image, (0, 0))
+        window.blit(self.surface, self.position)
         if self.child:
             self.child.render(window)
 
-    """FUNCIONES COMPLEMENTARIA"""
 
+    """FUNCIONES COMPLEMENTARIA"""
     def __update_position(self):
         if self.child:
             obj_size = self.child.get_size()
