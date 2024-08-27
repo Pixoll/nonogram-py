@@ -376,8 +376,3 @@ class Nonogram:
     def _get_color_luminance(color: rgb_t) -> float:
         r, g, b = color
         return r * 0.2126 + g * 0.7152 + b * 0.0722
-
-
-nonogram = Nonogram.from_image("C:/Users/Pixoll/Desktop/gato.png")
-nonogram._player_grid = nonogram._original
-print(nonogram)
