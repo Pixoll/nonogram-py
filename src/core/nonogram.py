@@ -122,7 +122,7 @@ class Nonogram:
 
     @classmethod
     def from_pre_made(cls, nonogram_id: int) -> Self:
-        nonogram_path = f"../../nonograms/pre_made/{nonogram_id}.json"
+        nonogram_path = f"nonograms/pre_made/{nonogram_id}.json"
 
         if not path.exists(nonogram_path):
             raise ValueError(f"No nonogram with id {nonogram_id}")
@@ -169,7 +169,7 @@ class Nonogram:
 
     @classmethod
     def load(cls, nonogram_type: nonogram_type_t, nonogram_id: int) -> Self:
-        nonogram_path = f"../../nonograms/{nonogram_type}/{nonogram_id}.json"
+        nonogram_path = f"nonograms/{nonogram_type}/{nonogram_id}.json"
         if not path.exists(nonogram_path):
             raise ValueError(f"No nonogram of type {nonogram_type} with id {nonogram_id}")
 
@@ -236,7 +236,7 @@ class Nonogram:
         return self._player_grid_transposed[column] == self._original_transposed[column]
 
     def save(self) -> None:
-        save_path = f"../../nonograms/{self._type}/"
+        save_path = f"nonograms/{self._type}/"
 
         player_mask = "".join(["".join([
             " " if color is None
