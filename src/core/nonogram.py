@@ -77,6 +77,7 @@ class Nonogram:
                         else:
                             used_colors[color] += 1
 
+                    self._player_grid[-1].append(None)
                     continue
 
                 if color is None or color == (255, 255, 255):
