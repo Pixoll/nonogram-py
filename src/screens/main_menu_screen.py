@@ -18,6 +18,7 @@ class MainMenuScreen(Screen):
         self.base.alignment("center")
         self.base.set_border((0, 132, 134))
         self.base.set_color((0, 132, 134))
+        self.base.set_image("C:/Users/akmak/Desktop/GitHub/nonogram-py/src/assets/images/1.jpg")
 
         # OPCIONES DE MENU
         column1 = Column()
@@ -57,13 +58,9 @@ class MainMenuScreen(Screen):
 
         # CONTAINERS Y ROWS QUE DIVIDEN EL MENU PRINCIPAL
         container1 = Container((self.width * 0.3, self.height))
-        container1.set_border((0, 132, 134))
-        container1.set_color((0, 132, 134))
         container1.set_child(column1)
 
         container2 = Container((self.width * 0.5, self.height))
-        container2.set_border((0, 132, 134))
-        container2.set_color((0, 132, 134))
 
         self.row1 = Row()
         self.row1.add_child(container1)
