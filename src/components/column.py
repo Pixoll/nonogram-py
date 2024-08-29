@@ -1,69 +1,57 @@
-from components import Element
+from enum import auto, Enum
+from typing import Self
 
-class Column(Element):
+from components.element_bundle import ElementBundle
+from events import Event
+
+
+class HorizontalAlignment(Enum):
+    LEFT = auto()
+    CENTER = auto()
+    RIGHT = auto()
+
+
+class Column(ElementBundle):
+    _alignment: HorizontalAlignment
+    _max_width: int
+
     def __init__(self):
-        super().__init__(0, 0)
-        self.elements = []
-        self.position = (0, 0)
-        self.__update_size()
-        self.separation = 0
+        super().__init__()
+        self._alignment = HorizontalAlignment.CENTER
+        self._max_width = 0
 
-        self.maxWidth = 0
-        self.align = "center"
+    def set_alignment(self, alignment: HorizontalAlignment) -> Self:
+        self._alignment = alignment
+        self._update_positions()
+        return self
 
-    """OPCIONES DE COLUMN"""
-    def add_child(self, element: Element):
-        self.elements.append(element)
-        self.__update_size()
-        self.__update_positions()
+    def on_all_events(self, event: Event) -> None:
+        pass
 
-    def set_position(self, new_position: tuple[int, int]):
-        self.position = new_position
-        self.__update_positions()
-
-    def set_separation(self, val: int):
-        self.separation = val
-        self.__update_positions()
-        self.__update_size()
-
-    def get_size(self) -> tuple[int, int]:
-        return self.width, self.height
-
-    def get_childs(self) -> list[Element]:
-        return self.elements
-
-    def alignment(self, alignment: str):
-        if alignment in [
-            "center", "left", "right"
-        ]:
-            self.align = alignment
-            self.__update_positions()
-
-    """OPCIONES DE RENDER"""
-    def render(self, window):
-        for element in self.elements:
-            element.render(window)
-
-
-    """FUNCIONES COMPLEMENTARIAS"""
-    def __update_size(self):
-        if not self.elements:
-            self.width = 0
-            self.height = 0
+    def _update_size(self) -> None:
+        if not self._elements:
+            self._width = 0
+            self._height = 0
             return
-        self.width = max(el.width for el in self.elements)
-        self.maxWidth = self.width
-        self.height = sum(el.height for el in self.elements) + self.separation*(len(self.elements)-1)
 
-    def __update_positions(self):
-        current_y = 0
-        for element in self.elements:
-            if self.align == "center":
-                align = (self.maxWidth - element.get_size()[0]) / 2
-            elif self.align == "left":
-                align = 0
-            else:
-                align = (self.maxWidth - element.get_size()[0])
-            element_position = (self.position[0] +  align, self.position[1] + current_y)
+        self._height = sum(element._height for element in self._elements) + self._padding * (len(self._elements) - 1)
+        self._width = max(element._width for element in self._elements)
+        self._max_width = self._width
+
+    def _update_positions(self) -> None:
+        y_offset = 0
+
+        for element in self._elements:
+            x_offset = 0
+
+            match self._alignment:
+                case HorizontalAlignment.LEFT:
+                    x_offset = 0
+                case HorizontalAlignment.CENTER:
+                    x_offset = (self._max_width - element._width) / 2
+                case HorizontalAlignment.RIGHT:
+                    x_offset = (self._max_width - element._width)
+
+            element_position = (self._position[0] + x_offset, self._position[1] + y_offset)
             element.set_position(element_position)
-            current_y += element.height + self.separation
+            y_offset += element._height + self._padding

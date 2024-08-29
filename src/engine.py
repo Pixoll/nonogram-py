@@ -2,44 +2,56 @@ import pygame
 import events
 from screens.screen import Screen
 
+
 class Engine:
-    screen: Screen
+    _screen: Screen | None
+    _window: pygame.Surface
 
     def __init__(self, window: pygame.Surface):
-        self.window_size = window.get_size()
+        self._screen = None
+        self._window = window
 
     def set_screen(self, screen: Screen) -> None:
-        self.screen = screen
+        self._screen = screen
 
-    def get_window_size(self) -> tuple[int, int]:
-        return self.window_size
+    @property
+    def window_size(self) -> tuple[int, int]:
+        return self._window.get_size()
 
     def run(self, window: pygame.Surface, clock: pygame.time.Clock) -> None:
-        if not hasattr(self, "screen"):
-            raise Exception("No screen")
+        if self._screen is None:
+            raise ValueError("No screen - use set_screen() before run()")
 
         running = True
 
         while running:
             for raw_event in pygame.event.get():
-                print(raw_event)
                 event = Engine._parse_event(raw_event)
-                print(event)
-                print()
-
                 if event is None:
                     continue
 
-                self.screen.on_event(event)
+                self._screen.on_all_events(event)
+                self._delegate_event(event)
 
                 if event.type == events.EventType.QUIT:
                     running = False
 
-            window.fill("purple")
-            self.screen.render()
+            window.fill("white")
+            self._screen.render()
             pygame.display.flip()
 
             clock.tick(60)
+
+    def _delegate_event(self, event: events.Event) -> None:
+        match event.type:
+            case events.EventType.KEY_UP | events.EventType.KEY_DOWN:
+                self._screen.on_key_event(event)
+            case events.EventType.MOUSE_BUTTON_UP | events.EventType.MOUSE_BUTTON_DOWN:
+                self._screen.on_mouse_button_event(event)
+            case events.EventType.MOUSE_MOTION:
+                self._screen.on_mouse_motion_event(event)
+            case events.EventType.QUIT:
+                self._screen.on_quit_event(event)
 
     @staticmethod
     def _parse_event(event: pygame.event.Event) -> events.Event | None:

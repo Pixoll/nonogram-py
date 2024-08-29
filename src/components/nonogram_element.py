@@ -1,34 +1,37 @@
-import pygame
+from components import Element
 from components.board import Board
 from core.nonogram import Nonogram
-from components import Element
+from events import Event
 
 
 class NonogramElement(Element):
+    _nonogram: Nonogram
+    _cell_size: int
+    _margin: int
+    _grid_width: int
+    _grid_height: int
+    _colors: tuple[tuple[int, int, int], ...]
+    _board: Board
+
     def __init__(self, nonogram: Nonogram):
         super().__init__(*nonogram.size)
-        self.nonogram = nonogram
-        self.cell_size = 10
-        self.margin = 10
-        self.grid_width = nonogram.size[0]
-        self.grid_height = nonogram.size[1]
-        self.colors = nonogram.used_colors
-        self.board = Board(self.grid_width, self.grid_height,50,5)
+        self._nonogram = nonogram
+        self._cell_size = 10
+        self._margin = 10
+        self._grid_width, self._grid_height = nonogram.size
+        self._colors = nonogram.used_colors
+        self._board = Board(self._grid_width, self._grid_height, 50, 5)
 
-    def render(self, window):
-        self.board.render(window)
-        return
-
-    def get_size(self) -> tuple[int, int]:
-        return self.grid_width, self.grid_height
+    @property
+    def board(self) -> Board:
+        return self._board
 
     def set_position(self, position: tuple[int, int]):
         return
 
-    def get_board(self) -> Board:
-        return self.board
+    def on_all_events(self, event: Event) -> None:
+        pass
 
-
-
-
-
+    def render(self, window):
+        self._board.render(window)
+        return

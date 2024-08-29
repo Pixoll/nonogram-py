@@ -45,7 +45,7 @@ class MouseButtonEvent:
 
     def __init__(self, event: Event):
         self.type = EventType(event.type)
-        [self.x, self.y] = event.pos
+        self.x, self.y = event.pos
         self.button = MouseButton(event.button)
         self.touch = event.touch
 

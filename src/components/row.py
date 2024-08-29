@@ -1,69 +1,57 @@
-from components.element import Element
+from enum import auto, Enum
+from typing import Self
 
-class Row(Element):
+from components.element_bundle import ElementBundle
+from events import Event
+
+
+class VerticalAlignment(Enum):
+    TOP = auto()
+    CENTER = auto()
+    BOTTOM = auto()
+
+
+class Row(ElementBundle):
+    _alignment: VerticalAlignment
+    _max_height: int
+
     def __init__(self):
-        super().__init__(0, 0)
-        self.elements = []
-        self.position = (0, 0)
-        self.__update_size()
-        self.separation = 0
+        super().__init__()
+        self._alignment = VerticalAlignment.CENTER
+        self._max_height = 0
 
-        self.maxHeigth = 0
-        self.align = "center"
+    def set_alignment(self, alignment: VerticalAlignment) -> Self:
+        self._alignment = alignment
+        self._update_positions()
+        return self
 
-    """OPCIONES DE ROW"""
-    def add_child(self, element: Element):
-        self.elements.append(element)
-        self.__update_size()
-        self.__update_positions()
+    def on_all_events(self, event: Event) -> None:
+        pass
 
-    def set_position(self, new_position: tuple[int, int]):
-        self.position = new_position
-        self.__update_positions()
-
-    def set_separation(self, val: int):
-        self.separation = val
-        self.__update_positions()
-        self.__update_size()
-
-    def get_size(self) -> tuple[int, int]:
-        return self.width, self.height
-
-    def get_childs(self) -> list[Element]:
-        return self.elements
-
-    def alignment(self, alignment: str):
-        if alignment in [
-            "center", "top", "bottom"
-        ]:
-            self.align = alignment
-            self.__update_positions()
-
-    """OPCIONES DE RENDER"""
-    def render(self, window):
-        for element in self.elements:
-            element.render(window)
-
-
-    """FUNCIONES DE COMPLEMENTARIAS"""
-    def __update_size(self):
-        if not self.elements:
-            self.width = 0
-            self.height = 0
+    def _update_size(self) -> None:
+        if not self._elements:
+            self._width = 0
+            self._height = 0
             return
-        self.width = sum(el.width for el in self.elements) + self.separation*(len(self.elements)-1)
-        self.height = max(el.height for el in self.elements)
-        self.maxHeigth = self.height
 
-    def __update_positions(self):
-        current_x = 0
-        for element in self.elements:
-            if self.align == "center":
-                align = (self.maxHeigth - element.get_size()[1]) / 2
-            elif self.align == "top":
-                align = 0
-            else:
-                align = (self.maxHeigth - element.get_size()[1])
-            element_position = (self.position[0] + current_x, self.position[1] + align)
+        self._width = sum(element._width for element in self._elements) + self._padding * (len(self._elements) - 1)
+        self._height = max(element._height for element in self._elements)
+        self._max_height = self._height
+
+    def _update_positions(self) -> None:
+        x_offset = 0
+
+        for element in self._elements:
+            y_offset = 0
+
+            match self._alignment:
+                case VerticalAlignment.TOP:
+                    y_offset = 0
+                case VerticalAlignment.CENTER:
+                    y_offset = (self._max_height - element._height) / 2
+                case VerticalAlignment.BOTTOM:
+                    y_offset = (self._max_height - element._height)
+
+            element_position = (self._position[0] + x_offset, self._position[1] + y_offset)
             element.set_position(element_position)
-            current_x += element.width + self.separation
+            x_offset += element._width + self._padding

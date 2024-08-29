@@ -1,42 +1,49 @@
+from typing import Self
+
 import pygame
 
 from components.element import Element
+from events import Event
 
 
 class Text(Element):
+    _text: str
+    _font: pygame.font.Font
+    _color: tuple[int, int, int]
+    _text_surface: pygame.Surface
+
     def __init__(self, text: str, font: pygame.font.Font, color: tuple[int, int, int]):
-        self.text = text
-        self.font = font
-        self.color = color
+        text_surface = font.render(text, True, color)
+        super().__init__(*text_surface.get_size())
 
-        self.text_surface = self.font.render(self.text, True, self.color)
-        width, height = self.text_surface.get_size()
+        self._text = text
+        self._font = font
+        self._color = color
+        self._text_surface = text_surface
 
-        super().__init__(width, height)
+    def set_position(self, position: tuple[int, int]) -> Self:
+        self._position = position
+        return self
 
-        self.position = (0, 0)
+    def set_text(self, text: str) -> Self:
+        self._text = text
+        self._text_surface = self._font.render(self._text, True, self._color)
+        self._width, self._height = self._text_surface.get_size()
+        return self
 
-    def render(self, window):
-        window.blit(self.text_surface, self.position)
+    def set_color(self, color: tuple[int, int, int]) -> Self:
+        self._color = color
+        self._text_surface = self._font.render(self._text, True, self._color)
+        return self
 
-    """OPCIONES DE TEXTO"""
+    def set_font(self, font: pygame.font.Font) -> Self:
+        self._font = font
+        self._text_surface = self._font.render(self._text, True, self._color)
+        self._width, self._height = self._text_surface.get_size()
+        return self
 
-    def get_size(self) -> tuple[int, int]:
-        return self.width, self.height
+    def on_all_events(self, event: Event) -> None:
+        pass
 
-    def set_position(self, position: tuple[int, int]):
-        self.position = position
-
-    def set_text(self, new_text: str):
-        self.text = new_text
-        self.text_surface = self.font.render(self.text, True, self.color)
-        self.width, self.height = self.text_surface.get_size()
-
-    def set_color(self, new_color: tuple[int, int, int]):
-        self.color = new_color
-        self.text_surface = self.font.render(self.text, True, self.color)
-
-    def set_font(self, new_font: pygame.font.Font):
-        self.font = new_font
-        self.text_surface = self.font.render(self.text, True, self.color)
-        self.width, self.height = self.text_surface.get_size()
+    def render(self, window) -> None:
+        window.blit(self._text_surface, self._position)

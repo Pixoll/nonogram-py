@@ -1,36 +1,44 @@
 import pygame
 
-from components import Container, Text
+from components import ChildAlignment, Container, Text
 from engine import Engine
-from events import Event, EventType, KeyEvent, QuitEvent, MouseButton
+from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
 
 
 class CreateScreen(Screen):
-    engine: Engine
+    _engine: Engine
+    _menu: Container
+    _button: Container
 
     def __init__(self, engine: Engine):
-        self.engine = engine
-        self.menu = Container((1280, 720))
-        self.menu.alignment("center")
+        self._engine = engine
+        self._menu = Container(1280, 720).set_child_alignment(ChildAlignment.CENTER)
 
-        self.button1 = Container((200, 100))
-        self.button1.set_color((207, 178, 171))
-        self.button1.set_border((0, 0, 0))
-        self.button1.set_child(Text("LOL", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        self._button = (
+            Container(200, 100)
+            .set_background_color((207, 178, 171))
+            .set_border((0, 0, 0))
+            .set_child(Text("LOL", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        )
 
-        self.menu.set_child(self.button1)
+        self._menu.set_child(self._button)
 
-    def on_event(self, event: Event) -> None:
-        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:
-            mouse_pos = pygame.mouse.get_pos()
-
-            if self.button1.position[0] <= mouse_pos[0] <= self.button1.position[0] + self.button1.width and \
-                    self.button1.position[1] <= mouse_pos[1] <= self.button1.position[1] + self.button1.height:
-                from screens.main_menu_screen import MainMenuScreen
-                self.engine.set_screen(MainMenuScreen(self.engine))
+    def on_all_events(self, event: Event) -> None:
+        pass
 
     def on_key_event(self, key_event: KeyEvent) -> None:
+        pass
+
+    def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
+        if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
+            return
+
+        if self._button.contains(pygame.mouse.get_pos()):
+            from screens.main_menu_screen import MainMenuScreen
+            self._engine.set_screen(MainMenuScreen(self._engine))
+
+    def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         pass
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
@@ -38,4 +46,4 @@ class CreateScreen(Screen):
 
     def render(self) -> None:
         window = pygame.display.get_surface()
-        self.menu.render(window)
+        self._menu.render(window)

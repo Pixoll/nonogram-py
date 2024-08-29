@@ -1,44 +1,47 @@
-import pygame
+from typing import Self
+
+from pygame import Surface
+from pygame.event import Event
+
 from components.block import Block
 from components.column import Column
-from components.row import Row
 from components.element import Element
-from pygame.event import Event
+from components.row import Row
 
 
 class Board(Element):
-    def __init__(self, x: int, y:int, size: int, separation: int):
-        super().__init__(x, y)
+    def __init__(self, width: int, height: int, size: int, padding: int):
+        super().__init__(width, height)
 
-        self.row = Row()
-        for i in range(0,x):
+        self._row = Row()
+
+        for i in range(0, width):
             column = Column()
-            for j in range(0,y):
-                column.add_child(Block((size,size)))
-            self.row.add_child(column)
-            column.set_separation(separation)
-        self.row.set_separation(separation)
 
-        self.size = (self.row.get_size())
-        print(self.size)
-        self.position = (0, 0)
+            for j in range(0, height):
+                column.add_element(Block(size, size))
 
+            self._row.add_element(column)
+            column.set_padding(padding)
 
-    """OPCIONES DE BOARD"""
-    def set_position(self, new_position: tuple[int, int]):
-        self.position = new_position
-        self.row.set_position(self.position)
+        self._row.set_padding(padding)
 
-    def get_size(self) -> tuple[int, int]:
-        return self.size
+    def set_position(self, position: tuple[int, int]) -> Self:
+        self._position = position
+        self._row.set_position(self.position)
+        return self
 
-    """OPCIONES DE RENDER"""
-    def render(self, window: pygame.Surface):
-        self.row.render(window)
+    @property
+    def size(self) -> tuple[int, int]:
+        return self._row.size
 
+    def render(self, window: Surface):
+        self._row.render(window)
 
-    """FUNCIONES DE COMPLEMENTARIAS"""
-    def run_logic(self, event: Event) -> None:
-        for columna in self.row.get_childs():
-            for bloque in columna.get_childs():
-                bloque.on_event(event)
+    def on_all_events(self, event: Event) -> None:
+        for column_or_block in self._row.elements:
+            if isinstance(column_or_block, Block):
+                column_or_block.on_all_events(event)
+            else:
+                for block in column_or_block.elements:
+                    block.on_all_events(event)
