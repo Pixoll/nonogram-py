@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Self
 
 import pygame
@@ -7,11 +8,16 @@ from events import Event, EventType, MouseButton
 
 
 class Block(ElementWithChild):
+    class State(Enum):
+        EMPTY = 0
+        COLORED = 1
+        CROSSED = 2
+
     _surface: pygame.Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _border_color: tuple[int, int, int] | tuple[int, int, int, int]
     _border_width: int
-    _state: int
+    _state: State
     _x_mark_visible: bool
     _x_image: pygame.Surface
 
@@ -25,7 +31,7 @@ class Block(ElementWithChild):
         self._surface.fill(self._background_color)
         self._draw_border()
 
-        self._state = 0
+        self._state = Block.State.EMPTY
         self._x_mark_visible = False
 
         self._x_image = pygame.transform.scale(pygame.image.load('assets/textures/x.gif'), self.size)
@@ -51,25 +57,25 @@ class Block(ElementWithChild):
         self._update_child_position()
         return self
 
-    def set_state(self, state: int) -> None:
-        if state == 1:
-            if self._state == 1:
-                self._state = 0
+    def set_state(self, state: State) -> None:
+        if state == Block.State.COLORED:
+            if self._state == Block.State.COLORED:
+                self._state = Block.State.EMPTY
                 self.set_background_color((255, 255, 255))
             else:
-                if self._state == 3:
+                if self._state == Block.State.CROSSED:
                     self.toggle_x_mark()
-                self._state = 1
+                self._state = Block.State.COLORED
                 self.set_background_color((0, 0, 0))
 
             return
 
-        if self._state == 3:
+        if self._state == Block.State.CROSSED:
             self.toggle_x_mark()
-            self._state = 0
+            self._state = Block.State.EMPTY
             self.set_background_color((255, 255, 255))
         else:
-            self._state = 3
+            self._state = Block.State.CROSSED
             self.set_background_color((255, 255, 255))
             self.toggle_x_mark()
 
@@ -78,7 +84,7 @@ class Block(ElementWithChild):
             return
 
         if self.contains(pygame.mouse.get_pos()):
-            self.set_state(int(event.button == MouseButton.LEFT))
+            self.set_state(Block.State(int(event.button == MouseButton.LEFT)))
 
     def render(self, window: pygame.Surface) -> None:
         window.blit(self._surface, self.position)
