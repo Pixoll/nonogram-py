@@ -25,6 +25,9 @@ class NonogramElement(Element):
     def set_position(self, position: tuple[int, int]):
         return
 
+    def get_board(self) -> Board:
+        return self.board
+
 
 
 
