@@ -5,14 +5,15 @@ from components.row import Row
 from components.element import Element
 from pygame.event import Event
 
+
 class Board(Element):
-    def __init__(self, dimension: int, size: int, separation: int):
-        super().__init__(dimension, dimension)
+    def __init__(self, x: int, y:int, size: int, separation: int):
+        super().__init__(x, y)
 
         self.row = Row()
-        for i in range(0,dimension):
+        for i in range(0,x):
             column = Column()
-            for j in range(0,dimension):
+            for j in range(0,y):
                 column.add_child(Block((size,size)))
             self.row.add_child(column)
             column.set_separation(separation)
@@ -30,8 +31,6 @@ class Board(Element):
 
     def get_size(self) -> tuple[int, int]:
         return self.size
-
-
 
     """OPCIONES DE RENDER"""
     def render(self, window: pygame.Surface):

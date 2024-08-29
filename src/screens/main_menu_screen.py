@@ -1,6 +1,7 @@
 import pygame
 
 from components import Column, Container, Text, Row, row
+from core.nonogram import Nonogram
 from engine import Engine
 from events import Event, EventType, KeyEvent, QuitEvent, MouseButton
 from screens.screen import Screen
@@ -81,7 +82,8 @@ class MainMenuScreen(Screen):
             if self.button1.position[0] <= mouse_pos[0] <= self.button1.position[0] + self.button1.width and \
                     self.button1.position[1] <= mouse_pos[1] <= self.button1.position[1] + self.button1.height:
                 from screens.play_screen import PlayScreen
-                self.engine.set_screen(PlayScreen(self.engine))
+                nonogram = Nonogram.from_pre_made(16647)
+                self.engine.set_screen(PlayScreen(self.engine, nonogram))
 
             elif self.button2.position[0] <= mouse_pos[0] <= self.button2.position[0] + self.button2.width and \
                     self.button2.position[1] <= mouse_pos[1] <= self.button2.position[1] + self.button2.height:

@@ -26,6 +26,9 @@ class Block(Element):
         self.state = 0
         self.x_mark_visible = False  # Estado para la marca de "X"
 
+        self.x_image = pygame.image.load('assets/textures/x.gif')
+        self.x_image = pygame.transform.scale(self.x_image, (self.size[0], self.size[1]))
+
 
     """OPCIONES DE CONTAINER"""
     def set_color(self, new_color: tuple[int, int, int]):
@@ -89,9 +92,10 @@ class Block(Element):
             pygame.draw.rect(self.surface, self.border_color, self.surface.get_rect(), 1)
             self.x_mark_visible = False
         else:
-            center_x, center_y = self.surface.get_width() // 2, self.surface.get_height() // 2
-            pygame.draw.line(self.surface, (0, 0, 0), (center_x - 10, center_y - 10), (center_x + 10, center_y + 10), 3)
-            pygame.draw.line(self.surface, (0, 0, 0), (center_x + 10, center_y - 10), (center_x - 10, center_y + 10), 3)
+            x_center = (self.surface.get_width() - self.x_image.get_width()) // 2
+            y_center = (self.surface.get_height() - self.x_image.get_height()) // 2
+            self.surface.blit(self.x_image, (x_center, y_center))
+            pygame.draw.rect(self.surface, self.border_color, self.surface.get_rect(), 1)
             self.x_mark_visible = True
 
     def on_event(self, event: Event) -> None:
