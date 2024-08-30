@@ -2,7 +2,7 @@ from typing import Self
 
 from pygame import Surface
 from pygame.event import Event
-
+from core.nonogram import Nonogram
 from components.block import Block
 from components.column import Column
 from components.element import Element
@@ -10,17 +10,15 @@ from components.row import Row
 
 
 class Board(Element):
-    def __init__(self, width: int, height: int, size: int, padding: int):
-        super().__init__(width, height)
+    def __init__(self, nonogram: Nonogram, size: int, padding: int):
+        super().__init__(*nonogram.size)
 
         self._row = Row()
 
-        for i in range(0, width):
+        for i in range(nonogram.size[0]):
             column = Column()
-
-            for j in range(0, height):
-                column.add_element(Block(size, size))
-
+            for j in range(nonogram.size[1]):
+                column.add_element(Block(size, size, nonogram[i, j]).set_border_color((0, 0, 0, 64)))
             self._row.add_element(column)
             column.set_padding(padding)
 

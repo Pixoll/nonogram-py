@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Self
+from typing import Self, Literal
 
 import pygame
 
@@ -21,10 +21,10 @@ class Block(ElementWithChild):
     _x_mark_visible: bool
     _x_image: pygame.Surface
 
-    def __init__(self, width: int, height: int):
+    def __init__(self, width: int, height: int, color: tuple[int, int, int] | Literal["x"] | None):
         super().__init__(width, height)
-        self._surface = pygame.Surface(self.size)
-        self._background_color = (255, 255, 255)
+        self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
+        self._background_color = color if type(color) is tuple else (255, 255, 255)
         self._border_color = (0, 0, 0)
         self._border_width = 1
 
@@ -32,7 +32,7 @@ class Block(ElementWithChild):
         self._draw_border()
 
         self._state = Block.State.EMPTY
-        self._x_mark_visible = False
+        self._x_mark_visible = color == "x"
 
         self._x_image = pygame.transform.scale(pygame.image.load('assets/textures/x.gif'), self.size)
 
@@ -81,6 +81,9 @@ class Block(ElementWithChild):
 
     def on_all_events(self, event: Event) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN:
+            return
+
+        if event.button != MouseButton.LEFT and event.button != MouseButton.RIGHT:
             return
 
         if self.contains(pygame.mouse.get_pos()):

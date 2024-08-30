@@ -8,8 +8,6 @@ class NonogramElement(Element):
     _nonogram: Nonogram
     _cell_size: int
     _margin: int
-    _grid_width: int
-    _grid_height: int
     _colors: tuple[tuple[int, int, int], ...]
     _board: Board
 
@@ -18,9 +16,8 @@ class NonogramElement(Element):
         self._nonogram = nonogram
         self._cell_size = 10
         self._margin = 10
-        self._grid_width, self._grid_height = nonogram.size
         self._colors = nonogram.used_colors
-        self._board = Board(self._grid_width, self._grid_height, 50, 5)
+        self._board = Board(nonogram, 25, 0)
 
     @property
     def board(self) -> Board:
