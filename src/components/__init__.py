@@ -7,4 +7,5 @@ from components.element_with_child import ChildAlignment, ElementWithChild
 from components.hint_element import HintElement
 from components.nonogram_element import NonogramElement
 from components.row import Row, VerticalAlignment
+from components.sound import Sound
 from components.text import Text
