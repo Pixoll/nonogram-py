@@ -15,8 +15,6 @@ class Block(ElementWithChild):
 
     _surface: pygame.Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
-    _border_color: tuple[int, int, int] | tuple[int, int, int, int]
-    _border_width: int
     _state: State
     _x_mark_visible: bool
     _x_image: pygame.Surface
@@ -25,11 +23,8 @@ class Block(ElementWithChild):
         super().__init__(width, height)
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._background_color = color if type(color) is tuple else (255, 255, 255)
-        self._border_color = (0, 0, 0)
-        self._border_width = 1
 
         self._surface.fill(self._background_color)
-        self._draw_border()
 
         self._state = Block.State.EMPTY
         self._x_mark_visible = color == "x"
@@ -39,17 +34,6 @@ class Block(ElementWithChild):
     def set_background_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> Self:
         self._background_color = color
         self._surface.fill(self._background_color)
-        self._draw_border()
-        return self
-
-    def set_border_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> Self:
-        self._border_color = color
-        self._draw_border()
-        return self
-
-    def set_border_width(self, border_width: int) -> Self:
-        self._border_width = border_width
-        self._draw_border()
         return self
 
     def set_position(self, new_position: tuple[int, int]) -> Self:
@@ -97,15 +81,10 @@ class Block(ElementWithChild):
     def toggle_x_mark(self) -> None:
         if self._x_mark_visible:
             self._surface.fill(self._background_color)
-            self._draw_border()
             self._x_mark_visible = False
             return
 
         x_center = (self._surface.get_width() - self._x_image.get_width()) // 2
         y_center = (self._surface.get_height() - self._x_image.get_height()) // 2
         self._surface.blit(self._x_image, (x_center, y_center))
-        self._draw_border()
         self._x_mark_visible = True
-
-    def _draw_border(self) -> None:
-        pygame.draw.rect(self._surface, self._border_color, self._surface.get_rect(), self._border_width)

@@ -17,7 +17,7 @@ class NonogramElement(Element):
         self._cell_size = 10
         self._margin = 10
         self._colors = nonogram.used_colors
-        self._board = Board(nonogram, 25, 0)
+        self._board = Board(nonogram, 25, 1)
 
     @property
     def board(self) -> Board:
