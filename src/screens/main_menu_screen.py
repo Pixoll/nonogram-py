@@ -1,6 +1,6 @@
 import pygame
 
-from components import ChildAlignment, Column, Container, Row, Text
+from components import ChildAlignment, Column, Container, Row, Text, HorizontalAlignment
 from core.nonogram import Nonogram
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -19,20 +19,20 @@ class MainMenuScreen(Screen):
             .set_child_alignment(ChildAlignment.CENTER)
             .set_border((0, 132, 134))
             .set_background_color((0, 132, 134))
-            .set_image("assets/textures/bg_main_menu.jpg")
+            .set_image("assets/textures/sus.jpg")
         )
 
         column1 = Column()
         column2 = Column()
 
         title = (
-            Container(int(self._width * 0.3), int(self._height * 0.2))
-            .set_background_color((207, 224, 99))
-            .set_border((207, 224, 99))
+            Container(int(self._width * 0.4), int(self._height * 0.3))
+            .set_background_color((255, 255, 255))
+            .set_border((255, 255, 255))
             .set_child(
                 Text(
                     "NANOGRAM",
-                    pygame.font.SysFont("Arial", 50),
+                    pygame.font.SysFont("Arial", 80),
                     (99, 99, 224)
                 )
                 .set_color((152, 99, 224))
@@ -52,43 +52,48 @@ class MainMenuScreen(Screen):
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 224, 99))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("CREATE PUZZLE", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Workshop", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
 
         self._settings_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("SETTINGS", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Statistics", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        )
+
+        self._exit_button = (
+            Container(int(self._width * 0.1), int(self._height * 0.1))
+            .set_background_color((224, 99, 159))
+            .set_border((0, 0, 0, 0))
+            .set_child(Text("Exit", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
 
         (column2.add_element(self._play_button)
          .add_element(self._create_puzzle_button)
-         .add_element(self._settings_button))
-
-        (column1.add_element(column2)
-         .set_padding(int(self._height * 0.2)))
-
-        column2.set_padding(int(self._height * 0.03))
+         .add_element(self._settings_button)
+         .add_element(self._exit_button)
+         .set_padding(int(self._height*0.08))
+         .set_alignment(HorizontalAlignment.LEFT))
 
         container1 = (
-            Container(int(self._width * 0.3), self._height)
-            .set_background_color((0, 0, 0, 0))
+            Container(int(self._width * 0.6), self._height)
+            .set_background_color((255, 255, 255, 0))
             .set_border((0, 0, 0, 0))
             .set_child(column1)
         )
 
         container2 = (
-            Container(int(self._width * 0.5), self._height)
-            .set_background_color((0, 0, 0, 0))
+            Container(int(self._width * 0.4), self._height)
+            .set_background_color((0, 0, 0,  150))
             .set_border((0, 0, 0, 0))
+            .set_child(column2)
         )
 
         self._row1 = (
             Row()
             .add_element(container1)
             .add_element(container2)
-            .set_padding(int(self._width * 0.03))
         )
 
         self._base.set_child(self._row1)
