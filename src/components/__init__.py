@@ -1,4 +1,3 @@
-from components.board import Board
 from components.column import Column, HorizontalAlignment
 from components.container import Container
 from components.element import Element

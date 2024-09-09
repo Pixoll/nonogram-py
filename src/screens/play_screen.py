@@ -15,11 +15,11 @@ class PlayScreen(Screen):
     def __init__(self, engine: Engine, nonogram: Nonogram):
         self._engine = engine
         self._menu = Container(1280, 720).set_child_alignment(ChildAlignment.CENTER)
-        self._nonogram = NonogramElement(nonogram)
-        self._menu.set_child(self._nonogram.board)
+        self._nonogram = NonogramElement(nonogram, 25, 1)
+        self._menu.set_child(self._nonogram)
 
     def on_all_events(self, event: Event) -> None:
-        self._nonogram.board.on_all_events(event)
+        self._nonogram.on_all_events(event)
 
     def on_key_event(self, key_event: KeyEvent) -> None:
         pass
