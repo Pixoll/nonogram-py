@@ -2,7 +2,6 @@ from components.element import Element
 import pygame
 from events import Event
 
-
 class ColorBlock(Element):
     _color:tuple[int, int, int] | tuple[int, int, int, int]
     _position: tuple[int, int]
