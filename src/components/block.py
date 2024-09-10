@@ -41,16 +41,19 @@ class Block(ElementWithChild):
         self._update_child_position()
         return self
 
-    def set_state(self, state: State) -> None:
-        if state == Block.State.COLORED:
+    def set_state(self, new_state: State, color: tuple[int, int,int] | None) -> None:
+        if new_state == Block.State.COLORED:
             if self._state == Block.State.COLORED:
-                self._state = Block.State.EMPTY
-                self.set_background_color((255, 255, 255))
+                if color is not None and self._background_color != color:
+                    self.set_background_color(color)
+                else:
+                    self._state = Block.State.EMPTY
+                    self.set_background_color((255, 255, 255))
             else:
                 if self._state == Block.State.CROSSED:
                     self.toggle_x_mark()
                 self._state = Block.State.COLORED
-                self.set_background_color((0, 0, 0))
+                self.set_background_color(color)
 
             return
 
@@ -64,14 +67,7 @@ class Block(ElementWithChild):
             self.toggle_x_mark()
 
     def on_all_events(self, event: Event) -> None:
-        if event.type != EventType.MOUSE_BUTTON_DOWN:
-            return
-
-        if event.button != MouseButton.LEFT and event.button != MouseButton.RIGHT:
-            return
-
-        if self.contains(pygame.mouse.get_pos()):
-            self.set_state(Block.State(int(event.button == MouseButton.LEFT)))
+        pass
 
     def render(self, window: pygame.Surface) -> None:
         window.blit(self._surface, self.position)

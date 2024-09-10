@@ -2,12 +2,13 @@ from typing import Self
 
 import pygame
 from pygame import Surface
-from pygame.event import Event
-from core.nonogram import Nonogram
+
 from components.block import Block
 from components.column import Column
 from components.element import Element
 from components.row import Row
+from core.nonogram import Nonogram
+from events import Event, EventType, MouseButton
 
 
 class NonogramElement(Element):
@@ -16,6 +17,7 @@ class NonogramElement(Element):
     _padding: int
     _horizontal_hints: tuple[tuple[Nonogram.Hint, ...], ...]
     _vertical_hints: tuple[tuple[Nonogram.Hint, ...], ...]
+    _selected_color: tuple[int, int, int]
 
     def __init__(self, nonogram: Nonogram, size: int, padding: int):
         super().__init__(nonogram.size[0] * (size + padding) + padding, nonogram.size[1] * (size + padding) + padding)
@@ -25,6 +27,7 @@ class NonogramElement(Element):
         self._row = Row()
         self._horizontal_hints = nonogram.horizontal_hints
         self._vertical_hints = nonogram.vertical_hints
+        self._selected_color = nonogram.used_colors[0]
         for i in range(nonogram.size[0]):
             column = Column()
             for j in range(nonogram.size[1]):
@@ -51,14 +54,24 @@ class NonogramElement(Element):
         self._surface.fill(self._background_color)
         return self
 
+    def set_selected_color(self, color: tuple[int, int, int]) -> Self:
+        self._selected_color = color
+        return self
+
     def render(self, window: Surface):
         window.blit(self._surface, (self.position[0] - self._padding, self._position[1] - self._padding))
         self._row.render(window)
 
     def on_all_events(self, event: Event) -> None:
-        for column_or_block in self._row.elements:
-            if isinstance(column_or_block, Block):
-                column_or_block.on_all_events(event)
-            else:
-                for block in column_or_block.elements:
-                    block.on_all_events(event)
+        if event.type != EventType.MOUSE_BUTTON_DOWN:
+            return
+
+        if event.button != MouseButton.LEFT and event.button != MouseButton.RIGHT:
+            return
+
+        for column in self._row.elements:
+            for block in column.elements:
+                # noinspection PyTypeChecker
+                b: Block = block
+                if b.contains(pygame.mouse.get_pos()):
+                    b.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)

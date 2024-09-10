@@ -1,9 +1,12 @@
 import pygame
-from components.element import Element
+
 from components.color_block import ColorBlock
-from components.row import Row, VerticalAlignment
 from components.column import Column
-from events import Event
+from components.element import Element
+from components.nonogram_element import NonogramElement
+from components.row import Row, VerticalAlignment
+from events import Event, EventType, MouseButton
+
 
 class ColorPicker(Element):
     _surface: pygame.Surface
@@ -12,11 +15,17 @@ class ColorPicker(Element):
     _position: tuple[int, int]
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _size_block: int
-    _color_selected: ColorBlock
+    _selected_block: ColorBlock
+    _nonogram_element: NonogramElement
 
-    def __init__(self, colors: tuple[tuple[int, int, int], ...], padding: int) -> None:
+    def __init__(
+            self,
+            nonogram_element: NonogramElement,
+            colors: tuple[tuple[int, int, int], ...],
+            padding: int
+    ) -> None:
         cols = 4
-        rows = len(colors)//cols
+        rows = len(colors) // cols
         if len(colors) % cols > 0:
             rows += 1
         super().__init__(cols * 25, rows * 25)
@@ -26,7 +35,8 @@ class ColorPicker(Element):
         self._padding = padding
         self._background_color = (229, 229, 229)
         self._row = Row().set_alignment(VerticalAlignment.TOP)
-        self._color_selected = ColorBlock(self._size_block,self._size_block,(1,1,1))
+        self._selected_block = ColorBlock(self._size_block, self._size_block, colors[0])
+        self._nonogram_element = nonogram_element
         width = cols * (self._size_block + padding)
         height = rows * (self._size_block + padding)
 
@@ -40,34 +50,30 @@ class ColorPicker(Element):
             column.set_padding(padding)
 
         self._row.set_padding(padding)
-        self.set_position((1000,300))
-        self._color_selected.set_position((self._position[0] + 25, self._position[1]+200))
+        self.set_position((1000, 300))
+        self._selected_block.set_position((self._position[0] + 25, self._position[1] + 200))
         self._surface = pygame.Surface((width, height), pygame.SRCALPHA)
 
         self._surface.fill(self._background_color)
-
 
     def set_position(self, position: tuple[int, int]):
         self._position = position
         self._row.set_position(position)
 
-    def on_all_events(self, event: Event) -> tuple[int, int, int] | tuple[int, int, int, int]:
-        for column_or_block in self._row.elements:
-            if isinstance(column_or_block, ColorBlock):
-                color = column_or_block.on_all_events(event)
-                if color:
-                    self._color_selected.set_color(color)
-                    self._color_selected._surface.fill(color)
-                    return color
-            else:
-                for block in column_or_block.elements:
-                    color = block.on_all_events(event)
-                    if color:
-                        self._color_selected.set_color(color)
-                        self._color_selected._surface.fill(color)
-                        return color
+    def on_all_events(self, event: Event) -> None:
+        if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
+            return
+
+        for column in self._row.elements:
+            for block in column.elements:
+                if block.contains(pygame.mouse.get_pos()):
+                    # noinspection PyTypeChecker
+                    b: ColorBlock = block
+                    color = b.color
+                    self._selected_block.set_color(color)
+                    self._nonogram_element.set_selected_color(color)
 
     def render(self, screen) -> None:
         screen.blit(self._surface, self._position)
-        self._color_selected.render(screen)
+        self._selected_block.render(screen)
         self._row.render(screen)
