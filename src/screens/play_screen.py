@@ -22,6 +22,7 @@ class PlayScreen(Screen):
 
     def on_all_events(self, event: Event) -> None:
         self._nonogram.on_all_events(event)
+        self._color_picker.on_all_events(event)
 
     def on_key_event(self, key_event: KeyEvent) -> None:
         pass
