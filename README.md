@@ -1,6 +1,4 @@
-# Nonogram in Python
-
-University Programming Project in Python
+# Nonogram in pygame
 
 ## Dependencies
 
