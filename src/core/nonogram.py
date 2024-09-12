@@ -313,11 +313,12 @@ class Nonogram:
         for i in reversed(range(max_vertical_hints)):
             grid += padding * max_horizontal_hints
             for hints in self._vertical_hints:
+                hints = hints[::-1]
                 grid += hints[i].__repr__() if len(hints) > 0 and i < len(hints) else padding
             grid += "\n"
 
         for y in range(self._size[1]):
-            hints = self._horizontal_hints[y]
+            hints = self._horizontal_hints[y][::-1]
             for i in reversed(range(max_horizontal_hints)):
                 grid += hints[i].__repr__() if len(hints) > 0 and i < len(hints) else padding
 
@@ -358,7 +359,7 @@ class Nonogram:
 
             skipped = False
 
-        return tuple(hints)[::-1]
+        return tuple(hints)
 
     @staticmethod
     def _get_palette(palette_json: dict[str, str]) -> dict[str, rgb_t]:
