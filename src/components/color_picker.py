@@ -44,7 +44,6 @@ class ColorPicker(Element):
             column = Column()
             for j in range(rows):
                 if i * rows + j < len(colors):
-                    print(i * rows + j)
                     column.add_element(ColorBlock(self._size_block, self._size_block, colors[i * rows + j]))
             self._row.add_element(column)
             column.set_padding(padding)
