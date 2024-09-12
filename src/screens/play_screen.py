@@ -1,6 +1,6 @@
 import pygame
 
-from components import ChildAlignment, Container, NonogramElement, ColorPicker
+from components import ChildAlignment, Container, NonogramElement, ColorPicker, HintElement
 from core.nonogram import Nonogram
 from engine import Engine
 from events import Event, KeyEvent, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -12,7 +12,6 @@ class PlayScreen(Screen):
     _menu: Container
     _nonogram: NonogramElement
     _color_picker: ColorPicker
-
     def __init__(self, engine: Engine, nonogram: Nonogram):
         self._engine = engine
         self._menu = Container(1280, 720).set_child_alignment(ChildAlignment.CENTER)

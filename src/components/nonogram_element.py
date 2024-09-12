@@ -6,6 +6,7 @@ from pygame import Surface
 from components.block import Block
 from components.column import Column
 from components.element import Element
+from components.hint_element import HintElement
 from components.row import Row
 from core.nonogram import Nonogram
 from events import Event, EventType, MouseButton
@@ -15,8 +16,8 @@ class NonogramElement(Element):
     _surface: Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _padding: int
-    _horizontal_hints: tuple[tuple[Nonogram.Hint, ...], ...]
-    _vertical_hints: tuple[tuple[Nonogram.Hint, ...], ...]
+    _horizontal_hints: HintElement
+    _vertical_hints: HintElement
     _selected_color: tuple[int, int, int]
 
     def __init__(self, nonogram: Nonogram, size: int, padding: int):
@@ -25,9 +26,10 @@ class NonogramElement(Element):
         self._background_color = (192, 192, 192)
         self._padding = padding
         self._row = Row()
-        self._horizontal_hints = nonogram.horizontal_hints
-        self._vertical_hints = nonogram.vertical_hints
+        self._horizontal_hints = HintElement(size,nonogram, padding,True)
+        self._vertical_hints = HintElement(size,nonogram, padding,False)
         self._selected_color = nonogram.used_colors[0]
+
         for i in range(nonogram.size[0]):
             column = Column()
             for j in range(nonogram.size[1]):
@@ -60,6 +62,7 @@ class NonogramElement(Element):
 
     def render(self, window: Surface):
         window.blit(self._surface, (self.position[0] - self._padding, self._position[1] - self._padding))
+        self._vertical_hints.render(window)
         self._row.render(window)
 
     def on_all_events(self, event: Event) -> None:
