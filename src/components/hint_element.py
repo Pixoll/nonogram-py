@@ -1,7 +1,5 @@
 from typing import Self
 from pygame import Surface
-from sqlalchemy import column
-
 from components.column import Column, HorizontalAlignment
 from components.element import Element
 from components.row import Row, VerticalAlignment
@@ -35,6 +33,7 @@ class HintElement(Element):
 
                 self._colum_or_row.add_element(row)
                 self._colum_or_row.set_alignment(HorizontalAlignment.RIGHT)
+            self._colum_or_row.set_padding(padding)
         else:
 
             self._hints = nonogram.vertical_hints
@@ -50,13 +49,15 @@ class HintElement(Element):
 
                 self._colum_or_row.add_element(column)
                 self._colum_or_row.set_alignment(VerticalAlignment.BOTTOM)
+            self._colum_or_row.set_padding(padding)
 
     def set_position(self, position: tuple[int, int]) -> Self:
-        pass
+        self._position = position
+        self._colum_or_row.set_position(position)
+        return self
 
     def on_all_events(self, event: Event) -> None:
         pass
 
     def render(self, window: Surface) -> None:
         self._colum_or_row.render(window)
-        pass

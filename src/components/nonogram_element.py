@@ -44,7 +44,22 @@ class NonogramElement(Element):
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
-        self._row.set_position(self.position)
+        max_horizontal_hint_blocks = max(len(hints) for hints in self._horizontal_hints._hints)
+        max_vertical_hint_blocks = max(len(hints) for hints in self._vertical_hints._hints)
+
+        block_size = self._horizontal_hints.size[0]
+
+        vertical_hint_position = (
+        self._position[0], self._position[1] - max_vertical_hint_blocks *  (self._padding + block_size))
+
+        horizontal_hint_position = (
+        self._position[0] - max_horizontal_hint_blocks * (self._padding + block_size), self._position[1])
+
+        self._vertical_hints.set_position(vertical_hint_position)
+        self._horizontal_hints.set_position(horizontal_hint_position)
+
+        self._row.set_position(self._position)
+
         return self
 
     @property
@@ -62,7 +77,11 @@ class NonogramElement(Element):
 
     def render(self, window: Surface):
         window.blit(self._surface, (self.position[0] - self._padding, self._position[1] - self._padding))
+
         self._vertical_hints.render(window)
+
+        self._horizontal_hints.render(window)
+
         self._row.render(window)
 
     def on_all_events(self, event: Event) -> None:

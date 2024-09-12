@@ -49,7 +49,7 @@ class ColorPicker(Element):
             column.set_padding(padding)
 
         self._row.set_padding(padding)
-        self.set_position((1000, 300))
+        self.set_position((1500, 400))
         self._selected_block.set_position((self._position[0] + 25, self._position[1] + 200))
         self._surface = pygame.Surface((width, height), pygame.SRCALPHA)
 
