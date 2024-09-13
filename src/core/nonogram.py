@@ -315,21 +315,22 @@ class Nonogram:
         x, y = index
         return self._player_grid[y][x]
 
-    def __setitem__(self, index: tuple[int, int], value: rgb_t | Literal["x"] | None) -> None:
+    def __setitem__(self, index: tuple[int, int], new_value: rgb_t | Literal["x"] | None) -> None:
         x, y = index
-        if self._player_grid[y][x] == value:
+        if self._player_grid[y][x] == new_value:
             return
 
-        self._player_grid[y][x] = value
-        self._player_grid_transposed[x][y] = value
+        old_value = self._player_grid[y][x]
+        is_old_correct = (None if old_value == "x" else old_value) == self._original[y][x]
+        is_new_correct = (None if new_value == "x" else new_value) == self._original[y][x]
 
-        if value == "x":
+        self._player_grid[y][x] = new_value
+        self._player_grid_transposed[x][y] = new_value
+
+        if is_old_correct == is_new_correct:
             return
 
-        if value == self._original[y][x]:
-            self._correct_cells += 1
-        else:
-            self._correct_cells -= 1
+        self._correct_cells += 1 if is_new_correct else -1
 
     def __repr__(self):
         title = f"{Nonogram.__name__} {self._size[0]}x{self._size[1]}:"
