@@ -1,3 +1,4 @@
+from components.block import Block
 from components.color_picker import ColorPicker
 from components.column import Column, HorizontalAlignment
 from components.hints_element import HintsElement
