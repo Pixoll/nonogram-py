@@ -4,7 +4,7 @@ from pygame import font, Surface
 from components import ChildAlignment, ColorPicker, Container, NonogramElement
 from core.nonogram import Nonogram
 from engine import Engine
-from events import Event, KeyEvent, MouseButtonEvent, MouseMotionEvent, QuitEvent
+from events import Event, Key, KeyEvent, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
 
 
@@ -30,7 +30,9 @@ class PlayScreen(Screen):
         self._color_picker.on_all_events(event)
 
     def on_key_event(self, key_event: KeyEvent) -> None:
-        pass
+        if key_event.key == Key.ESCAPE:
+            from screens.main_menu_screen import MainMenuScreen
+            self._engine.set_screen(MainMenuScreen(self._engine))
 
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
         pass
