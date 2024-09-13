@@ -1,13 +1,16 @@
 from typing import Self
+
 from pygame import font, Surface
+
+from components.colored_block import ColoredBlock
 from components.column import Column, HorizontalAlignment
 from components.element import Element
 from components.row import Row, VerticalAlignment
-from components.colored_block import ColoredBlock
 from core.nonogram import Nonogram
 from events import Event
 
-class HintElement(Element):
+
+class HintsElement(Element):
     _surface: Surface
     _padding: int
     _nonogram: Nonogram
@@ -55,6 +58,10 @@ class HintElement(Element):
         self._position = position
         self._colum_or_row.set_position(position)
         return self
+
+    @property
+    def hints(self) -> tuple[tuple[Nonogram.Hint, ...], ...]:
+        return self._hints
 
     def on_all_events(self, event: Event) -> None:
         pass

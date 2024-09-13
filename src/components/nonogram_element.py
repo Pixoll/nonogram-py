@@ -6,7 +6,7 @@ from pygame import Surface
 from components.block import Block
 from components.column import Column
 from components.element import Element
-from components.hint_element import HintElement
+from components.hints_element import HintsElement
 from components.row import Row
 from core.nonogram import Nonogram
 from events import Event, EventType, MouseButton
@@ -16,8 +16,9 @@ class NonogramElement(Element):
     _surface: Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _padding: int
-    _horizontal_hints: HintElement
-    _vertical_hints: HintElement
+    _block_size: int
+    _horizontal_hints: HintsElement
+    _vertical_hints: HintsElement
     _selected_color: tuple[int, int, int]
 
     def __init__(self, nonogram: Nonogram, size: int, padding: int):
@@ -26,8 +27,9 @@ class NonogramElement(Element):
         self._background_color = (192, 192, 192)
         self._padding = padding
         self._row = Row()
-        self._horizontal_hints = HintElement(size,nonogram, padding,True)
-        self._vertical_hints = HintElement(size,nonogram, padding,False)
+        self._block_size = size
+        self._horizontal_hints = HintsElement(size, nonogram, padding, True)
+        self._vertical_hints = HintsElement(size, nonogram, padding, False)
         self._selected_color = nonogram.used_colors[0]
 
         for i in range(nonogram.size[0]):
@@ -44,16 +46,18 @@ class NonogramElement(Element):
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
-        max_horizontal_hint_blocks = max(len(hints) for hints in self._horizontal_hints._hints)
-        max_vertical_hint_blocks = max(len(hints) for hints in self._vertical_hints._hints)
-
-        block_size = self._horizontal_hints.size[0]
+        max_horizontal_hint_blocks = max(len(hints) for hints in self._horizontal_hints.hints)
+        max_vertical_hint_blocks = max(len(hints) for hints in self._vertical_hints.hints)
 
         vertical_hint_position = (
-        self._position[0], self._position[1] - max_vertical_hint_blocks *  (self._padding + block_size))
+            self._position[0],
+            self._position[1] - max_vertical_hint_blocks * (self._padding + self._block_size)
+        )
 
         horizontal_hint_position = (
-        self._position[0] - max_horizontal_hint_blocks * (self._padding + block_size), self._position[1])
+            self._position[0] - max_horizontal_hint_blocks * (self._padding + self._block_size),
+            self._position[1]
+        )
 
         self._vertical_hints.set_position(vertical_hint_position)
         self._horizontal_hints.set_position(horizontal_hint_position)
