@@ -1,6 +1,7 @@
-from components.element import Element
 import pygame
-from events import Event, EventType, MouseButton
+
+from components.element import Element
+from events import Event
 
 
 class ColorBlock(Element):
@@ -10,10 +11,10 @@ class ColorBlock(Element):
     _hint_value: int | None
     _font: pygame.font.Font
 
-    def __init__(self, width: int, height: int, color: tuple[int, int, int] | tuple[int, int, int, int], font: pygame.font.Font = None) -> None:
-        super().__init__(width, height)
+    def __init__(self, size: int, color: tuple[int, int, int] | tuple[int, int, int, int], font: pygame.font.Font = None) -> None:
+        super().__init__(size, size)
         self._color = color
-        self._surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._surface.fill(self._color)
         self._hint_value = None
         self._font = font if font else pygame.font.SysFont(None, 24)

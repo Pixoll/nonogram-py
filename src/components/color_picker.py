@@ -22,6 +22,7 @@ class ColorPicker(Element):
             self,
             nonogram_element: NonogramElement,
             colors: tuple[tuple[int, int, int], ...],
+            block_size: int,
             padding: int
     ) -> None:
         cols = 4
@@ -35,7 +36,6 @@ class ColorPicker(Element):
         self._padding = padding
         self._background_color = (229, 229, 229)
         self._row = Row().set_alignment(VerticalAlignment.TOP)
-        self._selected_block = ColorBlock(self._size_block, self._size_block, colors[0])
         self._nonogram_element = nonogram_element
         width = cols * (self._size_block + padding)
         height = rows * (self._size_block + padding)
@@ -43,16 +43,19 @@ class ColorPicker(Element):
         for i in range(cols):
             column = Column()
             for j in range(rows):
-                if i * rows + j < len(colors):
-                    column.add_element(ColorBlock(self._size_block, self._size_block, colors[i * rows + j]))
+                index = i + j * cols
+                if index < len(colors):
+                    column.add_element(ColorBlock(self._size_block, colors[index]))
             self._row.add_element(column)
             column.set_padding(padding)
 
         self._row.set_padding(padding)
         self.set_position((1500, 400))
-        self._selected_block.set_position((self._position[0] + 25, self._position[1] + 200))
-        self._surface = pygame.Surface((width, height), pygame.SRCALPHA)
 
+        self._selected_block = ColorBlock(self._size_block, colors[0])
+        self._selected_block.set_position((self._position[0] + 25, self._position[1] + 200))
+
+        self._surface = pygame.Surface((width, height), pygame.SRCALPHA)
         self._surface.fill(self._background_color)
 
     def set_position(self, position: tuple[int, int]):
