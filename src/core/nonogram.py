@@ -1,12 +1,13 @@
 import json
 import os.path as path
 from os import listdir, makedirs
+from random import randrange
 from typing import Any, Literal, Self
 
 from PIL import Image
 
 type rgb_t = tuple[int, int, int]
-type nonogram_type_t = Literal["pre_made", "image", "custom"]
+type nonogram_type_t = Literal["pre_made", "image", "custom", "generated"]
 
 
 class Nonogram:
@@ -167,6 +168,33 @@ class Nonogram:
                 nonogram_data[i].append(pixels[j, i])
 
         return cls(nonogram_data, "image")
+
+    @classmethod
+    def generate(cls, size: tuple[int, int], colors: list[rgb_t] | None = None) -> Self:
+        if colors is None:
+            colors = [(0, 0, 0)]
+
+        test = set()
+        nonogram_data: list[list[rgb_t | None]] = []
+        total_colors = size[0] * size[1] * randrange(30, 70) / 100
+        colored = 0
+
+        for i in range(size[0]):
+            nonogram_data.append([])
+            for j in range(size[1]):
+                nonogram_data[i].append(None)
+
+        while colored < total_colors:
+            x = randrange(0, size[0])
+            y = randrange(0, size[1])
+            if nonogram_data[x][y] is None:
+                index = randrange(len(colors))
+                test.add(index)
+                color = colors[index]
+                nonogram_data[x][y] = color
+                colored += 1
+
+        return cls(nonogram_data, "generated")
 
     @classmethod
     def load(cls, nonogram_type: nonogram_type_t, nonogram_id: int) -> Self:
