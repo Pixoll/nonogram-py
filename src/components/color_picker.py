@@ -8,7 +8,7 @@ from components.column import Column
 from components.element import Element
 from components.nonogram_element import NonogramElement
 from components.row import Row, VerticalAlignment
-from events import Event, EventType, MouseButton
+from events import Event, EventType, MouseButton, MouseWheelEvent
 
 
 class ColorPicker(Element):
@@ -18,6 +18,7 @@ class ColorPicker(Element):
     _position: tuple[int, int]
     _background_color: tuple[int, int, int]
     _block_size: int
+    _selected_color_index: int
     _selected_block: ColorBlock
     _nonogram_element: NonogramElement
 
@@ -51,7 +52,8 @@ class ColorPicker(Element):
         self._row.set_padding(padding)
         self.set_position((1000, 300))
 
-        self._selected_block = ColorBlock(block_size, colors[0]).set_position((
+        self._selected_color_index = 0
+        self._selected_block = ColorBlock(block_size, colors[self._selected_color_index]).set_position((
             self.position[0] + (self._row.size[0] - block_size) // 2,
             self.position[1] + self._row.size[1] + block_size
         ))
@@ -65,6 +67,20 @@ class ColorPicker(Element):
         return self
 
     def on_all_events(self, event: Event) -> None:
+        if event.type == EventType.MOUSE_WHEEL:
+            wheel_event: MouseWheelEvent = event
+            down = wheel_event.precise_y < 0 if not wheel_event.flipped else wheel_event.precise_y > 0
+
+            self._selected_color_index += -1 if down else 1
+            if self._selected_color_index >= len(self._colors):
+                self._selected_color_index = 0
+            elif self._selected_color_index < 0:
+                self._selected_color_index = len(self._colors) - 1
+
+            color = self._colors[self._selected_color_index]
+            self._selected_block.set_color(color)
+            self._nonogram_element.set_selected_color(color)
+
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 
