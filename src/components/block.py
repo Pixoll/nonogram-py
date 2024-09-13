@@ -1,10 +1,10 @@
 from enum import Enum
-from typing import Self, Literal
+from typing import Literal, Self
 
 import pygame
 
 from components.element_with_child import ElementWithChild
-from events import Event, EventType, MouseButton
+from events import Event
 
 
 class Block(ElementWithChild):
@@ -41,7 +41,7 @@ class Block(ElementWithChild):
         self._update_child_position()
         return self
 
-    def set_state(self, new_state: State, color: tuple[int, int,int] | None) -> None:
+    def set_state(self, new_state: State, color: tuple[int, int, int] | None) -> None:
         if new_state == Block.State.COLORED:
             if self._state == Block.State.COLORED:
                 if color is not None and self._background_color != color:

@@ -397,10 +397,10 @@ class KeyEvent:
             self.key = Key.INVALID
 
         self.key_code = event.key
-        self.mod = []
+        self.mods = []
         for mod in list(KeyMod):
             if event.mod & mod != 0:
-                self.mod.append(mod)
+                self.mods.append(mod)
 
         self.unicode = event.unicode
 

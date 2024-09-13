@@ -1,3 +1,5 @@
+from typing import Self
+
 import pygame
 
 from components.element import Element
@@ -5,7 +7,7 @@ from events import Event
 
 
 class ColorBlock(Element):
-    _color: tuple[int, int, int] | tuple[int, int, int, int]
+    _color: tuple[int, int, int]
     _position: tuple[int, int]
     _surface: pygame.Surface
     _hint_value: int | None
@@ -19,15 +21,17 @@ class ColorBlock(Element):
         self._hint_value = None
         self._font = font if font else pygame.font.SysFont(None, 24)
 
-    def set_position(self, position: tuple[int, int]) -> None:
+    def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
+        return self
 
-    def set_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> None:
+    def set_color(self, color: tuple[int, int, int]) -> Self:
         self._color = color
         self._surface.fill(color)
+        return self
 
     @property
-    def color(self) -> tuple[int, int, int] | tuple[int, int, int, int]:
+    def color(self) -> tuple[int, int, int]:
         return self._color
 
     def on_all_events(self, event: Event) -> None:
