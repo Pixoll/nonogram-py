@@ -66,6 +66,14 @@ class Block(ElementWithChild):
             self.set_background_color((255, 255, 255))
             self.toggle_x_mark()
 
+    @property
+    def color(self) -> tuple[int, int, int]:
+        return self._background_color
+
+    @property
+    def state(self) -> State:
+        return self._state
+
     def on_all_events(self, event: Event) -> None:
         pass
 

@@ -13,9 +13,12 @@ from events import Event, EventType, MouseButton
 
 
 class NonogramElement(Element):
+    _nonogram: Nonogram
     _surface: Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _padding: int
+    _grid: Row
+    _grid_position: tuple[int, int]
     _block_size: int
     _horizontal_hints: HintsElement
     _vertical_hints: HintsElement
@@ -27,9 +30,11 @@ class NonogramElement(Element):
             nonogram.size[1] * (block_size + padding) + padding
         )
 
+        self._nonogram = nonogram
         self._background_color = (192, 192, 192)
         self._padding = padding
         self._grid = Row()
+        self._grid_position = (0, 0)
         self._block_size = block_size
         self._horizontal_hints = HintsElement(nonogram.horizontal_hints, block_size, padding, True)
         self._vertical_hints = HintsElement(nonogram.vertical_hints, block_size, padding, False)
@@ -54,10 +59,11 @@ class NonogramElement(Element):
         self._position = (position[0] - self._horizontal_hints.size[0] // 2, position[1])
         vertical_hint_position = (self._position[0] + self._horizontal_hints.size[0] + self._padding, self._position[1])
         horizontal_hint_position = (self._position[0], self._position[1] + self._vertical_hints.size[1] + self._padding)
+        self._grid_position = (vertical_hint_position[0], horizontal_hint_position[1])
 
         self._vertical_hints.set_position(vertical_hint_position)
         self._horizontal_hints.set_position(horizontal_hint_position)
-        self._grid.set_position((vertical_hint_position[0], horizontal_hint_position[1]))
+        self._grid.set_position(self._grid_position)
 
         return self
 
@@ -83,9 +89,24 @@ class NonogramElement(Element):
         if event.button != MouseButton.LEFT and event.button != MouseButton.RIGHT:
             return
 
+        mouse_pos = pygame.mouse.get_pos()
+
         for column in self._grid.elements:
             for block in column.elements:
                 # noinspection PyTypeChecker
                 b: Block = block
-                if b.contains(pygame.mouse.get_pos()):
-                    b.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)
+                if not b.contains(mouse_pos):
+                    continue
+
+                b.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)
+
+                x = (mouse_pos[0] - self._grid_position[0]) // (self._block_size + self._padding)
+                y = (mouse_pos[1] - self._grid_position[1]) // (self._block_size + self._padding)
+
+                match b.state:
+                    case Block.State.EMPTY:
+                        self._nonogram[x, y] = None
+                    case Block.State.CROSSED:
+                        self._nonogram[x, y] = "x"
+                    case Block.State.COLORED:
+                        self._nonogram[x, y] = b.color
