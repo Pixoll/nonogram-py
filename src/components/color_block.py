@@ -1,28 +1,33 @@
-from components.element import Element
+from typing import Self
+
 import pygame
-from events import Event, EventType, MouseButton
+
+from components.element import Element
+from events import Event
 
 
 class ColorBlock(Element):
-    _color: tuple[int, int, int] | tuple[int, int, int, int]
+    _color: tuple[int, int, int]
     _position: tuple[int, int]
     _surface: pygame.Surface
 
-    def __init__(self, width: int, height: int, color: tuple[int, int, int] | tuple[int, int, int, int]) -> None:
-        super().__init__(width, height)
+    def __init__(self, size: int, color: tuple[int, int, int]) -> None:
+        super().__init__(size, size)
         self._color = color
-        self._surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._surface.fill(self._color)
 
-    def set_position(self, position: tuple[int, int]) -> None:
+    def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
+        return self
 
-    def set_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> None:
+    def set_color(self, color: tuple[int, int, int]) -> Self:
         self._color = color
         self._surface.fill(color)
+        return self
 
     @property
-    def color(self) -> tuple[int, int, int] | tuple[int, int, int, int]:
+    def color(self) -> tuple[int, int, int]:
         return self._color
 
     def on_all_events(self, event: Event) -> None:
