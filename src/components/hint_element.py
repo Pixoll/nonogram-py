@@ -19,7 +19,7 @@ class HintElement(Element):
         self._nonogram = nonogram
         self._padding = padding
         self._is_horizontal = is_horizontal
-        hints_font = font.SysFont("Arial", 24)
+        hints_font = font.SysFont("Arial", int(size / 1.5))
 
         if self._is_horizontal:
             self._hints = nonogram.horizontal_hints
