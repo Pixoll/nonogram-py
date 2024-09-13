@@ -44,29 +44,22 @@ class NonogramElement(Element):
 
         self._grid.set_padding(padding)
 
+        self._width = self._horizontal_hints.size[0] + self._padding + self._grid.size[0]
+        self._height = self._vertical_hints.size[1] + self._padding + self._grid.size[1]
+
         self._surface = Surface((self.size[0] + padding * 2, self.size[1] + padding * 2), pygame.SRCALPHA)
         self._surface.fill(self._background_color)
 
     def set_position(self, position: tuple[int, int]) -> Self:
-        self._position = position
-        vertical_hint_position = (
-            position[0],
-            position[1] - self._vertical_hints.size[1] - self._padding * 2
-        )
-        horizontal_hint_position = (
-            position[0] - self._horizontal_hints.size[0] - self._padding * 2,
-            position[1]
-        )
+        self._position = (position[0] - self._horizontal_hints.size[0] // 2, position[1])
+        vertical_hint_position = (self._position[0] + self._horizontal_hints.size[0] + self._padding, self._position[1])
+        horizontal_hint_position = (self._position[0], self._position[1] + self._vertical_hints.size[1] + self._padding)
 
         self._vertical_hints.set_position(vertical_hint_position)
         self._horizontal_hints.set_position(horizontal_hint_position)
-        self._grid.set_position(position)
+        self._grid.set_position((vertical_hint_position[0], horizontal_hint_position[1]))
 
         return self
-
-    @property
-    def size(self) -> tuple[int, int]:
-        return self._grid.size
 
     def set_background_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> Self:
         self._background_color = color
