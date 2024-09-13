@@ -31,6 +31,7 @@ class HintElement(Element):
                     hint_block = ColoredBlock(size, hint.color, str(hint.value), hints_font)
                     row.add_element(hint_block)
 
+                row.set_padding(padding)
                 self._colum_or_row.add_element(row)
                 self._colum_or_row.set_alignment(HorizontalAlignment.RIGHT)
             self._colum_or_row.set_padding(padding)
@@ -45,6 +46,7 @@ class HintElement(Element):
                     hint_block = ColoredBlock(size, hint.color, str(hint.value), hints_font)
                     column.add_element(hint_block)
 
+                column.set_padding(padding)
                 self._colum_or_row.add_element(column)
                 self._colum_or_row.set_alignment(VerticalAlignment.BOTTOM)
             self._colum_or_row.set_padding(padding)
