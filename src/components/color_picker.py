@@ -69,7 +69,7 @@ class ColorPicker(Element):
     def on_all_events(self, event: Event) -> None:
         if event.type == EventType.MOUSE_WHEEL:
             wheel_event: MouseWheelEvent = event
-            down = wheel_event.precise_y < 0 if not wheel_event.flipped else wheel_event.precise_y > 0
+            down = wheel_event.precise_y < 0 if wheel_event.flipped else wheel_event.precise_y > 0
 
             self._selected_color_index += -1 if down else 1
             if self._selected_color_index >= len(self._colors):
