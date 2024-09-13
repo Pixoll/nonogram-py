@@ -94,7 +94,7 @@ class Nonogram:
 
                 self._player_grid[-1].append(None)
 
-        if nonogram_type != "pre_made" and nonogram_id is None and len(used_colors) > 1:
+        if nonogram_type == "image" and nonogram_id is None and len(used_colors) > 1:
             lightest_color: rgb_t | None = None
             highest_luminance = 0
 
