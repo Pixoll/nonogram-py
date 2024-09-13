@@ -1,9 +1,9 @@
 from typing import Self
-from pygame import Surface
+from pygame import font, Surface
 from components.column import Column, HorizontalAlignment
 from components.element import Element
 from components.row import Row, VerticalAlignment
-from components.color_block import ColorBlock
+from components.colored_block import ColoredBlock
 from core.nonogram import Nonogram
 from events import Event
 
@@ -19,6 +19,7 @@ class HintElement(Element):
         self._nonogram = nonogram
         self._padding = padding
         self._is_horizontal = is_horizontal
+        hints_font = font.SysFont("Arial", 24)
 
         if self._is_horizontal:
             self._hints = nonogram.horizontal_hints
@@ -27,15 +28,13 @@ class HintElement(Element):
                 row = Row()
 
                 for hint in self._hints[i]:
-                    hint_block = ColorBlock(size, size, hint.color,None)
-                    hint_block.set_hint(hint.value)
+                    hint_block = ColoredBlock(size, hint.color, str(hint.value), hints_font)
                     row.add_element(hint_block)
 
                 self._colum_or_row.add_element(row)
                 self._colum_or_row.set_alignment(HorizontalAlignment.RIGHT)
             self._colum_or_row.set_padding(padding)
         else:
-
             self._hints = nonogram.vertical_hints
             self._colum_or_row = Row()
 
@@ -43,8 +42,7 @@ class HintElement(Element):
                 column = Column()
 
                 for hint in self._hints[i]:
-                    hint_block = ColorBlock(size, size, hint.color, None)
-                    hint_block.set_hint(hint.value)
+                    hint_block = ColoredBlock(size, hint.color, str(hint.value), hints_font)
                     column.add_element(hint_block)
 
                 self._colum_or_row.add_element(column)

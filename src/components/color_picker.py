@@ -3,7 +3,7 @@ from typing import Self
 
 import pygame
 
-from components.color_block import ColorBlock
+from components.colored_block import ColoredBlock
 from components.column import Column
 from components.element import Element
 from components.nonogram_element import NonogramElement
@@ -19,7 +19,7 @@ class ColorPicker(Element):
     _background_color: tuple[int, int, int]
     _block_size: int
     _selected_color_index: int
-    _selected_block: ColorBlock
+    _selected_block: ColoredBlock
     _nonogram_element: NonogramElement
 
     def __init__(
@@ -46,15 +46,15 @@ class ColorPicker(Element):
             for j in range(rows):
                 index = i + j * cols
                 if index < len(colors):
-                    column.add_element(ColorBlock(block_size, colors[index]))
+                    column.add_element(ColoredBlock(block_size, colors[index]))
             self._row.add_element(column)
             column.set_padding(padding)
 
         self._row.set_padding(padding)
-        self.set_position((1500, 400))
+        self.set_position((1000, 300))
 
         self._selected_color_index = 0
-        self._selected_block = ColorBlock(block_size, colors[self._selected_color_index]).set_position((
+        self._selected_block = ColoredBlock(block_size, colors[self._selected_color_index]).set_position((
             self.position[0] + (self._row.size[0] - block_size) // 2,
             self.position[1] + self._row.size[1] + block_size
         ))
@@ -89,7 +89,7 @@ class ColorPicker(Element):
             for block in column.elements:
                 if block.contains(pygame.mouse.get_pos()):
                     # noinspection PyTypeChecker
-                    b: ColorBlock = block
+                    b: ColoredBlock = block
                     color = b.color
                     self._selected_block.set_color(color)
                     self._nonogram_element.set_selected_color(color)
