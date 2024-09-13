@@ -1,12 +1,13 @@
 import json
 import os.path as path
 from os import listdir, makedirs
+from random import randrange
 from typing import Any, Literal, Self
 
 from PIL import Image
 
 type rgb_t = tuple[int, int, int]
-type nonogram_type_t = Literal["pre_made", "image", "custom"]
+type nonogram_type_t = Literal["pre_made", "image", "custom", "generated"]
 
 
 class Nonogram:
@@ -93,7 +94,7 @@ class Nonogram:
 
                 self._player_grid[-1].append(None)
 
-        if nonogram_type != "pre_made" and nonogram_id is None and len(used_colors) > 1:
+        if nonogram_type == "image" and nonogram_id is None and len(used_colors) > 1:
             lightest_color: rgb_t | None = None
             highest_luminance = 0
 
@@ -167,6 +168,33 @@ class Nonogram:
                 nonogram_data[i].append(pixels[j, i])
 
         return cls(nonogram_data, "image")
+
+    @classmethod
+    def generate(cls, size: tuple[int, int], colors: list[rgb_t] | None = None) -> Self:
+        if colors is None:
+            colors = [(0, 0, 0)]
+
+        test = set()
+        nonogram_data: list[list[rgb_t | None]] = []
+        total_colors = size[0] * size[1] * randrange(30, 70) / 100
+        colored = 0
+
+        for i in range(size[0]):
+            nonogram_data.append([])
+            for j in range(size[1]):
+                nonogram_data[i].append(None)
+
+        while colored < total_colors:
+            x = randrange(0, size[0])
+            y = randrange(0, size[1])
+            if nonogram_data[x][y] is None:
+                index = randrange(len(colors))
+                test.add(index)
+                color = colors[index]
+                nonogram_data[x][y] = color
+                colored += 1
+
+        return cls(nonogram_data, "generated")
 
     @classmethod
     def load(cls, nonogram_type: nonogram_type_t, nonogram_id: int) -> Self:
@@ -287,21 +315,22 @@ class Nonogram:
         x, y = index
         return self._player_grid[y][x]
 
-    def __setitem__(self, index: tuple[int, int], value: rgb_t | Literal["x"] | None) -> None:
+    def __setitem__(self, index: tuple[int, int], new_value: rgb_t | Literal["x"] | None) -> None:
         x, y = index
-        if self._player_grid[y][x] == value:
+        if self._player_grid[y][x] == new_value:
             return
 
-        self._player_grid[y][x] = value
-        self._player_grid_transposed[x][y] = value
+        old_value = self._player_grid[y][x]
+        is_old_correct = (None if old_value == "x" else old_value) == self._original[y][x]
+        is_new_correct = (None if new_value == "x" else new_value) == self._original[y][x]
 
-        if value == "x":
+        self._player_grid[y][x] = new_value
+        self._player_grid_transposed[x][y] = new_value
+
+        if is_old_correct == is_new_correct:
             return
 
-        if value == self._original[y][x]:
-            self._correct_cells += 1
-        else:
-            self._correct_cells -= 1
+        self._correct_cells += 1 if is_new_correct else -1
 
     def __repr__(self):
         title = f"{Nonogram.__name__} {self._size[0]}x{self._size[1]}:"
