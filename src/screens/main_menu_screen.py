@@ -111,9 +111,8 @@ class MainMenuScreen(Screen):
         mouse_pos = pygame.mouse.get_pos()
 
         if self._play_button.contains(mouse_pos):
-            from screens.play_screen import PlayScreen
-            nonogram = Nonogram.from_pre_made(16647)
-            self._engine.set_screen(PlayScreen(self._engine, nonogram))
+            from screens.select_game_screen import SelectGameScreen
+            self._engine.set_screen(SelectGameScreen(self._engine))
 
         elif self._create_puzzle_button.contains(mouse_pos):
             from screens.create_screen import CreateScreen
