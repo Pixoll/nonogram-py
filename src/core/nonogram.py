@@ -326,7 +326,7 @@ class Nonogram:
             "width": self._size[0],
             "height": self._size[1],
             "palette": {k: "%02x%02x%02x" % v for k, v in self._palette.items()},
-            "player_mask": player_mask,
+            "player_mask": None if player_mask.strip() == "" else player_mask,
             "completed": self.is_completed,
         }
 
