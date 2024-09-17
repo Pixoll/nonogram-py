@@ -315,7 +315,7 @@ class Nonogram:
             makedirs(save_path)
 
         saved_nonograms = listdir(save_path)
-        nonogram_id = saved_nonograms[-1].split(".")[0] if len(saved_nonograms) > 1 else "1"
+        nonogram_id = int(saved_nonograms[-1].split(".")[0]) + 1 if len(saved_nonograms) > 0 else 1
 
         pre_made_nonogram = {
             "id": nonogram_id,
