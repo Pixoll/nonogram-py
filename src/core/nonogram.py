@@ -6,8 +6,8 @@ from typing import Any, Literal, Self
 
 from PIL import Image
 
-type rgb_t = tuple[int, int, int]
-type nonogram_type_t = Literal["pre_made", "image", "custom", "generated"]
+rgb_t = tuple[int, int, int]
+nonogram_type_t = Literal["pre_made", "image", "custom", "generated"]
 
 
 class Nonogram:

@@ -30,7 +30,7 @@ from events.video_expose_event import *
 from events.video_resize_event import *
 from events.window_event import *
 
-type Event = (ActiveEvent
+Event = (ActiveEvent
               | AudioDeviceEvent
               | ClipboardUpdateEvent
               | ControllerDeviceEvent
