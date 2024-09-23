@@ -1,7 +1,7 @@
 import pygame
 
 from engine import Engine
-from screens.main_menu_screen import MainMenuScreen
+from screens.create_screen import CreateScreen
 from components import Sound
 
 pygame.init()
@@ -12,7 +12,7 @@ window = pygame.display.set_mode((1280, 720), flags=pygame.RESIZABLE)
 pygame.display.set_caption("Nonogram")
 
 engine = Engine(window)
-engine.set_screen(MainMenuScreen(engine))
+engine.set_screen(CreateScreen(engine))
 Sound.play_background_music()
 engine.run(window, clock)
 

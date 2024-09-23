@@ -48,7 +48,7 @@ class MainMenuScreen(Screen):
             .set_child(Text("PLAY", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
 
-        self._create_puzzle_button = (
+        self._workshop_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 224, 99))
             .set_border((0, 0, 0, 0))
@@ -70,7 +70,7 @@ class MainMenuScreen(Screen):
         )
 
         (column2.add_element(self._play_button)
-         .add_element(self._create_puzzle_button)
+         .add_element(self._workshop_button)
          .add_element(self._settings_button)
          .add_element(self._exit_button)
          .set_padding(int(self._height*0.08))
@@ -112,12 +112,12 @@ class MainMenuScreen(Screen):
 
         if self._play_button.contains(mouse_pos):
             from screens.play_screen import PlayScreen
-            nonogram = Nonogram.from_pre_made(16647)
+            nonogram = Nonogram.from_pre_made(0)
             self._engine.set_screen(PlayScreen(self._engine, nonogram))
 
-        elif self._create_puzzle_button.contains(mouse_pos):
-            from screens.create_screen import CreateScreen
-            self._engine.set_screen(CreateScreen(self._engine))
+        elif self._workshop_button.contains(mouse_pos):
+            from screens.workshop_screen import WorkshopScreen
+            self._engine.set_screen(WorkshopScreen(self._engine))
 
         elif self._settings_button.contains(mouse_pos):
             from screens.settings_screen import SettingsScreen
