@@ -2,6 +2,7 @@ import pygame
 
 from components import ChildAlignment, Column, Container, Row, Text, HorizontalAlignment
 from core.nonogram import Nonogram
+from components.row_of_nonograms import RowOfNonograms
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
@@ -46,6 +47,7 @@ class SelectGameScreen(Screen):
             Container(self._width, int(self._height * 0.6))
             .set_background_color((0, 0, 0, 200))
             .set_border((0, 0, 0, 0))
+            .set_child(RowOfNonograms(self._width, int(self._height * 0.6)))
         )
         container3 = (
             Container(self._width, int(self._height * 0.2))
