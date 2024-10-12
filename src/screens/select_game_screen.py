@@ -1,6 +1,6 @@
 import pygame
 
-from components import ChildAlignment, Column, Container, Row, Text, HorizontalAlignment
+from components import ChildAlignment, Column, Container, Row, Text
 from core.nonogram import Nonogram
 from components.row_of_nonograms import RowOfNonograms
 from engine import Engine
@@ -9,6 +9,7 @@ from screens.screen import Screen
 
 class SelectGameScreen(Screen):
     _engine: Engine
+    _row_of_nonograms: RowOfNonograms
 
     def __init__(self, engine: Engine):
         self._engine = engine
@@ -43,11 +44,12 @@ class SelectGameScreen(Screen):
             .set_border((0, 0, 0, 0))
             .set_child(row1)
         )
+        self._row_of_nonograms = RowOfNonograms(self._width, int(self._height * 0.6))
         container2 = (
             Container(self._width, int(self._height * 0.6))
             .set_background_color((0, 0, 0, 200))
             .set_border((0, 0, 0, 0))
-            .set_child(RowOfNonograms(self._width, int(self._height * 0.6)))
+            .set_child(self._row_of_nonograms)
         )
         container3 = (
             Container(self._width, int(self._height * 0.2))
@@ -63,6 +65,7 @@ class SelectGameScreen(Screen):
         self._base.set_child(self._column)
 
     def on_all_events(self, event: Event) -> None:
+        self._row_of_nonograms.on_all_events(event)
         pass
 
     def on_key_event(self, key_event: KeyEvent) -> None:

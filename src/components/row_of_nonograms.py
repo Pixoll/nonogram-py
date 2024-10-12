@@ -1,14 +1,17 @@
 from components import Element, Row, Text, Container, VerticalAlignment
+from components.scroll_bar import ScrollBar
 from core.nonogram import Nonogram
+import pygame
 from events import Event
 from typing import Self
-import pygame
+
 
 class RowOfNonograms(Element):
     _row: Row
     _list_of_nonograms: list[Nonogram]
+    _scrollbar: ScrollBar
 
-    def __init__(self,width:int, height:int):
+    def __init__(self, width: int, height: int):
         super().__init__(width, height)
         self._row = Row()
         self._list_of_nonograms = []
@@ -34,12 +37,15 @@ class RowOfNonograms(Element):
                 )
             )
             self._row.add_element(info_nonogram)
+        content_width = len(self._list_of_nonograms) * 200
+        self._scrollbar = ScrollBar(width, content_width)
 
         self._row.set_alignment(VerticalAlignment.CENTER)
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
         self._row.set_position(position)
+        self._scrollbar.set_position((position[0], position[1] + self._height - 20))
         return self
 
     @property
@@ -47,7 +53,17 @@ class RowOfNonograms(Element):
         return self._list_of_nonograms
 
     def on_all_events(self, event: Event) -> None:
-        pass
+        self._scrollbar.on_all_events(event)
+        for element in self._row.elements:
+            element.on_all_events(event)
+
+    def update(self):
+        self._scrollbar.update()
+        scroll_offset = self._scrollbar.x_axis
+        self._row.set_position((self._position[0] + scroll_offset, self._position[1]))
 
     def render(self, window: pygame.Surface) -> None:
         self._row.render(window)
+        self._scrollbar.render(window)
+
+
