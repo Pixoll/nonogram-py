@@ -2,7 +2,7 @@ from os.path import exists
 from shutil import rmtree
 from unittest import TestCase
 
-from src.core.nonogram import Nonogram
+from core.nonogram import Nonogram
 
 
 class TestNonogram(TestCase):
