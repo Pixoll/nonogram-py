@@ -112,7 +112,7 @@ class CreateScreen(Screen):
             font = pygame.font.Font(None, 40),
             inactive_color = (0, 0, 0),
             active_color = (255, 255, 255),
-            max_width = int(self._width * 0.3)
+            max_width = int(self._width * 0.3),
         )
         self.nanogram_name = (
             Container(int(self._width * 0.3), int(self._height * 0.08))
@@ -153,7 +153,9 @@ class CreateScreen(Screen):
 
         self.board.on_all_events(event)
         self.color_gradient.on_all_events(event)
-        self.text_field.on_all_events(event)
+        if self.text_field.on_all_events(event):
+            self.text_field.on_all_events(event)
+            self.nanogram_name.set_child(self.text_field)
 
         if self.color_gradient.contains(mouse_pos):
             new_color= self.color_gradient.get_color()
