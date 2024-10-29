@@ -1,6 +1,6 @@
 import pygame
 
-from components import ChildAlignment, Column, Container, Row, Text, HorizontalAlignment, VerticalAlignment
+from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text, VerticalAlignment
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
@@ -27,7 +27,7 @@ class WorkshopScreen(Screen):
             Container(int(self._width * 0.2), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("My nanograms", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("My nonograms", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
         column1.add_element(self._my_button)
 
@@ -61,25 +61,26 @@ class WorkshopScreen(Screen):
 
         column2 = Column()
 
-        self._imagen_referencial = (
+        self._ref_image = (
             Container(int(self._width * 0.4), int(self._width * 0.3))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("imagen1", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("image1", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
-        column2.add_element(self._imagen_referencial)
+        column2.add_element(self._ref_image)
 
-        self._informacion_referencial = (
+        self._ref_info = (
             Container(int(self._width * 0.4), int(self._width * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("informacion1", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("info1", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
 
-        column2.add_element(self._informacion_referencial)
+        column2.add_element(self._ref_info)
         row1.add_element(column2)
 
         self._base.set_child(row1)
+
     def on_all_events(self, event: Event) -> None:
         pass
 
@@ -101,23 +102,19 @@ class WorkshopScreen(Screen):
             self._engine.set_screen(CreateScreen(self._engine))
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
-        if event.type != EventType.MOUSE_MOTION:
-            return
-
         mouse_pos = pygame.mouse.get_pos()
 
         if self._my_button.contains(mouse_pos):
-            self._informacion_referencial.set_child(Text("informacion1", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
-            self._imagen_referencial.set_child(Text("imagen1", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            self._ref_info.set_child(Text("info1", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            self._ref_image.set_child(Text("image1", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
 
         elif self._create_button.contains(mouse_pos):
-            self._informacion_referencial.set_child(Text("informacion2", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
-            self._imagen_referencial.set_child(Text("imagen2", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            self._ref_info.set_child(Text("info2", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            self._ref_image.set_child(Text("image2", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
 
         elif self._saved_button.contains(mouse_pos):
-            self._informacion_referencial.set_child(Text("informacion3", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
-            self._imagen_referencial.set_child(Text("imagen3", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
-
+            self._ref_info.set_child(Text("info3", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            self._ref_image.set_child(Text("image3", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
         pass

@@ -1,9 +1,9 @@
 from typing import Self
+
 import pygame
-from pyexpat.errors import messages
 
 from components.element import Element
-from events import Event, EventType, MouseButton, Key
+from events import Event, EventType, Key, MouseButton
 
 
 class TextField(Element):
@@ -18,7 +18,14 @@ class TextField(Element):
     _max_width: int
     _empty: bool
 
-    def __init__(self, text: str, font: pygame.font.Font, inactive_color: tuple[int, int, int], active_color: tuple[int, int, int], max_width: int):
+    def __init__(
+            self,
+            text: str,
+            font: pygame.font.Font,
+            inactive_color: tuple[int, int, int],
+            active_color: tuple[int, int, int],
+            max_width: int
+    ):
         text_surface = font.render(text, True, inactive_color)
         super().__init__(*text_surface.get_size())
         self._message = text

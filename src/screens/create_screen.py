@@ -1,9 +1,9 @@
 import pygame
 
-from components import ChildAlignment, Column, Container, Row, Text, HorizontalAlignment, VerticalAlignment
+from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text, VerticalAlignment
 from components.colors import Colors
-from components.gradient_color import GradientColor
 from components.create_nanogram import CreateNanogram
+from components.gradient_color import GradientColor
 from components.text_field import TextField
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -31,21 +31,20 @@ class CreateScreen(Screen):
         row1 = Row().set_alignment(VerticalAlignment.CENTER)
         container1 = (
             Container(int(self._width * 0.4), int(self._height))
-            .set_background_color((0, 0, 0,  50))
-            .set_border((0, 0, 0,  50))
+            .set_background_color((0, 0, 0, 50))
+            .set_border((0, 0, 0, 50))
             .set_child(column1)
         )
         container2 = (
             Container(int(self._width * 0.6), int(self._height))
-            .set_background_color((0, 0, 0,  150))
-            .set_border((0, 0, 0,  150))
+            .set_background_color((0, 0, 0, 150))
+            .set_border((0, 0, 0, 150))
             .set_child(column2)
         )
 
+        # column 1 elements
 
-        # elementos columna 1
-
-        #   ELEMENTOS FILA 1
+        # row 1 elements
         row2 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._width * 0.05))
         column1.add_element(row2)
 
@@ -53,7 +52,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("generar", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
+            .set_child(Text("Generate", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._upload_button)
 
@@ -61,7 +60,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("aleatorio", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
+            .set_child(Text("Randomized", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._pencil_button)
 
@@ -69,11 +68,11 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("borrar todo", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
+            .set_child(Text("Erase all", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._eraser_button)
 
-            #   ELEMENTOS FILA 2
+        #  row 2 elements
         row3 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._height * 0.05))
         self.color_gradient = GradientColor((255, 0, 0), 25, 1)
         row3.add_element(self.color_gradient)
@@ -99,20 +98,19 @@ class CreateScreen(Screen):
         )
         column1.add_element(self._exit_button)
 
-
-        # elementos columna 2
-        self.board = CreateNanogram(20,20, 1)
-        boardbase = (Container(max(self.board.size), max(self.board.size)).set_child(self.board)
+        # column 2 elements
+        self.board = CreateNanogram(20, 20, 1)
+        board_base = (Container(max(self.board.size), max(self.board.size)).set_child(self.board)
                      .set_child_alignment(ChildAlignment.CENTER).set_border((0, 0, 0, 0)))
         self.board.set_selected_color((255, 0, 0))
-        column2.add_element(boardbase)
+        column2.add_element(board_base)
 
         self.text_field = TextField(
-            text = "Level name...",
-            font = pygame.font.Font(None, 40),
-            inactive_color = (0, 0, 0),
-            active_color = (255, 255, 255),
-            max_width = int(self._width * 0.3),
+            text="Level name...",
+            font=pygame.font.Font(None, 40),
+            inactive_color=(0, 0, 0),
+            active_color=(255, 255, 255),
+            max_width=int(self._width * 0.3),
         )
         self.nanogram_name = (
             Container(int(self._width * 0.3), int(self._height * 0.08))
@@ -122,10 +120,8 @@ class CreateScreen(Screen):
         )
         column2.add_element(self.nanogram_name)
 
-
         row1.add_element(container1).add_element(container2)
         self._base.set_child(row1)
-
 
     def on_all_events(self, event: Event) -> None:
         pass
@@ -158,7 +154,7 @@ class CreateScreen(Screen):
             self.nanogram_name.set_child(self.text_field)
 
         if self.color_gradient.contains(mouse_pos):
-            new_color= self.color_gradient.get_color()
+            new_color = self.color_gradient.get_color()
             self.board.set_selected_color(new_color)
 
         if self.colors.contains(mouse_pos):

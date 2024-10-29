@@ -1,9 +1,9 @@
-from typing import List, Tuple
-import pygame
 from typing import Self
 
+import pygame
+
+from components import Column, HorizontalAlignment, Row, VerticalAlignment
 from components.colored_block import ColoredBlock
-from components import Column, Row, HorizontalAlignment, VerticalAlignment
 from components.element import Element
 from events import Event, EventType, MouseButton
 
@@ -13,7 +13,8 @@ class Colors(Element):
         cant_columns = 3
         cant_colors = 85
 
-        super().__init__(cant_columns * (block_size + padding) - padding, cant_colors * (block_size + padding) - padding)
+        super().__init__(cant_columns * (block_size + padding) - padding,
+                         cant_colors * (block_size + padding) - padding)
         self._block_size = block_size
         self._column1 = Column().set_alignment(HorizontalAlignment.CENTER)
         self._column2 = Column().set_alignment(HorizontalAlignment.CENTER)
@@ -116,8 +117,13 @@ class Colors(Element):
             self._column3.add_element(ColoredBlock(block_size, color))
             self._column4.add_element(ColoredBlock(block_size, color))
             self._column5.add_element(ColoredBlock(block_size, color))
-        self._row = Row().set_alignment(VerticalAlignment.CENTER).add_element(self._column1).add_element(self._column2).add_element(self._column3).add_element(self._column4).add_element(self._column5)
-
+        self._row = (Row()
+                     .set_alignment(VerticalAlignment.CENTER)
+                     .add_element(self._column1)
+                     .add_element(self._column2)
+                     .add_element(self._column3)
+                     .add_element(self._column4)
+                     .add_element(self._column5))
 
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
 
@@ -133,10 +139,11 @@ class Colors(Element):
         for column in self._row.elements:
             for block in column.elements:
                 if block.contains(pygame.mouse.get_pos()):
+                    # noinspection PyTypeChecker
                     b: ColoredBlock = block
                     color = b.color
+                    # TODO: event handlers should NEVER return values
                     return color
-
 
     def render(self, screen) -> None:
         screen.blit(self._surface, self._position)

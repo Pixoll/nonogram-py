@@ -1,7 +1,8 @@
+import json
 from typing import Self
+
 import pygame
 from pygame import Surface
-import json
 
 from components.block import Block
 from components.column import Column
@@ -84,6 +85,7 @@ class CreateNanogram(Element):
     def clear(self) -> None:
         for column in self._grid.elements:
             for block in column.elements:
+                # noinspection PyTypeChecker
                 b: Block = block
                 b.set_background_color((255, 255, 255))
 
@@ -98,6 +100,7 @@ class CreateNanogram(Element):
 
         for column in self._grid.elements:
             for block in column.elements:
+                # noinspection PyTypeChecker
                 b: Block = block
                 if not b.contains(mouse_pos):
                     continue
@@ -107,17 +110,16 @@ class CreateNanogram(Element):
     def set_name(self, name: str) -> None:
         self._name = name
 
-    def _rgb_to_hex(self, color: tuple[int, int, int]) -> str:
-        return '#{:02x}{:02x}{:02x}'.format(color[0], color[1], color[2])
-
+    # TODO implement into Nonogram class, this shouldn't be here
     def save(self, nonogram_id: int = 1) -> None:
         self._colors = []
         mask = ''
 
         for column in self._grid.elements:
             for block in column.elements:
+                # noinspection PyTypeChecker
                 b: Block = block
-                hex_color = self._rgb_to_hex(b.color)
+                hex_color = "%02x%02x%02x" % b.color
 
                 if hex_color != '#ffffff':
                     if hex_color not in self._colors:

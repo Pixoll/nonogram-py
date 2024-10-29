@@ -28,8 +28,8 @@ class ColoredBlock(Element):
         self._text = text
         self._font = font
         self._text_color = self._calculate_text_color()
-        self.selected = False
-        self.border_color = (255, 255, 255)  # Initial border is white
+        self._selected = False
+        self._border_color = (255, 255, 255)  # Initial border is white
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
@@ -46,10 +46,7 @@ class ColoredBlock(Element):
         return self
 
     def change_state(self) -> None:
-        if self.selected:
-            self.selected = False
-        else:
-            self.selected = True
+        self._selected = not self._selected
 
     @property
     def color(self) -> tuple[int, int, int]:
@@ -61,10 +58,10 @@ class ColoredBlock(Element):
     def render(self, screen: pygame.Surface) -> None:
         screen.blit(self._surface, self._position)
 
-        if self.selected:
+        if self._selected:
             pygame.draw.rect(
                 screen,
-                self.border_color,
+                self._border_color,
                 (self._position[0], self._position[1], self.size[0], self.size[1]),
                 2  # Border thickness
             )
@@ -72,7 +69,7 @@ class ColoredBlock(Element):
         if self._text is not None and self._font is not None:
             block_text = self._font.render(self._text, True, self._text_color)
             text_rect = block_text.get_rect(center=(self._position[0] + self._surface.get_width() // 2,
-                                                   self._position[1] + self._surface.get_height() // 2))
+                                                    self._position[1] + self._surface.get_height() // 2))
             screen.blit(block_text, text_rect)
 
     def _calculate_text_color(self) -> tuple[int, int, int]:

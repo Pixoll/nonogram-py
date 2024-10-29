@@ -6,7 +6,7 @@ from components.colored_block import ColoredBlock
 from components.column import Column
 from components.element import Element
 from components.row import Row, VerticalAlignment
-from events import Event, EventType, MouseButton, MouseWheelEvent
+from events import Event, EventType, MouseButton
 
 
 class GradientColor(Element):
@@ -17,7 +17,7 @@ class GradientColor(Element):
     _background_color: tuple[int, int, int]
     _block_size: int
 
-    def __init__(self, color: tuple[int, int, int], block_size: int, padding: int ) -> None:
+    def __init__(self, color: tuple[int, int, int], block_size: int, padding: int) -> None:
 
         cols = 10  # Fixed 10 columns
         rows = 10  # Fixed 10 rows
@@ -63,29 +63,6 @@ class GradientColor(Element):
         self._row.set_position(position)
         return self
 
-        aux_row = Row().set_alignment(VerticalAlignment.CENTER)
-        _color = color
-        aux2 = 1
-        columns = []
-
-        for i in range(10):
-            aux1 = 1
-            column = Column()
-            for j in range(10):
-                column.add_element(ColoredBlock(self._block_size, darken_color(_color, aux1)))
-                aux1 = aux1 + 1
-            columns.append(column)
-            column.set_padding(self._padding)
-            _color = lighten_color(_color, aux2)
-            aux2 = aux2 + 1
-
-        for column in reversed(columns):
-            aux_row.add_element(column)
-
-        aux_row.set_padding(self._padding)
-        self._row = aux_row
-        self._row.set_position(self._position)
-
     def paint_gradient(self, color: tuple[int, int, int]) -> None:
         aux_row = Row().set_alignment(VerticalAlignment.CENTER)
         _color = color
@@ -115,7 +92,6 @@ class GradientColor(Element):
         self._row = aux_row
         self._row.set_position(self._position)
 
-
     def on_all_events(self, event: Event) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
@@ -123,6 +99,7 @@ class GradientColor(Element):
         for column in self._row.elements:
             for block in column.elements:
                 if block.contains(pygame.mouse.get_pos()):
+                    # noinspection PyTypeChecker
                     b: ColoredBlock = block
                     color = b.color
                     self._selected_block.change_state()
@@ -136,6 +113,7 @@ class GradientColor(Element):
 
     def get_color(self) -> tuple[int, int, int]:
         return self._selected_color
+
 
 def darken_color(color: tuple[int, int, int], level: int) -> tuple[int, int, int]:
     min_color_value = 0
@@ -159,13 +137,10 @@ def darken_color(color: tuple[int, int, int], level: int) -> tuple[int, int, int
 
 
 def lighten_color(color: tuple[int, int, int], level: int) -> tuple[int, int, int]:
-    max_color_value = 255
-
     lighten_factor = (level / 10) * 0.4
-    new_color = tuple(
-        min(int(c + (max_color_value - c) * lighten_factor), max_color_value) for c in color
+
+    return (
+        min(color[0] + int((255 - color[0]) * lighten_factor), 255),
+        min(color[1] + int((255 - color[1]) * lighten_factor), 255),
+        min(color[2] + int((255 - color[2]) * lighten_factor), 255),
     )
-    return new_color
-
-
-
