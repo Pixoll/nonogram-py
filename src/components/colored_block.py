@@ -52,7 +52,7 @@ class ColoredBlock(Element):
     def color(self) -> tuple[int, int, int]:
         return self._color
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         return
 
     def render(self, screen: pygame.Surface) -> None:

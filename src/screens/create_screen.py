@@ -123,11 +123,11 @@ class CreateScreen(Screen):
         row1.add_element(container1).add_element(container2)
         self._base.set_child(row1)
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         pass
 
     def on_key_event(self, key_event: KeyEvent) -> None:
-        self.text_field.on_all_events(event=key_event)
+        self.text_field.on_any_event(event=key_event)
         self.nanogram_name._update_child_position()
 
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
@@ -147,10 +147,10 @@ class CreateScreen(Screen):
         if self._eraser_button.contains(mouse_pos):
             self.board.clear()
 
-        self.board.on_all_events(event)
-        self.color_gradient.on_all_events(event)
-        if self.text_field.on_all_events(event):
-            self.text_field.on_all_events(event)
+        self.board.on_any_event(event)
+        self.color_gradient.on_any_event(event)
+        if self.text_field.on_any_event(event):
+            self.text_field.on_any_event(event)
             self.nanogram_name.set_child(self.text_field)
 
         if self.color_gradient.contains(mouse_pos):
@@ -158,7 +158,7 @@ class CreateScreen(Screen):
             self.board.set_selected_color(new_color)
 
         if self.colors.contains(mouse_pos):
-            new_gradient = self.colors.on_all_events(event)
+            new_gradient = self.colors.on_any_event(event)
             self.color_gradient.paint_gradient(new_gradient)
             new_color = self.color_gradient.get_color()
             self.board.set_selected_color(new_color)

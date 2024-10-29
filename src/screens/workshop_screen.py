@@ -81,7 +81,7 @@ class WorkshopScreen(Screen):
 
         self._base.set_child(row1)
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         pass
 
     def on_key_event(self, key_event: KeyEvent) -> None:

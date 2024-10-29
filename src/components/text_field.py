@@ -56,7 +56,7 @@ class TextField(Element):
         self._text_surface = self._font.render(self._text, True, self._color)
         self._width, self._height = self._text_surface.get_size()
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:
 
             mouse_pos = pygame.mouse.get_pos()

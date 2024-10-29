@@ -63,7 +63,7 @@ class Colors(Element):
 
         return colors
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 

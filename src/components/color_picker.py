@@ -67,7 +67,7 @@ class ColorPicker(Element):
         self._row.set_position(position)
         return self
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         if event.type == EventType.MOUSE_WHEEL:
             wheel_event: MouseWheelEvent = event
             down = wheel_event.precise_y < 0 if wheel_event.flipped else wheel_event.precise_y > 0

@@ -30,7 +30,7 @@ class Engine:
                 if event is None:
                     continue
 
-                self._screen.on_all_events(event)
+                self._screen.on_any_event(event)
                 self._delegate_event(event)
 
                 if event.type == events.EventType.QUIT:

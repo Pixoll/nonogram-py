@@ -25,9 +25,9 @@ class PlayScreen(Screen):
         self._menu.set_child(self._nonogram_element)
         self._completed_text = font.SysFont("Arial", 30).render("completed!", True, (0, 0, 0))
 
-    def on_all_events(self, event: Event) -> None:
-        self._nonogram_element.on_all_events(event)
-        self._color_picker.on_all_events(event)
+    def on_any_event(self, event: Event) -> None:
+        self._nonogram_element.on_any_event(event)
+        self._color_picker.on_any_event(event)
 
     def on_key_event(self, key_event: KeyEvent) -> None:
         if key_event.key == Key.ESCAPE:

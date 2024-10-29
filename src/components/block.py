@@ -74,7 +74,7 @@ class Block(ElementWithChild):
     def state(self) -> State:
         return self._state
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         pass
 
     def render(self, window: pygame.Surface) -> None:

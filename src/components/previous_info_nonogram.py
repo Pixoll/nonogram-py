@@ -23,7 +23,7 @@ class PreviousInfoNonogram(Element):
     def set_position(self, position: tuple[int, int]) -> Self:
         pass
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         pass
 
     def render(self, window: Surface) -> None:

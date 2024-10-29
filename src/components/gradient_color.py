@@ -92,7 +92,7 @@ class GradientColor(Element):
         self._row = aux_row
         self._row.set_position(self._position)
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 

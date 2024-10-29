@@ -89,7 +89,7 @@ class CreateNanogram(Element):
                 b: Block = block
                 b.set_background_color((255, 255, 255))
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN:
             return
 

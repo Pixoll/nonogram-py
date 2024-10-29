@@ -82,7 +82,7 @@ class NonogramElement(Element):
         self._horizontal_hints.render(window)
         self._grid.render(window)
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN:
             return
 

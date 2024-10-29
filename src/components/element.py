@@ -35,7 +35,7 @@ class Element(ABC):
         pass
 
     @abstractmethod
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         pass
 
     @abstractmethod

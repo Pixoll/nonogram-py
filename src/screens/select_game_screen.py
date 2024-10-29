@@ -65,8 +65,8 @@ class SelectGameScreen(Screen):
         )
         self._base.set_child(self._column)
 
-    def on_all_events(self, event: Event) -> None:
-        self._row_of_nonograms.on_all_events(event)
+    def on_any_event(self, event: Event) -> None:
+        self._row_of_nonograms.on_any_event(event)
         pass
 
     def on_key_event(self, key_event: KeyEvent) -> None:

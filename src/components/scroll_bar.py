@@ -59,7 +59,7 @@ class ScrollBar(Element):
 
             self.x_axis = int(width_diff / scroll_length * (self._bar.position[0] - bar_half_length) * -1)
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         pos = pygame.mouse.get_pos()
 
         if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:

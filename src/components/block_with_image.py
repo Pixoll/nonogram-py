@@ -20,7 +20,7 @@ class BlockWithImage(Element):
         self._position = position
         return self
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         return
 
     def render(self, screen: pygame.Surface) -> None:
