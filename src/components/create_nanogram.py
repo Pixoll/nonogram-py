@@ -143,5 +143,3 @@ class CreateNanogram(Element):
 
         with open(f"nonograms/pre_made/0.json", 'w') as json_file:
             json.dump(nonogram_data, json_file, indent=4)
-
-        print("Nonogram saved:", nonogram_data)
