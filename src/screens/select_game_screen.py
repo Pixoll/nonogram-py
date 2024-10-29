@@ -1,11 +1,12 @@
 import pygame
 
 from components import ChildAlignment, Column, Container, Row, Text
-from core.nonogram import Nonogram
 from components.row_of_nonograms import RowOfNonograms
+from core.nonogram import Nonogram
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
+
 
 class SelectGameScreen(Screen):
     _engine: Engine
@@ -21,18 +22,18 @@ class SelectGameScreen(Screen):
             .set_background_color((0, 132, 134))
             .set_image("assets/textures/select.jpg")
         )
-        row1= Row()
+        row1 = Row()
         self._play_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((198, 191, 166))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("PLAY", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Play", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
         self._back_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((198, 191, 166))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("BACK", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Back", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
         row1.add_element(self._back_button)
         row1.add_element(self._play_button)
@@ -85,7 +86,6 @@ class SelectGameScreen(Screen):
         if self._back_button.contains(mouse_pos):
             from screens.main_menu_screen import MainMenuScreen
             self._engine.set_screen(MainMenuScreen(self._engine))
-
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         pass

@@ -1,9 +1,11 @@
-from components import Element, Row, Text, Container, VerticalAlignment
+from typing import Self
+
+import pygame
+
+from components import Container, Element, Row, Text, VerticalAlignment
 from components.scroll_bar import ScrollBar
 from core.nonogram import Nonogram
-import pygame
 from events import Event
-from typing import Self
 
 
 class RowOfNonograms(Element):
@@ -38,7 +40,7 @@ class RowOfNonograms(Element):
             )
             self._row.add_element(info_nonogram)
         content_width = len(self._list_of_nonograms) * 200
-        print(content_width,len(self._list_of_nonograms))
+        print(content_width, len(self._list_of_nonograms))
         self._scrollbar = ScrollBar(width, content_width)
 
         self._row.set_alignment(VerticalAlignment.CENTER)
@@ -67,5 +69,3 @@ class RowOfNonograms(Element):
         self.update()
         self._row.render(window)
         self._scrollbar.render(window)
-
-

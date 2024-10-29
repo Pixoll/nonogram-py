@@ -1,10 +1,13 @@
+from typing import Self
+
 import pygame
+
 from components import Element
 from components.block_with_image import BlockWithImage
-from typing import Self
 from events import Event, EventType, MouseButton
 
 GRAY = (197, 194, 197)
+
 
 class ScrollBar(Element):
     _bar_left: BlockWithImage
@@ -87,4 +90,3 @@ class ScrollBar(Element):
         self._bar.render(window)
         self._bar_left.render(window)
         self._bar_right.render(window)
-

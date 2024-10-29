@@ -1,7 +1,6 @@
 import pygame
 
-from components import ChildAlignment, Column, Container, Row, Text, HorizontalAlignment
-from core.nonogram import Nonogram
+from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
@@ -45,7 +44,7 @@ class MainMenuScreen(Screen):
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 178, 171))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("PLAY", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Play", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
 
         self._workshop_button = (
@@ -73,7 +72,7 @@ class MainMenuScreen(Screen):
          .add_element(self._workshop_button)
          .add_element(self._settings_button)
          .add_element(self._exit_button)
-         .set_padding(int(self._height*0.08))
+         .set_padding(int(self._height * 0.08))
          .set_alignment(HorizontalAlignment.LEFT))
 
         container1 = (
@@ -85,7 +84,7 @@ class MainMenuScreen(Screen):
 
         container2 = (
             Container(int(self._width * 0.4), self._height)
-            .set_background_color((0, 0, 0,  150))
+            .set_background_color((0, 0, 0, 150))
             .set_border((0, 0, 0, 0))
             .set_child(column2)
         )
