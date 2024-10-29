@@ -6,8 +6,8 @@ from typing import Any, Literal, Self
 
 from PIL import Image
 
-type rgb_t = tuple[int, int, int]
-type nonogram_type_t = Literal["pre_made", "image", "custom", "generated"]
+rgb_t = tuple[int, int, int]
+nonogram_type_t = Literal["pre_made", "image", "custom", "generated"]
 
 
 class Nonogram:
@@ -41,6 +41,7 @@ class Nonogram:
     _original_transposed: list[list[rgb_t | None]]
     _player_grid: list[list[rgb_t | Literal["x"] | None]]
     _player_grid_transposed: list[list[rgb_t | Literal["x"] | None]]
+    _palette: dict[str, rgb_t]
     _used_colors: tuple[rgb_t, ...]
     _horizontal_hints: tuple[tuple[Hint, ...], ...]
     _vertical_hints: tuple[tuple[Hint, ...], ...]
@@ -54,7 +55,8 @@ class Nonogram:
             self,
             nonogram: list[list[rgb_t | None]],
             nonogram_type: nonogram_type_t,
-            nonogram_id: int | None = None
+            nonogram_id: int | None = None,
+            palette: dict[str, rgb_t] | None = None,
     ):
         self._original = []
         self._player_grid = []
@@ -112,6 +114,14 @@ class Nonogram:
 
             del used_colors[lightest_color]
 
+        if palette is None:
+            palette = {}
+            i = 0
+            for color in used_colors.keys():
+                palette[str(i)] = color
+                i += 1
+
+        self._palette = palette
         self._original_transposed = list([list(column) for column in zip(*self._original)])
         self._player_grid_transposed = list([list(column) for column in zip(*self._player_grid)])
         self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in self._original])
@@ -120,7 +130,8 @@ class Nonogram:
         self._number_of_cells = self._size[0] * self._size[1]
         self._type = nonogram_type
         self._id = nonogram_id
-        self._used_colors = tuple(used_colors.keys())
+        # noinspection PyTypeChecker
+        self._used_colors = tuple(palette.values())
 
     @classmethod
     def from_pre_made(cls, nonogram_id: int) -> Self:
@@ -146,8 +157,7 @@ class Nonogram:
             color = palette[mask[i]] if mask[i] in palette else None
             nonogram_data[-1].append(color)
 
-        nonogram = cls(nonogram_data, "pre_made", nonogram_id)
-        nonogram._used_colors = tuple(palette.values())
+        nonogram = cls(nonogram_data, "pre_made", nonogram_id, palette)
 
         return nonogram
 
@@ -216,25 +226,35 @@ class Nonogram:
         mask: str = nonogram_json["mask"]
         player_mask: str = nonogram_json["player_mask"]
         palette = Nonogram._get_palette(nonogram_json["palette"])
+        el_len = max([len(k) for k in palette.keys()])
 
         nonogram_data: list[list[rgb_t | None]] = []
         player_grid: list[list[rgb_t | Literal["x"] | None]] = []
 
-        for i in range(width):
-            if i % width == 0:
+        for i in range(0, len(mask), el_len):
+            if i % (width * el_len) == 0:
                 nonogram_data.append([])
                 player_grid.append([])
 
-            nonogram_data[-1].append(palette[mask[i]] if mask[i] in palette else None)
+            original_mask_element = (str(int(mask[i:i + el_len]))
+                                     if mask[i:i + el_len].isdigit()
+                                     else mask[i:i + el_len])
+            player_mask_element = (str(int(player_mask[i:i + el_len]))
+                                   if player_mask[i:i + el_len].isdigit()
+                                   else player_mask[i:i + el_len])
+
+            nonogram_data[-1].append(
+                palette[original_mask_element] if original_mask_element in palette
+                else None
+            )
             player_grid[-1].append(
-                palette[player_mask[i]] if player_mask[i].isnumeric() and player_mask[i] in palette
-                else None if player_mask[i] == " "
-                else "x"
+                palette[player_mask_element] if player_mask_element in palette
+                else "x" if player_mask[i:i + el_len][0] == "x"
+                else None
             )
 
-        nonogram = cls(nonogram_data, nonogram_type, nonogram_id)
+        nonogram = cls(nonogram_data, nonogram_type, nonogram_id, palette)
         nonogram._player_grid = player_grid
-        nonogram._used_colors = tuple(palette.values())
 
         return nonogram
 
@@ -267,10 +287,14 @@ class Nonogram:
     def save(self) -> None:
         save_path = f"nonograms/{self._type}/"
 
+        el_len = max([len(k) for k in self._palette.keys()])
+        inverse_palette: dict[rgb_t, str] = {v: k for k, v in self._palette.items()}
+
+        # noinspection PyTypeChecker
         player_mask = "".join(["".join([
-            " " if color is None
-            else "x" if color == "x"
-            else str(self._used_colors.index(color) + 1) for color in row
+            " " * el_len if color is None
+            else "x" * el_len if color == "x"
+            else inverse_palette[color].zfill(el_len) for color in row
         ]) for row in self._player_grid])
 
         if self._id is not None:
@@ -291,20 +315,18 @@ class Nonogram:
             makedirs(save_path)
 
         saved_nonograms = listdir(save_path)
-        nonogram_id = saved_nonograms[-1].split(".")[0] if len(saved_nonograms) > 1 else "1"
-
-        palette: dict[rgb_t, str] = {
-            self._used_colors[i]: str(i + 1) for i in range(len(self._used_colors))
-        }
+        nonogram_id = int(saved_nonograms[-1].split(".")[0]) + 1 if len(saved_nonograms) > 0 else 1
 
         pre_made_nonogram = {
             "id": nonogram_id,
             "mask": "".join(["".join([
-                " " if color is None else palette[color] for color in row
+                " " * el_len if color is None
+                else inverse_palette[color].zfill(el_len) for color in row
             ]) for row in self._original]),
             "width": self._size[0],
             "height": self._size[1],
-            "player_mask": player_mask,
+            "palette": {k: "%02x%02x%02x" % v for k, v in self._palette.items()},
+            "player_mask": None if player_mask.strip() == "" else player_mask,
             "completed": self.is_completed,
         }
 
