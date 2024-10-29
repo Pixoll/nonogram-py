@@ -38,6 +38,7 @@ class RowOfNonograms(Element):
             )
             self._row.add_element(info_nonogram)
         content_width = len(self._list_of_nonograms) * 200
+        print(content_width,len(self._list_of_nonograms))
         self._scrollbar = ScrollBar(width, content_width)
 
         self._row.set_alignment(VerticalAlignment.CENTER)
@@ -63,6 +64,7 @@ class RowOfNonograms(Element):
         self._row.set_position((self._position[0] + scroll_offset, self._position[1]))
 
     def render(self, window: pygame.Surface) -> None:
+        self.update()
         self._row.render(window)
         self._scrollbar.render(window)
 
