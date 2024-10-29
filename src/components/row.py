@@ -25,7 +25,7 @@ class Row(ElementBundle):
         self._update_positions()
         return self
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         pass
 
     def _update_size(self) -> None:

@@ -53,10 +53,10 @@ class RowOfNonograms(Element):
     def nonograms(self) -> list[Nonogram]:
         return self._list_of_nonograms
 
-    def on_all_events(self, event: Event) -> None:
-        self._scrollbar.on_all_events(event)
+    def on_any_event(self, event: Event) -> None:
+        self._scrollbar.on_any_event(event)
         for element in self._row.elements:
-            element.on_all_events(event)
+            element.on_any_event(event)
 
     def update(self):
         self._scrollbar.update()

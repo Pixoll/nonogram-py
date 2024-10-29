@@ -52,7 +52,7 @@ class HintsElement(Element):
     def hints(self) -> tuple[tuple[Nonogram.Hint, ...], ...]:
         return self._hints
 
-    def on_all_events(self, event: Event) -> None:
+    def on_any_event(self, event: Event) -> None:
         pass
 
     def render(self, window: Surface) -> None:
