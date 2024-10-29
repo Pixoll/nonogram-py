@@ -1,7 +1,6 @@
 import pygame
 
 from engine import Engine
-from screens.create_screen import CreateScreen
 from screens.main_menu_screen import MainMenuScreen
 from components import Sound
 
