@@ -1,8 +1,5 @@
 from typing import Self
-
 import pygame
-
-import components.previous_info_nonogram
 from components import Container, Element, Row, Text, VerticalAlignment
 from components.scroll_bar import ScrollBar
 from core.nonogram import Nonogram
@@ -32,6 +29,12 @@ class RowOfNonograms(Element):
         self._scrollbar = ScrollBar(width, content_width)
 
         self._row.set_alignment(VerticalAlignment.CENTER)
+
+    def get_selected_nonogram(self) -> Nonogram | None:
+        for element in self._row.elements:
+            if isinstance(element, PreviousInfoNonogram) and element.is_selected():
+                return element.getNonogram()
+        return None
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position

@@ -80,8 +80,10 @@ class SelectGameScreen(Screen):
 
         if self._play_button.contains(mouse_pos):
             from screens.play_screen import PlayScreen
-            nonogram = Nonogram.from_pre_made(16647)
-            self._engine.set_screen(PlayScreen(self._engine, nonogram))
+            selected_nonogram = self._row_of_nonograms.get_selected_nonogram()
+            if selected_nonogram:
+                from screens.play_screen import PlayScreen
+                self._engine.set_screen(PlayScreen(self._engine, selected_nonogram))
 
         if self._back_button.contains(mouse_pos):
             from screens.main_menu_screen import MainMenuScreen

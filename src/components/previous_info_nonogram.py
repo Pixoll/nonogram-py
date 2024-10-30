@@ -5,13 +5,14 @@ from pygame import Surface
 
 from components import Element, Text, Container
 from core.nonogram import Nonogram
-from events import Event
+from events import Event, EventType, MouseButton
 
 
 # TODO should be implemented in row_of_nonograms.py
 class PreviousInfoNonogram(Container):
     _nonogram: Nonogram
     _size: Text
+    _selected: bool
 
     def __init__(self, nonogram: Nonogram, width: int, height: int) -> None:
         super().__init__(width, height)
@@ -21,16 +22,29 @@ class PreviousInfoNonogram(Container):
         self.set_child(self._size)
         self.set_background_color((255, 255, 255))
         self.set_border((99, 99, 224))
-        self._border_width = 10
+        self.set_border_width(10)
+        self._selected = False
 
 
     def set_position(self, position: tuple[int, int]) -> Self:
+
         super().set_position(position)
         pass
 
     def on_any_event(self, event: Event) -> None:
         super().on_any_event(event)
-        pass
+        pos = pygame.mouse.get_pos()
+        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:
+            if super().contains(pos):
+                self._selected = not self._selected
+                new_color = (197, 194, 197) if self._selected else (255, 255, 255)
+                self.set_background_color(new_color)
+
+    def is_selected(self) -> bool:
+        return self._selected
+
+    def getNonogram(self) -> Nonogram:
+        return self._nonogram
 
     def render(self, window: Surface) -> None:
         super().render(window)
