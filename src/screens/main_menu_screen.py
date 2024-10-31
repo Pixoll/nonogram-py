@@ -82,6 +82,7 @@ class MainMenuScreen(Screen):
         self._exit_confirmation_popup = (
             Container(self._width, self._height)
             .set_background_color((0, 0, 0, 128))
+            .set_border((0, 0, 0, 0))
             .set_child(
                 Container(int(self._width * 0.225), int(self._width * 0.1))
                 .set_position((
