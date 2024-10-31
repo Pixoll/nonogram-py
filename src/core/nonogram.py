@@ -307,6 +307,7 @@ class Nonogram:
             pre_made_nonogram["completed"] = self.is_completed
 
             with open(save_path + f"/{self._id}.json", "w", encoding="utf-8") as nonogram_file:
+                # noinspection PyTypeChecker
                 json.dump(pre_made_nonogram, nonogram_file, indent=2)
 
             return
@@ -331,6 +332,7 @@ class Nonogram:
         }
 
         with open(save_path + f"/{nonogram_id}.json", "w", encoding="utf-8") as nonogram_file:
+            # noinspection PyTypeChecker
             json.dump(pre_made_nonogram, nonogram_file, indent=2)
 
     def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
