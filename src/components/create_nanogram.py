@@ -121,7 +121,7 @@ class CreateNanogram(Element):
                 b: Block = block
                 hex_color = "%02x%02x%02x" % b.color
 
-                if hex_color != '#ffffff':
+                if hex_color != "ffffff":
                     if hex_color not in self._colors:
                         self._colors.append(hex_color)
                     color_index = self._colors.index(hex_color) + 1
