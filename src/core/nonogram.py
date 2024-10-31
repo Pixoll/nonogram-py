@@ -6,10 +6,13 @@ from typing import Any, Literal, Self, TypeAlias
 
 from PIL import Image
 
+from core.factory import factory, make
+
 rgb_t: TypeAlias = tuple[int, int, int]
 nonogram_type_t: TypeAlias = Literal["pre_made", "image", "custom", "generated"]
 
 
+@factory
 class Nonogram:
     class Hint:
         _value: int
@@ -134,6 +137,7 @@ class Nonogram:
         self._used_colors = tuple(palette.values())
 
     @classmethod
+    @make
     def from_pre_made(cls, nonogram_id: int) -> Self:
         nonogram_path = f"nonograms/pre_made/{nonogram_id}.json"
 
@@ -162,6 +166,7 @@ class Nonogram:
         return nonogram
 
     @classmethod
+    @make
     def from_image(cls, image_path: str, colors: int = 256, max_size: int = 100) -> Self:
         image = Image.open(image_path).convert("P", palette=Image.ADAPTIVE, colors=colors).convert("RGB")
 
@@ -180,6 +185,7 @@ class Nonogram:
         return cls(nonogram_data, "image")
 
     @classmethod
+    @make
     def generate(cls, size: tuple[int, int], colors: list[rgb_t] | None = None) -> Self:
         if colors is None:
             colors = [(0, 0, 0)]
@@ -207,6 +213,7 @@ class Nonogram:
         return cls(nonogram_data, "generated")
 
     @classmethod
+    @make
     def load(cls, nonogram_type: nonogram_type_t, nonogram_id: int) -> Self:
         nonogram_path = f"nonograms/{nonogram_type}/{nonogram_id}.json"
         if not path.exists(nonogram_path):
