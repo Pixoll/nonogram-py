@@ -1,8 +1,6 @@
 import pygame
 
-from components import ChildAlignment, Column, Container, Row, Text
-from components.row_of_nonograms import RowOfNonograms
-from core.nonogram import Nonogram
+from components import ChildAlignment, Column, Container, Row, RowOfNonograms, Text
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen

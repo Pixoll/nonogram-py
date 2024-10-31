@@ -1,9 +1,7 @@
-from typing import Self
-
 import pygame
 from pygame import Surface
 
-from components import Element, Text, Container
+from components import Container, Text
 from core.nonogram import Nonogram
 from events import Event, EventType, MouseButton
 
@@ -25,12 +23,6 @@ class PreviousInfoNonogram(Container):
         self.set_border_width(10)
         self._selected = False
 
-
-    def set_position(self, position: tuple[int, int]) -> Self:
-
-        super().set_position(position)
-        pass
-
     def on_any_event(self, event: Event) -> None:
         super().on_any_event(event)
         pos = pygame.mouse.get_pos()
@@ -43,7 +35,7 @@ class PreviousInfoNonogram(Container):
     def is_selected(self) -> bool:
         return self._selected
 
-    def getNonogram(self) -> Nonogram:
+    def get_nonogram(self) -> Nonogram:
         return self._nonogram
 
     def render(self, window: Surface) -> None:

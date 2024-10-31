@@ -35,7 +35,7 @@ class RowOfNonograms(Element):
     def get_selected_nonogram(self) -> Nonogram | None:
         for element in self._row.elements:
             if isinstance(element, PreviousInfoNonogram) and element.is_selected():
-                return element.getNonogram()
+                return element.get_nonogram()
         return None
 
     def set_position(self, position: tuple[int, int]) -> Self:
