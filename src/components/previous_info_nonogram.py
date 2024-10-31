@@ -1,7 +1,8 @@
 import pygame
 from pygame import Surface
 
-from components import Container, Text
+from components.container import Container
+from components.text import Text
 from core.nonogram import Nonogram
 from events import Event, EventType, MouseButton
 
