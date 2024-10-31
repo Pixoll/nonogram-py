@@ -282,6 +282,10 @@ class Nonogram:
         return self._size
 
     @property
+    def id(self) -> int | None:
+        return self._id
+
+    @property
     def is_completed(self) -> bool:
         return self._correct_cells == self._number_of_cells
 
@@ -324,6 +328,9 @@ class Nonogram:
 
         saved_nonograms = listdir(save_path)
         nonogram_id = int(saved_nonograms[-1].split(".")[0]) + 1 if len(saved_nonograms) > 0 else 1
+
+        if self._id is None:
+            self._id = nonogram_id
 
         pre_made_nonogram = {
             "id": nonogram_id,
