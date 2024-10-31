@@ -186,6 +186,13 @@ class Nonogram:
 
     @classmethod
     @make
+    def from_matrix(cls, data: list[list[rgb_t | None]]) -> Self:
+        nonogram = cls(data, "custom")
+        nonogram.save()
+        return nonogram
+
+    @classmethod
+    @make
     def generate(cls, size: tuple[int, int], colors: list[rgb_t] | None = None) -> Self:
         if colors is None:
             colors = [(0, 0, 0)]

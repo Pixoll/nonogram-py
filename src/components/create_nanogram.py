@@ -1,4 +1,3 @@
-import json
 from typing import Self, TypeAlias
 
 import pygame
@@ -8,6 +7,7 @@ from components.block import Block
 from components.column import Column
 from components.element import Element
 from components.row import Row
+from core.nonogram import Nonogram
 from events import Event, EventType, MouseButton
 
 rgb_t: TypeAlias = tuple[int, int, int]
@@ -23,7 +23,6 @@ class CreateNanogram(Element):
     _selected_color: tuple[int, int, int]
     _width: int
     _height: int
-    _colors: list[str]
     _name: str
 
     def __init__(self, width: int, height: int, padding: int):
@@ -41,7 +40,6 @@ class CreateNanogram(Element):
         self._grid_position = (0, 0)
         self._block_size = block_size
         self._selected_color = (0, 0, 0)
-        self._colors = []
         self._cwidth = int
         self._cheight = int
         self._name = ""
@@ -110,36 +108,14 @@ class CreateNanogram(Element):
     def set_name(self, name: str) -> None:
         self._name = name
 
-    # TODO implement into Nonogram class, this shouldn't be here
-    def save(self, nonogram_id: int = 1) -> None:
-        self._colors = []
-        mask = ""
+    def save(self) -> None:
+        matrix: list[list[rgb_t | None]] = []
 
         for column in self._grid.elements:
+            matrix.append([])
             for block in column.elements:
                 # noinspection PyTypeChecker
                 b: Block = block
-                hex_color = "%02x%02x%02x" % b.color
+                matrix[-1].append(b.color if b.color != (255, 255, 255) else None)
 
-                if hex_color != "ffffff":
-                    if hex_color not in self._colors:
-                        self._colors.append(hex_color)
-                    color_index = self._colors.index(hex_color) + 1
-                    mask += str(color_index)
-                else:
-                    mask += " "
-
-        palette = {str(i + 1): color[1:] for i, color in enumerate(self._colors)}
-
-        nonogram_data = {
-            "id": nonogram_id,
-            "mask": mask,
-            "width": self._cheight,
-            "height": self._cwidth,
-            "palette": palette,
-            "player_mask": None,
-            "completed": False
-        }
-
-        with open(f"nonograms/pre_made/0.json", "w", encoding="utf-8") as json_file:
-            json.dump(nonogram_data, json_file, indent=4)
+        Nonogram.from_matrix(matrix)
