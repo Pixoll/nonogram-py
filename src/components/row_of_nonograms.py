@@ -1,9 +1,12 @@
 from typing import Self
+
 import pygame
-from components import Container, Element, Row, Text, VerticalAlignment
+
+from components.element import Element
+from components.previous_info_nonogram import PreviousInfoNonogram
+from components.row import Row, VerticalAlignment
 from components.scroll_bar import ScrollBar
 from core.nonogram import Nonogram
-from components.previous_info_nonogram import PreviousInfoNonogram
 from events import Event
 
 
@@ -22,8 +25,7 @@ class RowOfNonograms(Element):
             self._list_of_nonograms.append(nonogram)
 
             size_index_str = f"{nonogram.size[0]}x{nonogram.size[1]}"
-            print(size_index_str)
-            info_nonogram = PreviousInfoNonogram(nonogram,self._width*0.8, self._height)
+            info_nonogram = PreviousInfoNonogram(nonogram, self._width * 0.8, self._height)
             self._row.add_element(info_nonogram)
         content_width = len(self._list_of_nonograms) * info_nonogram.size[0]
         self._scrollbar = ScrollBar(width, content_width)
