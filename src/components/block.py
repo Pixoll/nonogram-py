@@ -29,7 +29,7 @@ class Block(ElementWithChild):
         self._state = Block.State.EMPTY
         self._x_mark_visible = color == "x"
 
-        self._x_image = pygame.transform.scale(pygame.image.load('assets/textures/x.gif'), self.size)
+        self._x_image = pygame.transform.scale(pygame.image.load("assets/textures/x.gif"), self.size)
 
     def set_background_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> Self:
         self._background_color = color

@@ -44,7 +44,7 @@ class CreateNanogram(Element):
         self._colors = []
         self._cwidth = int
         self._cheight = int
-        self._name = ''
+        self._name = ""
 
         for i in range(width):
             column = Column()
@@ -113,7 +113,7 @@ class CreateNanogram(Element):
     # TODO implement into Nonogram class, this shouldn't be here
     def save(self, nonogram_id: int = 1) -> None:
         self._colors = []
-        mask = ''
+        mask = ""
 
         for column in self._grid.elements:
             for block in column.elements:
@@ -127,7 +127,7 @@ class CreateNanogram(Element):
                     color_index = self._colors.index(hex_color) + 1
                     mask += str(color_index)
                 else:
-                    mask += ' '
+                    mask += " "
 
         palette = {str(i + 1): color[1:] for i, color in enumerate(self._colors)}
 

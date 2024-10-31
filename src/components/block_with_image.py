@@ -14,7 +14,7 @@ class BlockWithImage(Element):
     def __init__(self, width: int, height: int, texture_name: str = None) -> None:
         super().__init__(width, height)
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
-        self._image = pygame.transform.scale(pygame.image.load(f'assets/textures/{texture_name}'), self.size)
+        self._image = pygame.transform.scale(pygame.image.load(f"assets/textures/{texture_name}"), self.size)
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
