@@ -1,3 +1,5 @@
+from typing import TypeAlias
+
 from events.active_event import *
 from events.audio_device_event import *
 from events.clipboard_update_event import *
@@ -30,7 +32,7 @@ from events.video_expose_event import *
 from events.video_resize_event import *
 from events.window_event import *
 
-Event = (ActiveEvent
+Event: TypeAlias = (ActiveEvent
               | AudioDeviceEvent
               | ClipboardUpdateEvent
               | ControllerDeviceEvent

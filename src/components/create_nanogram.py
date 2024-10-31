@@ -1,5 +1,5 @@
 import json
-from typing import Self
+from typing import Self, TypeAlias
 
 import pygame
 from pygame import Surface
@@ -10,7 +10,7 @@ from components.element import Element
 from components.row import Row
 from events import Event, EventType, MouseButton
 
-rgb_t = tuple[int, int, int]
+rgb_t: TypeAlias = tuple[int, int, int]
 
 
 class CreateNanogram(Element):
