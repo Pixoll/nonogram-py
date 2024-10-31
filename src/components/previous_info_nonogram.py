@@ -24,6 +24,11 @@ class PreviousInfoNonogram(Container):
         self.set_border_width(10)
         self._selected = False
 
+    def set_selected(self, selected: bool) -> None:
+        self._selected = selected
+        new_color = (197, 194, 197) if selected else (255, 255, 255)
+        self.set_background_color(new_color)
+
     def on_any_event(self, event: Event) -> None:
         super().on_any_event(event)
         pos = pygame.mouse.get_pos()

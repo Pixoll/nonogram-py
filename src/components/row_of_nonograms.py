@@ -14,6 +14,7 @@ class RowOfNonograms(Element):
     _row: Row
     _list_of_nonograms: list[Nonogram]
     _scrollbar: ScrollBar
+    _selected_nonogram: PreviousInfoNonogram | None = None
 
     def __init__(self, width: int, height: int):
         super().__init__(width, height)
@@ -33,9 +34,8 @@ class RowOfNonograms(Element):
         self._row.set_alignment(VerticalAlignment.CENTER)
 
     def get_selected_nonogram(self) -> Nonogram | None:
-        for element in self._row.elements:
-            if isinstance(element, PreviousInfoNonogram) and element.is_selected():
-                return element.get_nonogram()
+        if self._selected_nonogram:
+            return self._selected_nonogram.get_nonogram()
         return None
 
     def set_position(self, position: tuple[int, int]) -> Self:
@@ -50,8 +50,15 @@ class RowOfNonograms(Element):
 
     def on_any_event(self, event: Event) -> None:
         self._scrollbar.on_any_event(event)
+
         for element in self._row.elements:
-            element.on_any_event(event)
+            if isinstance(element, PreviousInfoNonogram):
+                element.on_any_event(event)
+
+                if element.is_selected():
+                    if self._selected_nonogram and self._selected_nonogram is not element:
+                        self._selected_nonogram.set_selected(False)
+                    self._selected_nonogram = element
 
     def update(self):
         self._scrollbar.update()
