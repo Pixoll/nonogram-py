@@ -400,7 +400,7 @@ class Nonogram:
                 cell = self._player_grid[y][x]
 
                 if cell is None:
-                    grid += padding
+                    grid += f"\033[48;2;255;255;255m{padding}\033[0m"
                 elif cell == "x":
                     grid += f"\033[38;2;255;64;64m X \033[0m"
                 else:
