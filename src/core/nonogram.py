@@ -141,7 +141,7 @@ class Nonogram:
             raise ValueError(f"No nonogram with id {nonogram_id}")
 
         pre_made_nonogram: dict[str, Any]
-        with open(nonogram_path) as nonogram_file:
+        with open(nonogram_path, encoding="utf-8") as nonogram_file:
             pre_made_nonogram = json.load(nonogram_file)
 
         mask: str = pre_made_nonogram["mask"]
@@ -213,7 +213,7 @@ class Nonogram:
             raise ValueError(f"No nonogram of type {nonogram_type} with id {nonogram_id}")
 
         nonogram_json: Any
-        with open(nonogram_path) as nonogram_file:
+        with open(nonogram_path, encoding="utf-8") as nonogram_file:
             nonogram_json = json.load(nonogram_file)
 
         if nonogram_json["player_mask"] is None:
@@ -300,13 +300,13 @@ class Nonogram:
         if self._id is not None:
             pre_made_nonogram: Any
 
-            with open(save_path + f"/{self._id}.json") as nonogram_file:
+            with open(save_path + f"/{self._id}.json", encoding="utf-8") as nonogram_file:
                 pre_made_nonogram = json.load(nonogram_file)
 
             pre_made_nonogram["player_mask"] = player_mask
             pre_made_nonogram["completed"] = self.is_completed
 
-            with open(save_path + f"/{self._id}.json", "w") as nonogram_file:
+            with open(save_path + f"/{self._id}.json", "w", encoding="utf-8") as nonogram_file:
                 json.dump(pre_made_nonogram, nonogram_file, indent=2)
 
             return
@@ -330,7 +330,7 @@ class Nonogram:
             "completed": self.is_completed,
         }
 
-        with open(save_path + f"/{nonogram_id}.json", "w") as nonogram_file:
+        with open(save_path + f"/{nonogram_id}.json", "w", encoding="utf-8") as nonogram_file:
             json.dump(pre_made_nonogram, nonogram_file, indent=2)
 
     def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
