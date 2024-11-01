@@ -1,5 +1,6 @@
 import pygame
 
+from assets import FontManager
 from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text
 from engine import Engine
 from events import Event, EventType, Key, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -31,7 +32,7 @@ class MainMenuScreen(Screen):
             .set_child(
                 Text(
                     "NANOGRAM",
-                    pygame.font.SysFont("Arial", 80),
+                    FontManager.get("sys", "Arial", 80),
                     (99, 99, 224)
                 )
                 .set_color((152, 99, 224))
@@ -44,46 +45,46 @@ class MainMenuScreen(Screen):
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 178, 171))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Play", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Play", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
 
         self._workshop_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 224, 99))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Workshop", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Workshop", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
 
         self._statistics_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Statistics", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Statistics", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
 
         self._settings_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((118, 224, 148))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Settings", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Settings", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
 
         self._exit_button = (
             Container(int(self._width * 0.1), int(self._height * 0.1))
             .set_background_color((224, 91, 93))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Exit", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Exit", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
 
         self._cancel_exit_button = (
             Container(int(self._width * 0.075), int(self._width * 0.025))
             .set_border((64, 128, 64))
-            .set_child(Text("cancel", pygame.font.SysFont("Arial", 20), (0, 0, 0)))
+            .set_child(Text("cancel", FontManager.get("sys", "Arial", 20), (0, 0, 0)))
         )
         self._confirm_exit_button = (
             Container(int(self._width * 0.075), int(self._width * 0.025))
             .set_border((128, 64, 64))
-            .set_child(Text("ok", pygame.font.SysFont("Arial", 20), (0, 0, 0)))
+            .set_child(Text("ok", FontManager.get("sys", "Arial", 20), (0, 0, 0)))
         )
 
         self._exit_confirmation_popup = (
@@ -101,7 +102,7 @@ class MainMenuScreen(Screen):
                     Column()
                     .set_padding(15)
                     .add_element(
-                        Text("Are you sure you want to exit?", pygame.font.SysFont("Arial", 20), (0, 0, 0))
+                        Text("Are you sure you want to exit?", FontManager.get("sys", "Arial", 20), (0, 0, 0))
                     )
                     .add_element(
                         Row()

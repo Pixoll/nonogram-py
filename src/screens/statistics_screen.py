@@ -1,5 +1,6 @@
 import pygame
 
+from assets import FontManager
 from components import ChildAlignment, Container, Text
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -19,7 +20,7 @@ class StatisticsScreen(Screen):
             Container(200, 100)
             .set_background_color((207, 178, 171))
             .set_border((0, 0, 0))
-            .set_child(Text("Statistics", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Statistics", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
 
         self._menu.set_child(self._button)

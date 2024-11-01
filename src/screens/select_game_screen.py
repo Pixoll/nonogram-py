@@ -1,5 +1,6 @@
 import pygame
 
+from assets import FontManager
 from components import ChildAlignment, Column, Container, Row, RowOfNonograms, Text
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -25,13 +26,13 @@ class SelectGameScreen(Screen):
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((198, 191, 166))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Play", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Play", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
         self._back_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((198, 191, 166))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Back", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Back", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
         row1.add_element(self._back_button)
         row1.add_element(self._play_button)

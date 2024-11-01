@@ -1,6 +1,7 @@
 import pygame
 from pygame import Surface
 
+from assets import FontManager
 from components.container import Container
 from components.text import Text
 from core.nonogram import Nonogram
@@ -17,7 +18,7 @@ class PreviousInfoNonogram(Container):
         super().__init__(width, height)
         self._nonogram = nonogram
         size = f"{self._nonogram.size[0]}x{self._nonogram.size[1]}"
-        self._size = Text(size, pygame.font.SysFont("Arial", 60), (99, 99, 224))
+        self._size = Text(size, FontManager.get("sys", "Arial", 60), (99, 99, 224))
         self.set_child(self._size)
         self.set_background_color((255, 255, 255))
         self.set_border((99, 99, 224))

@@ -1,7 +1,8 @@
 from typing import Self
 
-from pygame import font, Surface
+from pygame import Surface
 
+from assets import FontManager
 from components.colored_block import ColoredBlock
 from components.column import Column, HorizontalAlignment
 from components.element import Element
@@ -26,7 +27,7 @@ class HintsElement(Element):
         super().__init__(0, 0)
         self._hints = hints
         self._padding = padding
-        hints_font = font.SysFont("Arial", int(block_size / 1.5))
+        hints_font = FontManager.get("sys", "Arial", int(block_size / 1.5))
 
         self._hint_elements = Column() if is_horizontal else Row()
         for i in range(len(hints)):
