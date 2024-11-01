@@ -235,16 +235,11 @@ class Nonogram:
         with open(nonogram_path, encoding="utf-8") as nonogram_file:
             nonogram_json = json.load(nonogram_file)
 
-        if nonogram_json["player_mask"] is None:
-            raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} hasn't been played before")
-
-        if nonogram_json["completed"]:
-            raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} has already been completed")
-
         name: str = nonogram_json["name"]
         width: int = nonogram_json["width"]
+        height: int = nonogram_json["height"]
         mask: str = nonogram_json["mask"]
-        player_mask: str = nonogram_json["player_mask"]
+        player_mask: str | None = nonogram_json["player_mask"]
         palette = Nonogram._get_palette(nonogram_json["palette"])
         el_len = max([len(k) for k in palette.keys()])
 
@@ -259,19 +254,24 @@ class Nonogram:
             original_mask_element = (str(int(mask[i:i + el_len]))
                                      if mask[i:i + el_len].isdigit()
                                      else mask[i:i + el_len])
-            player_mask_element = (str(int(player_mask[i:i + el_len]))
-                                   if player_mask[i:i + el_len].isdigit()
-                                   else player_mask[i:i + el_len])
 
             nonogram_data[-1].append(
                 palette[original_mask_element] if original_mask_element in palette
                 else None
             )
-            player_grid[-1].append(
-                palette[player_mask_element] if player_mask_element in palette
-                else "x" if player_mask[i:i + el_len][0] == "x"
-                else None
-            )
+
+            if player_mask is not None:
+                player_mask_element = (str(int(player_mask[i:i + el_len]))
+                                       if player_mask[i:i + el_len].isdigit()
+                                       else player_mask[i:i + el_len])
+
+                player_grid[-1].append(
+                    palette[player_mask_element] if player_mask_element in palette
+                    else "x" if player_mask[i:i + el_len][0] == "x"
+                    else None
+                )
+            else:
+                player_grid[-1].append(None)
 
         nonogram = Nonogram(nonogram_data, nonogram_type, nonogram_id, name, palette)
 
