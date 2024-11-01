@@ -4,15 +4,15 @@ from pygame.font import Font, match_font
 
 
 class FontFormat:
-    BOLD = 0b0001
-    ITALIC = 0b0010
+    FAKE_BOLD = 0b0001
+    FAKE_ITALIC = 0b0010
     UNDERLINE = 0b0100
     STRIKETHROUGH = 0b1000
 
     @staticmethod
     def parse(flags: int) -> tuple[bool, bool, bool, bool]:
-        bold = bool(flags & FontFormat.BOLD)
-        italic = bool(flags & FontFormat.ITALIC)
+        bold = bool(flags & FontFormat.FAKE_BOLD)
+        italic = bool(flags & FontFormat.FAKE_ITALIC)
         underline = bool(flags & FontFormat.UNDERLINE)
         strikethrough = bool(flags & FontFormat.STRIKETHROUGH)
         return bold, italic, underline, strikethrough
@@ -67,8 +67,8 @@ class FontManager:
         path: str
 
         if font_type == "sys":
-            bold = bool(flags & FontFormat.BOLD)
-            italic = bool(flags & FontFormat.ITALIC)
+            bold = bool(flags & FontFormat.FAKE_BOLD)
+            italic = bool(flags & FontFormat.FAKE_ITALIC)
             path = match_font(name, bold, italic)
 
             if path is None:
