@@ -24,6 +24,10 @@ class Element(ABC):
     def position(self) -> tuple[int, int]:
         return self._position
 
+    def set_size(self, width: int, height: int):
+        self._width = width
+        self._height = height
+
     def contains(self, position: tuple[int, int]) -> bool:
         mx, my = position
         x, y = self._position

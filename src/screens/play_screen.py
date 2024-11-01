@@ -27,6 +27,7 @@ class PlayScreen(Screen):
         self._completed_text = (FontManager.get("sys", "Arial", 30)
                                 .render("completed!", True, (0, 0, 0)))
 
+
     def on_any_event(self, event: Event) -> None:
         self._nonogram_element.on_any_event(event)
         self._color_picker.on_any_event(event)
@@ -43,6 +44,9 @@ class PlayScreen(Screen):
         pass
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
+        pass
+
+    def save(self) -> None:
         pass
 
     def render(self) -> None:

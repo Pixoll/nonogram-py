@@ -55,6 +55,24 @@ class NonogramElement(Element):
         self._surface = Surface((self.size[0] + padding * 2, self.size[1] + padding * 2), pygame.SRCALPHA)
         self._surface.fill(self._background_color)
 
+    def set_zoom(self, zoom_factor: float) -> None:
+        new_block_size = int(self._block_size * zoom_factor)
+        self._block_size = new_block_size
+
+        self._horizontal_hints.update_size(new_block_size)
+        self._vertical_hints.update_size(new_block_size)
+
+        for column in self._grid:
+            for block in column.elements:
+                block.set_size(new_block_size, new_block_size)
+
+        self._width = self._horizontal_hints.size[0] + self._padding + self._grid.size[0]
+        self._height = self._vertical_hints.size[1] + self._padding + self._grid.size[1]
+        self.set_size(self._width, self._height)
+        self._surface = Surface((self.size[0] + self._padding * 2, self.size[1] + self._padding * 2), pygame.SRCALPHA)
+        self._surface.fill(self._background_color)
+
+
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = (position[0] - self._horizontal_hints.size[0] // 2, position[1])
         vertical_hint_position = (self._position[0] + self._horizontal_hints.size[0] + self._padding, self._position[1])
@@ -83,6 +101,11 @@ class NonogramElement(Element):
         self._grid.render(window)
 
     def on_any_event(self, event: Event) -> None:
+
+        if event.type == EventType.MOUSE_WHEEL:
+            zoom_factor = 1.1 if event.y > 0 else 0.9
+            self.set_zoom(zoom_factor)
+
         if event.type != EventType.MOUSE_BUTTON_DOWN:
             return
 
