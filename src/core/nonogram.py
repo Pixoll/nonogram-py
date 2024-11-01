@@ -274,7 +274,10 @@ class Nonogram:
             )
 
         nonogram = Nonogram(nonogram_data, nonogram_type, nonogram_id, name, palette)
-        nonogram._player_grid = player_grid
+
+        for j in range(height):
+            for i in range(width):
+                nonogram[i, j] = player_grid[j][i]
 
         return nonogram
 
