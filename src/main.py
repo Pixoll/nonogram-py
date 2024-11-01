@@ -1,7 +1,8 @@
 import pygame
+# noinspection PyProtectedMember
 from pygame._sdl2 import Window
 
-from components import Sound
+from assets import SoundManager
 from engine import Engine
 from screens.main_menu_screen import MainMenuScreen
 
@@ -16,7 +17,7 @@ pygame.display.set_caption("Nonogram")
 
 engine = Engine(window)
 engine.set_screen(MainMenuScreen(engine))
-Sound.play_background_music()
+SoundManager.play_music("music.mp3")
 engine.run(window, clock)
 
 pygame.quit()
