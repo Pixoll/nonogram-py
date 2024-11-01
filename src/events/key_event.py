@@ -119,8 +119,8 @@ class Key(Enum):
     NUM_LOCK_CLEAR = pygame.K_NUMLOCKCLEAR
     O = pygame.K_o
     P = pygame.K_p
-    PAGEDOWN = pygame.K_PAGEDOWN
-    PAGEUP = pygame.K_PAGEUP
+    PAGE_DOWN = pygame.K_PAGEDOWN
+    PAGE_UP = pygame.K_PAGEUP
     PAUSE = pygame.K_PAUSE
     PERCENT = pygame.K_PERCENT
     PERIOD = pygame.K_PERIOD
