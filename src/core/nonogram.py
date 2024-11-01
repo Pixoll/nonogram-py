@@ -53,12 +53,14 @@ class Nonogram:
     _correct_cells: int
     _type: nonogram_type_t
     _id: int | None
+    _name: str | None
 
     def __init__(
             self,
             nonogram: list[list[rgb_t | None]],
             nonogram_type: nonogram_type_t,
             nonogram_id: int | None = None,
+            nonogram_name: str | None = None,
             palette: dict[str, rgb_t] | None = None,
     ):
         self._original = []
@@ -133,6 +135,7 @@ class Nonogram:
         self._number_of_cells = self._size[0] * self._size[1]
         self._type = nonogram_type
         self._id = nonogram_id
+        self._name = nonogram_name
         # noinspection PyTypeChecker
         self._used_colors = tuple(palette.values())
 
@@ -148,6 +151,7 @@ class Nonogram:
         with open(nonogram_path, encoding="utf-8") as nonogram_file:
             pre_made_nonogram = json.load(nonogram_file)
 
+        name: str = pre_made_nonogram["name"]
         mask: str = pre_made_nonogram["mask"]
         width: int = pre_made_nonogram["width"]
         palette = Nonogram._get_palette(pre_made_nonogram["palette"])
@@ -161,8 +165,7 @@ class Nonogram:
             color = palette[mask[i]] if mask[i] in palette else None
             nonogram_data[-1].append(color)
 
-        nonogram = cls(nonogram_data, "pre_made", nonogram_id, palette)
-
+        nonogram = Nonogram(nonogram_data, "pre_made", nonogram_id, name, palette)
         return nonogram
 
     @classmethod
@@ -182,13 +185,14 @@ class Nonogram:
             for j in range(image.width):
                 nonogram_data[i].append(pixels[j, i])
 
-        return cls(nonogram_data, "image")
+        nonogram = Nonogram(nonogram_data, "image")
+        return nonogram
 
     @classmethod
     @make
-    def from_matrix(cls, data: list[list[rgb_t | None]]) -> Self:
-        nonogram = cls(data, "custom")
-        nonogram.save()
+    def from_matrix(cls, data: list[list[rgb_t | None]], name: str) -> Self:
+        nonogram = Nonogram(data, "custom")
+        nonogram.save(name)
         return nonogram
 
     @classmethod
@@ -217,7 +221,8 @@ class Nonogram:
                 nonogram_data[x][y] = color
                 colored += 1
 
-        return cls(nonogram_data, "generated")
+        nonogram = Nonogram(nonogram_data, "generated")
+        return nonogram
 
     @classmethod
     @make
@@ -236,6 +241,7 @@ class Nonogram:
         if nonogram_json["completed"]:
             raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} has already been completed")
 
+        name: str = nonogram_json["name"]
         width: int = nonogram_json["width"]
         mask: str = nonogram_json["mask"]
         player_mask: str = nonogram_json["player_mask"]
@@ -267,7 +273,7 @@ class Nonogram:
                 else None
             )
 
-        nonogram = cls(nonogram_data, nonogram_type, nonogram_id, palette)
+        nonogram = Nonogram(nonogram_data, nonogram_type, nonogram_id, name, palette)
         nonogram._player_grid = player_grid
 
         return nonogram
@@ -293,6 +299,10 @@ class Nonogram:
         return self._id
 
     @property
+    def name(self) -> str | None:
+        return self._name
+
+    @property
     def is_completed(self) -> bool:
         return self._correct_cells == self._number_of_cells
 
@@ -302,7 +312,7 @@ class Nonogram:
     def is_column_complete(self, column: int) -> bool:
         return self._player_grid_transposed[column] == self._original_transposed[column]
 
-    def save(self) -> None:
+    def save(self, name: str | None = None) -> None:
         save_path = f"nonograms/{self._type}/"
 
         el_len = max([len(k) for k in self._palette.keys()])
@@ -333,14 +343,16 @@ class Nonogram:
         if not path.exists(save_path):
             makedirs(save_path)
 
+        if name is None:
+            raise ValueError("Must provide name for new nonograms.")
+
         saved_nonograms = listdir(save_path)
         nonogram_id = int(saved_nonograms[-1].split(".")[0]) + 1 if len(saved_nonograms) > 0 else 1
-
-        if self._id is None:
-            self._id = nonogram_id
+        self._id = nonogram_id
 
         pre_made_nonogram = {
             "id": nonogram_id,
+            "name": name,
             "mask": "".join(["".join([
                 " " * el_len if color is None
                 else inverse_palette[color].zfill(el_len) for color in row

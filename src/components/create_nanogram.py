@@ -118,4 +118,4 @@ class CreateNanogram(Element):
                 b: Block = block
                 matrix[-1].append(b.color if b.color != (255, 255, 255) else None)
 
-        Nonogram.from_matrix(matrix)
+        Nonogram.from_matrix(matrix, self._name)
