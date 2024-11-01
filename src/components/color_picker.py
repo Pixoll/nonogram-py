@@ -85,8 +85,8 @@ class ColorPicker(Element):
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 
-        for column in self._row.elements:
-            for block in column.elements:
+        for column in self._row:
+            for block in column:
                 if block.contains(pygame.mouse.get_pos()):
                     block_color = block.color
                     self._selected_block.set_color(block_color)

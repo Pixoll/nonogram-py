@@ -91,8 +91,8 @@ class NonogramElement(Element):
 
         mouse_pos = pygame.mouse.get_pos()
 
-        for column in self._grid.elements:
-            for block in column.elements:
+        for column in self._grid:
+            for block in column:
                 if not block.contains(mouse_pos):
                     continue
 

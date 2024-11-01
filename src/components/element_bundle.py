@@ -36,9 +36,9 @@ class ElementBundle(Element, ABC, Generic[T]):
         self._update_size()
         return self
 
-    @property
-    def elements(self) -> tuple[T, ...]:
-        return tuple(self._elements)
+    def __iter__(self):
+        for element in self._elements:
+            yield element
 
     def render(self, window: Surface) -> None:
         for element in self._elements:

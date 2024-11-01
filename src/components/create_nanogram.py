@@ -81,8 +81,8 @@ class CreateNanogram(Element):
         self._grid.render(window)
 
     def clear(self) -> None:
-        for column in self._grid.elements:
-            for block in column.elements:
+        for column in self._grid:
+            for block in column:
                 block.set_background_color((255, 255, 255))
 
     def on_any_event(self, event: Event) -> None:
@@ -94,8 +94,8 @@ class CreateNanogram(Element):
 
         mouse_pos = pygame.mouse.get_pos()
 
-        for column in self._grid.elements:
-            for block in column.elements:
+        for column in self._grid:
+            for block in column:
                 if not block.contains(mouse_pos):
                     continue
 
@@ -107,9 +107,9 @@ class CreateNanogram(Element):
     def save(self) -> None:
         matrix: list[list[rgb_t | None]] = []
 
-        for column in self._grid.elements:
+        for column in self._grid:
             matrix.append([])
-            for block in column.elements:
+            for block in column:
                 matrix[-1].append(block.color if block.color != (255, 255, 255) else None)
 
         Nonogram.from_matrix(matrix, self._name)
