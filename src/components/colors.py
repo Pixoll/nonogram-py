@@ -16,11 +16,11 @@ class Colors(Element):
         super().__init__(cant_columns * (block_size + padding) - padding,
                          cant_colors * (block_size + padding) - padding)
         self._block_size = block_size
-        self._column1 = Column().set_alignment(HorizontalAlignment.CENTER)
-        self._column2 = Column().set_alignment(HorizontalAlignment.CENTER)
-        self._column3 = Column().set_alignment(HorizontalAlignment.CENTER)
-        self._column4 = Column().set_alignment(HorizontalAlignment.CENTER)
-        self._column5 = Column().set_alignment(HorizontalAlignment.CENTER)
+        self._column1: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
+        self._column2: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
+        self._column3: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
+        self._column4: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
+        self._column5: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
 
         colors = Colors._generate_colors()
 
@@ -30,13 +30,13 @@ class Colors(Element):
             self._column3.add_element(ColoredBlock(block_size, color))
             self._column4.add_element(ColoredBlock(block_size, color))
             self._column5.add_element(ColoredBlock(block_size, color))
-        self._row = (Row()
-                     .set_alignment(VerticalAlignment.CENTER)
-                     .add_element(self._column1)
-                     .add_element(self._column2)
-                     .add_element(self._column3)
-                     .add_element(self._column4)
-                     .add_element(self._column5))
+        self._row: Row[Column[ColoredBlock]] = (Row()
+                                                .set_alignment(VerticalAlignment.CENTER)
+                                                .add_element(self._column1)
+                                                .add_element(self._column2)
+                                                .add_element(self._column3)
+                                                .add_element(self._column4)
+                                                .add_element(self._column5))
 
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
 
@@ -47,7 +47,7 @@ class Colors(Element):
 
     @staticmethod
     def _generate_colors() -> list[tuple[int, int, int]]:
-        colors = [(255, 0, 0)]
+        colors: list[tuple[int, int, int]] = [(255, 0, 0)]
 
         steps = 15
         shift = 255 // 15
@@ -70,9 +70,7 @@ class Colors(Element):
         for column in self._row.elements:
             for block in column.elements:
                 if block.contains(pygame.mouse.get_pos()):
-                    # noinspection PyTypeChecker
-                    b: ColoredBlock = block
-                    color = b.color
+                    color = block.color
                     # TODO: event handlers should NEVER return values
                     return color
 

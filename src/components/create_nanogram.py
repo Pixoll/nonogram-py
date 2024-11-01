@@ -17,7 +17,7 @@ class CreateNanogram(Element):
     _surface: Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _padding: int
-    _grid: Row
+    _grid: Row[Column[Block]]
     _grid_position: tuple[int, int]
     _block_size: int
     _selected_color: tuple[int, int, int]
@@ -45,7 +45,7 @@ class CreateNanogram(Element):
         self._name = ""
 
         for i in range(width):
-            column = Column()
+            column: Column[Block] = Column()
             for j in range(height):
                 column.add_element(Block(block_size, block_size, (255, 255, 255)))
             self._grid.add_element(column)
@@ -83,9 +83,7 @@ class CreateNanogram(Element):
     def clear(self) -> None:
         for column in self._grid.elements:
             for block in column.elements:
-                # noinspection PyTypeChecker
-                b: Block = block
-                b.set_background_color((255, 255, 255))
+                block.set_background_color((255, 255, 255))
 
     def on_any_event(self, event: Event) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN:
@@ -98,12 +96,10 @@ class CreateNanogram(Element):
 
         for column in self._grid.elements:
             for block in column.elements:
-                # noinspection PyTypeChecker
-                b: Block = block
-                if not b.contains(mouse_pos):
+                if not block.contains(mouse_pos):
                     continue
 
-                b.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)
+                block.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)
 
     def set_name(self, name: str) -> None:
         self._name = name
@@ -114,8 +110,6 @@ class CreateNanogram(Element):
         for column in self._grid.elements:
             matrix.append([])
             for block in column.elements:
-                # noinspection PyTypeChecker
-                b: Block = block
-                matrix[-1].append(b.color if b.color != (255, 255, 255) else None)
+                matrix[-1].append(block.color if block.color != (255, 255, 255) else None)
 
         Nonogram.from_matrix(matrix, self._name)

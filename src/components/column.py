@@ -1,6 +1,7 @@
 from enum import auto, Enum
-from typing import Self
+from typing import Self, TypeVar
 
+from components.element import Element
 from components.element_bundle import ElementBundle
 from events import Event
 
@@ -11,7 +12,10 @@ class HorizontalAlignment(Enum):
     RIGHT = auto()
 
 
-class Column(ElementBundle):
+T = TypeVar("T", bound=Element)
+
+
+class Column(ElementBundle[T]):
     _alignment: HorizontalAlignment
     _max_width: int
 

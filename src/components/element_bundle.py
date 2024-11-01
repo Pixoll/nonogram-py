@@ -1,13 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import Self
+from typing import Generic, TypeVar
 
 from pygame import Surface
 
 from components.element import Element
 
+T = TypeVar("T", bound=Element)
+S = TypeVar("S", bound="ElementBundle")
 
-class ElementBundle(Element, ABC):
-    _elements: list[Element | Self]
+
+class ElementBundle(Element, ABC, Generic[T]):
+    _elements: list[T]
     _padding: int
 
     def __init__(self):
@@ -16,25 +19,25 @@ class ElementBundle(Element, ABC):
         self._elements = []
         self._padding = 0
 
-    def add_element(self, element: Element | Self) -> Self:
+    def add_element(self: S, element: T) -> S:
         self._elements.append(element)
         self._update_size()
         self._update_positions()
         return self
 
-    def set_position(self, position: tuple[int, int]) -> Self:
+    def set_position(self: S, position: tuple[int, int]) -> S:
         self._position = position
         self._update_positions()
         return self
 
-    def set_padding(self, padding: int) -> Self:
+    def set_padding(self: S, padding: int) -> S:
         self._padding = padding
         self._update_positions()
         self._update_size()
         return self
 
     @property
-    def elements(self) -> tuple[Element | Self, ...]:
+    def elements(self) -> tuple[T, ...]:
         return tuple(self._elements)
 
     def render(self, window: Surface) -> None:

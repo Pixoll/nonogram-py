@@ -29,9 +29,9 @@ class HintsElement(Element):
         self._padding = padding
         hints_font = FontManager.get("sys", "Arial", int(block_size / 1.5))
 
-        self._hint_elements = Column() if is_horizontal else Row()
+        self._hint_elements: Column[Row[ColoredBlock]] | Row[Column[ColoredBlock]] = Column() if is_horizontal else Row()
         for i in range(len(hints)):
-            row_or_column = Row() if is_horizontal else Column()
+            row_or_column: Row[ColoredBlock] | Column[ColoredBlock] = Row() if is_horizontal else Column()
 
             for hint in hints[i]:
                 hint_block = ColoredBlock(block_size, hint.color, str(hint.value), hints_font)

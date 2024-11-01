@@ -17,7 +17,7 @@ class NonogramElement(Element):
     _surface: Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _padding: int
-    _grid: Row
+    _grid: Row[Column[Block]]
     _grid_position: tuple[int, int]
     _block_size: int
     _horizontal_hints: HintsElement
@@ -41,7 +41,7 @@ class NonogramElement(Element):
         self._selected_color = nonogram.used_colors[0]
 
         for i in range(nonogram.size[0]):
-            column = Column()
+            column: Column[Block] = Column()
             for j in range(nonogram.size[1]):
                 column.add_element(Block(block_size, block_size, nonogram[i, j]))
             self._grid.add_element(column)
@@ -93,20 +93,18 @@ class NonogramElement(Element):
 
         for column in self._grid.elements:
             for block in column.elements:
-                # noinspection PyTypeChecker
-                b: Block = block
-                if not b.contains(mouse_pos):
+                if not block.contains(mouse_pos):
                     continue
 
-                b.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)
+                block.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)
 
                 x = (mouse_pos[0] - self._grid_position[0]) // (self._block_size + self._padding)
                 y = (mouse_pos[1] - self._grid_position[1]) // (self._block_size + self._padding)
 
-                match b.state:
+                match block.state:
                     case Block.State.EMPTY:
                         self._nonogram[x, y] = None
                     case Block.State.CROSSED:
                         self._nonogram[x, y] = "x"
                     case Block.State.COLORED:
-                        self._nonogram[x, y] = b.color
+                        self._nonogram[x, y] = block.color
