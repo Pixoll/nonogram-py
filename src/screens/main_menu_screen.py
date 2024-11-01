@@ -54,16 +54,23 @@ class MainMenuScreen(Screen):
             .set_child(Text("Workshop", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
 
-        self._settings_button = (
+        self._statistics_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Statistics", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
 
+        self._settings_button = (
+            Container(int(self._width * 0.3), int(self._height * 0.1))
+            .set_background_color((118, 224, 148))
+            .set_border((0, 0, 0, 0))
+            .set_child(Text("Settings", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+        )
+
         self._exit_button = (
             Container(int(self._width * 0.1), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
+            .set_background_color((224, 91, 93))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Exit", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
@@ -110,6 +117,7 @@ class MainMenuScreen(Screen):
 
         (column2.add_element(self._play_button)
          .add_element(self._workshop_button)
+         .add_element(self._statistics_button)
          .add_element(self._settings_button)
          .add_element(self._exit_button)
          .set_padding(int(self._height * 0.08))
@@ -177,6 +185,11 @@ class MainMenuScreen(Screen):
         if self._workshop_button.contains(mouse_pos):
             from screens.workshop_screen import WorkshopScreen
             self._engine.set_screen(WorkshopScreen(self._engine))
+            return
+
+        if self._statistics_button.contains(mouse_pos):
+            from screens.statistics_screen import StatisticsScreen
+            self._engine.set_screen(StatisticsScreen(self._engine))
             return
 
         if self._settings_button.contains(mouse_pos):

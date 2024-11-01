@@ -6,7 +6,7 @@ from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, Mo
 from screens.screen import Screen
 
 
-class SettingsScreen(Screen):
+class StatisticsScreen(Screen):
     _engine: Engine
     _menu: Container
     _button: Container
@@ -19,7 +19,7 @@ class SettingsScreen(Screen):
             Container(200, 100)
             .set_background_color((207, 178, 171))
             .set_border((0, 0, 0))
-            .set_child(Text("Settings", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Statistics", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
 
         self._menu.set_child(self._button)
