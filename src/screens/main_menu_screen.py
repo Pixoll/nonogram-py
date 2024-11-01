@@ -19,7 +19,7 @@ class MainMenuScreen(Screen):
             .set_child_alignment(ChildAlignment.CENTER)
             .set_border((0, 132, 134))
             .set_background_color((0, 132, 134))
-            .set_image("assets/textures/bg_main_menu.jpg")
+            .set_image("bg_main_menu.jpg")
         )
 
         column1 = Column()

@@ -19,7 +19,7 @@ class SelectGameScreen(Screen):
             .set_child_alignment(ChildAlignment.CENTER)
             .set_border((0, 132, 134))
             .set_background_color((0, 132, 134))
-            .set_image("assets/textures/select.jpg")
+            .set_image("select.jpg")
         )
         row1 = Row()
         self._play_button = (
