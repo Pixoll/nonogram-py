@@ -16,6 +16,7 @@ class Colors(Element):
         super().__init__(cant_columns * (block_size + padding) - padding,
                          cant_colors * (block_size + padding) - padding)
         self._block_size = block_size
+        self._selected_color = None  # Almacena el color seleccionado
         self._column1: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
         self._column2: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
         self._column3: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
@@ -70,9 +71,11 @@ class Colors(Element):
         for column in self._row:
             for block in column:
                 if block.contains(pygame.mouse.get_pos()):
-                    color = block.color
-                    # TODO: event handlers should NEVER return values
-                    return color
+                    self._selected_color = block.color
+                    break
+
+    def get_selected_color(self) -> tuple[int, int, int] | None:
+        return self._selected_color
 
     def render(self, screen) -> None:
         screen.blit(self._surface, self._position)
