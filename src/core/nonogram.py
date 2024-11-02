@@ -349,6 +349,9 @@ class Nonogram:
         if name is None:
             raise ValueError("Must provide name for new nonograms.")
 
+        if len(name) > 50:
+            raise ValueError("Name must be at most 50 characters long.")
+
         saved_nonograms = listdir(save_path)
         nonogram_id = int(saved_nonograms[-1].split(".")[0]) + 1 if len(saved_nonograms) > 0 else 1
         self._id = nonogram_id
