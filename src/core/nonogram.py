@@ -429,6 +429,143 @@ class Nonogram:
 
         return title + "\n" + grid
 
+    def _serialize(self) -> bytearray:
+        if self._id is None or self._name is None:
+            raise ValueError("Nonogram id and name must be present when serializing.")
+
+        for y in range(self._size[1]):
+            for x in range(self._size[0]):
+                self[x, y] = self._original[y][x]
+
+        inverse_palette: dict[rgb_t, int] = {v: int(k) + 1 for k, v in self._palette.items()}
+        binary = len(inverse_palette) == 1
+
+        original_mask: list[int] = []
+        player_mask: list[int] = []
+        empty = True
+        completed = self.is_completed
+
+        bit = 7
+        byte = 0
+
+        for y in range(self._size[1]):
+            for x in range(self._size[0]):
+                original_cell = self._original[y][x]
+                if binary:
+                    byte |= (original_cell is not None) << bit
+                    bit -= 1
+
+                    if bit < 0:
+                        original_mask.append(byte)
+                        bit = 7
+                        byte = 0
+                else:
+                    original_mask.append(
+                        0 if original_cell is None
+                        else inverse_palette[original_cell]
+                    )
+
+                player_cell = self._player_grid[y][x]
+                if player_cell is not None:
+                    empty = False
+
+                # noinspection PyTypeChecker
+                player_mask.append(
+                    0 if player_cell is None
+                    else 1 if player_cell == "x"
+                    else inverse_palette[player_cell]
+                )
+
+        if bit != 7:
+            original_mask.append(byte)
+
+        result = bytearray()
+
+        # distribute id on 3 bytes, max of 16 777 215 ids
+        result.extend(self._id.to_bytes(3, byteorder="big", signed=False))
+        result.extend(self._size)
+        result.append(len(inverse_palette))
+        result.append(empty)
+        result.append(self.is_completed)
+
+        result.extend(self._name.encode("ascii"))
+        result.append(0)
+
+        for color in inverse_palette.keys():
+            result.extend(color)
+
+        result.extend(original_mask)
+
+        if not empty and not completed:
+            result.extend(player_mask)
+
+        return result
+
+    @classmethod
+    @make
+    def _deserialize(cls, data: bytearray, nonogram_type: nonogram_type_t) -> Self:
+        nonogram_id = int.from_bytes(data[:3], byteorder="big", signed=False)
+        width = data[3]
+        height = data[4]
+        colors_len = data[5]
+        empty = bool(data[6])
+        completed = bool(data[7])
+
+        binary = colors_len == 1
+
+        name = ""
+        i = 8
+        while data[i] != 0:
+            name += chr(data[i])
+            i += 1
+
+        i += 1
+        palette: dict[int, rgb_t] = {}
+
+        for j in range(colors_len):
+            palette[j + 1] = (data[i], data[i + 1], data[i + 2])
+            i += 3
+
+        nonogram_data: list[list[rgb_t | None]] = []
+        bit = 7
+
+        for y in range(height):
+            nonogram_data.append([])
+            for x in range(width):
+                cell = data[i]
+                if binary:
+                    index = (cell >> bit) & 1
+                    nonogram_data[y].append(palette[index] if index > 0 else None)
+                    bit -= 1
+
+                    if bit < 0:
+                        bit = 7
+                        i += 1
+                else:
+                    nonogram_data[y].append(palette[cell])
+                    i += 1
+
+        nonogram = Nonogram(nonogram_data, nonogram_type, nonogram_id, name, {
+            str(k): v for k, v in palette.items()
+        })
+
+        if empty:
+            return nonogram
+
+        if completed:
+            for y in range(height):
+                for x in range(width):
+                    nonogram[x, y] = nonogram_data[y][x]
+
+            return nonogram
+
+        for y in range(height):
+            for x in range(width):
+                cell = data[i]
+                nonogram[x, y] = None if cell == 0 else "x" if cell == 1 else palette[cell]
+
+        return nonogram
+
     @staticmethod
     def _get_hints(row_or_column: list[rgb_t]) -> tuple[Hint, ...]:
         hints: list[Nonogram.Hint] = []
