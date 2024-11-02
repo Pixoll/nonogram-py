@@ -121,7 +121,7 @@ class Nonogram:
 
         if palette is None:
             palette = {}
-            i = 0
+            i = 1
             for color in used_colors.keys():
                 palette[str(i)] = color
                 i += 1
