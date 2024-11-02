@@ -9,6 +9,5 @@ from components.hints_element import HintsElement
 from components.nonogram_element import NonogramElement
 from components.row import Row, VerticalAlignment
 from components.row_of_nonograms import RowOfNonograms
-from components.sound import Sound
 from components.text import Text
 from components.dimension_selector import DimensionSelector

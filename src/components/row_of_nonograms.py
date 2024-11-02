@@ -51,7 +51,7 @@ class RowOfNonograms(Element):
     def on_any_event(self, event: Event) -> None:
         self._scrollbar.on_any_event(event)
 
-        for element in self._row.elements:
+        for element in self._row:
             if isinstance(element, PreviousInfoNonogram):
                 element.on_any_event(event)
 

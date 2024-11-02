@@ -48,6 +48,15 @@ class ColoredBlock(Element):
     def change_state(self) -> None:
         self._selected = not self._selected
 
+    def set_size(self, width: int, height: int):
+        super().set_size(width, height)
+        self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
+        self._surface.fill(self._color)
+
+    def set_font(self, font: pygame.font.Font | None = None) -> None:
+        self._font = font
+        pass
+
     @property
     def color(self) -> tuple[int, int, int]:
         return self._color

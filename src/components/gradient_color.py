@@ -11,7 +11,7 @@ from events import Event, EventType, MouseButton
 
 class GradientColor(Element):
     _surface: pygame.Surface
-    _row: Row
+    _row: Row[Column[ColoredBlock]]
     _padding: int
     _position: tuple[int, int]
     _background_color: tuple[int, int, int]
@@ -33,11 +33,11 @@ class GradientColor(Element):
         self._selected_color = color
 
         aux2 = 1
-        columns = []
+        columns: list[Column[ColoredBlock]] = []
 
         for i in range(10):
             aux1 = 1
-            column = Column()
+            column: Column[ColoredBlock] = Column()
             for j in range(10):
                 block = ColoredBlock(self._block_size, darken_color(self._color, aux1))
                 if block.color == self._selected_color:
@@ -67,12 +67,12 @@ class GradientColor(Element):
         aux_row = Row().set_alignment(VerticalAlignment.CENTER)
         _color = color
         aux2 = 1
-        columns = []
+        columns: list[Column[ColoredBlock]] = []
         self._selected_color = _color
 
         for i in range(10):
             aux1 = 1
-            column = Column()
+            column: Column[ColoredBlock] = Column()
             for j in range(10):
                 block = ColoredBlock(self._block_size, darken_color(_color, aux1))
                 if block.color == self._selected_color:
@@ -96,16 +96,14 @@ class GradientColor(Element):
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 
-        for column in self._row.elements:
-            for block in column.elements:
+        for column in self._row:
+            for block in column:
                 if block.contains(pygame.mouse.get_pos()):
-                    # noinspection PyTypeChecker
-                    b: ColoredBlock = block
-                    color = b.color
+                    color = block.color
                     self._selected_block.change_state()
-                    self._selected_block = b
+                    self._selected_block = block
                     self._selected_color = color
-                    b.change_state()
+                    block.change_state()
 
     def render(self, screen) -> None:
         screen.blit(self._surface, self._position)

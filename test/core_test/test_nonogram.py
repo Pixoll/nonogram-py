@@ -12,7 +12,7 @@ class TestNonogram(TestCase):
             [None, (255, 255, 255), (0, 0, 255)]
         ]
 
-        self.nonogram = Nonogram(self.nonogram_data, "custom")
+        self.nonogram = Nonogram.from_matrix(self.nonogram_data, "My nonogram")
 
     def tearDown(self):
         if exists("nonograms"):
@@ -21,6 +21,9 @@ class TestNonogram(TestCase):
     def test_initialization(self):
         self.assertEqual(self.nonogram.size, (3, 2))
         self.assertEqual(sorted(self.nonogram.used_colors), sorted(((0, 0, 0), (255, 0, 0), (0, 0, 255))))
+
+    def test_nonogram_name(self):
+        self.assertEqual(self.nonogram.name, "My nonogram")
 
     def test_horizontal_hints(self):
         self.assertEqual(self.nonogram.horizontal_hints[0][0].value, 1)

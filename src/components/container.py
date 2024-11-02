@@ -2,6 +2,7 @@ from typing import Self
 
 import pygame
 
+from assets import TextureManager
 from components.element_with_child import ElementWithChild
 from events import Event
 
@@ -48,8 +49,7 @@ class Container(ElementWithChild):
         return self
 
     def set_image(self, image_path: str) -> Self:
-        self._image = pygame.image.load(image_path)
-        self._image = pygame.transform.scale(self._image, self.size)
+        self._image = TextureManager.get(image_path, self.size)
         self._surface.blit(self._image, (0, 0))
         return self
 

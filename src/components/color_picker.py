@@ -13,7 +13,7 @@ from events import Event, EventType, MouseButton, MouseWheelEvent
 
 class ColorPicker(Element):
     _surface: pygame.Surface
-    _row: Row
+    _row: Row[Column[ColoredBlock]]
     _padding: int
     _position: tuple[int, int]
     _background_color: tuple[int, int, int]
@@ -42,7 +42,7 @@ class ColorPicker(Element):
         self._row = Row().set_alignment(VerticalAlignment.TOP)
 
         for i in range(cols):
-            column = Column()
+            column: Column[ColoredBlock] = Column()
             for j in range(rows):
                 index = i + j * cols
                 if index < len(colors):
@@ -85,14 +85,12 @@ class ColorPicker(Element):
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 
-        for column in self._row.elements:
-            for block in column.elements:
+        for column in self._row:
+            for block in column:
                 if block.contains(pygame.mouse.get_pos()):
-                    # noinspection PyTypeChecker
-                    b: ColoredBlock = block
-                    color = b.color
-                    self._selected_block.set_color(color)
-                    self._nonogram_element.set_selected_color(color)
+                    block_color = block.color
+                    self._selected_block.set_color(block_color)
+                    self._nonogram_element.set_selected_color(block_color)
 
     def render(self, screen) -> None:
         screen.blit(self._surface, self._position)
