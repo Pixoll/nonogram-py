@@ -499,6 +499,10 @@ class Nonogram:
         if not empty and not completed:
             result.extend(player_mask)
 
+        result_size = len(result).to_bytes(2, byteorder="big", signed=False)
+        result.insert(0, result_size[1])
+        result.insert(0, result_size[0])
+
         return result
 
     @classmethod
