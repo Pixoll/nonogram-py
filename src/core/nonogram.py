@@ -488,7 +488,7 @@ class Nonogram:
         result.append(empty)
         result.append(self.is_completed)
 
-        result.extend(self._name.encode("ascii"))
+        result.extend(self._name.encode())
         result.append(0)
 
         for color in inverse_palette.keys():
@@ -513,11 +513,11 @@ class Nonogram:
 
         binary = colors_len == 1
 
-        name = ""
         i = 8
         while data[i] != 0:
-            name += chr(data[i])
             i += 1
+
+        name = data[8:i].decode()
 
         i += 1
         palette: dict[int, rgb_t] = {}
