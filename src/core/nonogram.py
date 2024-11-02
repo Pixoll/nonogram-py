@@ -352,6 +352,7 @@ class Nonogram:
         saved_nonograms = listdir(save_path)
         nonogram_id = int(saved_nonograms[-1].split(".")[0]) + 1 if len(saved_nonograms) > 0 else 1
         self._id = nonogram_id
+        self._name = name
 
         pre_made_nonogram = {
             "id": nonogram_id,
