@@ -1,8 +1,6 @@
 from typing import Self, TypeAlias
-
 import pygame
 from pygame import Surface
-
 from components.block import Block
 from components.column import Column
 from components.element import Element
@@ -11,7 +9,6 @@ from core.nonogram import Nonogram
 from events import Event, EventType, MouseButton
 
 rgb_t: TypeAlias = tuple[int, int, int]
-
 
 class CreateNanogram(Element):
     _surface: Surface
@@ -25,9 +22,9 @@ class CreateNanogram(Element):
     _height: int
     _name: str
 
-    def __init__(self, width: int, height: int, padding: int):
+    def __init__(self, width: int, height: int, padding: int, size: int):
         max_dimension = max(width, height)
-        block_size = (519 - padding * (max_dimension + 1)) // max_dimension
+        block_size = (size//max_dimension)-1
 
         super().__init__(
             width * (block_size + padding) + padding,
@@ -40,8 +37,8 @@ class CreateNanogram(Element):
         self._grid_position = (0, 0)
         self._block_size = block_size
         self._selected_color = (0, 0, 0)
-        self._cwidth = int
-        self._cheight = int
+        self._cwidth = width
+        self._cheight = height
         self._name = ""
 
         for i in range(width):
@@ -55,8 +52,6 @@ class CreateNanogram(Element):
 
         self._width = self._grid.size[0]
         self._height = self._grid.size[1]
-        self._cheight = height
-        self._cwidth = width
 
         self._surface = Surface((self.size[0] + padding * 2, self.size[1] + padding * 2), pygame.SRCALPHA)
         self._surface.fill(self._background_color)

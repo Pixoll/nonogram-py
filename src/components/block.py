@@ -2,7 +2,6 @@ from enum import Enum
 from typing import Literal, Self
 
 import pygame
-
 from components.element_with_child import ElementWithChild
 from events import Event
 
@@ -23,7 +22,6 @@ class Block(ElementWithChild):
         super().__init__(width, height)
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._background_color = color if type(color) is tuple else (255, 255, 255)
-
         self._surface.fill(self._background_color)
 
         self._state = Block.State.EMPTY
@@ -86,9 +84,8 @@ class Block(ElementWithChild):
         if self._x_mark_visible:
             self._surface.fill(self._background_color)
             self._x_mark_visible = False
-            return
-
-        x_center = (self._surface.get_width() - self._x_image.get_width()) // 2
-        y_center = (self._surface.get_height() - self._x_image.get_height()) // 2
-        self._surface.blit(self._x_image, (x_center, y_center))
-        self._x_mark_visible = True
+        else:
+            x_center = (self._surface.get_width() - self._x_image.get_width()) // 2
+            y_center = (self._surface.get_height() - self._x_image.get_height()) // 2
+            self._surface.blit(self._x_image, (x_center, y_center))
+            self._x_mark_visible = True

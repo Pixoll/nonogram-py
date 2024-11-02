@@ -53,6 +53,15 @@ class Container(ElementWithChild):
         self._surface.blit(self._image, (0, 0))
         return self
 
+    def set_size(self, width: int, height: int):
+        self._width = width
+        self._height = height
+        self._surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        self._surface.fill(self._background_color)
+        self._draw_border()
+        if self._child:
+            self._update_child_position()
+
     def on_any_event(self, event: Event) -> None:
         pass
 
