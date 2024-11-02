@@ -503,7 +503,7 @@ class Nonogram:
 
     @classmethod
     @make
-    def _deserialize(cls, data: bytearray, nonogram_type: nonogram_type_t) -> Self:
+    def _deserialize(cls, nonogram_type: nonogram_type_t, data: bytearray) -> Self:
         nonogram_id = int.from_bytes(data[:3], byteorder="big", signed=False)
         width = data[3]
         height = data[4]
