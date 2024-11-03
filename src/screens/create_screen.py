@@ -3,6 +3,7 @@ from tkinter import filedialog
 
 import pygame
 
+from assets import FontManager
 from components import ChildAlignment, Column, Container, DimensionSelector, HorizontalAlignment, RecentColors, Row, \
     Text, VerticalAlignment
 from components.colors import Colors
@@ -59,7 +60,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Generate", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
+            .set_child(Text("Generate", FontManager.get("sys", "Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._upload_button)
 
@@ -67,7 +68,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Randomized", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
+            .set_child(Text("Randomized", FontManager.get("sys", "Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._randomizer_button)
 
@@ -75,7 +76,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Erase all", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
+            .set_child(Text("Erase all", FontManager.get("sys", "Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._eraser_button)
 
@@ -95,7 +96,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.15), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Save", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Save", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
         column1.add_element(self._save_button)
 
@@ -103,7 +104,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.15), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Exit", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Exit", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
         column1.add_element(self._exit_button)
 
@@ -142,7 +143,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.1), int(self._height * 0.05))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Resize", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
+            .set_child(Text("Resize", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
         row4.add_element(self._resize_button)
         self.column2.add_element(row4)
