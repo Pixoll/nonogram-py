@@ -191,8 +191,7 @@ class Nonogram:
     @classmethod
     @make
     def from_matrix(cls, data: list[list[rgb_t | None]], name: str) -> Self:
-        nonogram = Nonogram(data, "custom")
-        nonogram.save(name)
+        nonogram = Nonogram(data, "custom", nonogram_name=name)
         return nonogram
 
     @classmethod
