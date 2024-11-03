@@ -44,10 +44,6 @@ class RowOfNonograms(Element):
         self._scrollbar.set_position((position[0], position[1] + self._height - 20))
         return self
 
-    @property
-    def nonograms(self) -> list[Nonogram]:
-        return self._list_of_nonograms
-
     def on_any_event(self, event: Event) -> None:
         self._scrollbar.on_any_event(event)
 
