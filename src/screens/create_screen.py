@@ -231,7 +231,7 @@ class CreateScreen(Screen):
 
         if self._upload_button.contains(mouse_pos):
             file_path = filedialog.askopenfilename(
-                title="Selecciona una imagen",
+                title="Select an image",
                 filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.bmp;*.gif")]
             )
             if file_path:
