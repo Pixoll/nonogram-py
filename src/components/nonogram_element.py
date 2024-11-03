@@ -62,20 +62,22 @@ class NonogramElement(Element):
         self._vertical_hints.update_size(new_block_size)
 
         for column in self._grid._elements:
-            column.set_element_sizes(new_block_size,new_block_size)
+            column.set_element_sizes(new_block_size, new_block_size)
+            
+        self._width = self._horizontal_hints.size[0] + self._padding + self._grid.size[0]
+        self._height = self._vertical_hints.size[1] + self._padding + self._grid.size[1]
 
-        grid_width = self._nonogram.size[0] * (new_block_size + self._padding)
+        self.set_size(self._width, self._height)
+        self._surface = Surface((self.size[0] + self._padding * 2, self.size[1] + self._padding * 2), pygame.SRCALPHA)
+        self._surface.fill(self._background_color)
 
-        grid_height = self._nonogram.size[1] * (new_block_size + self._padding)
-        self._grid.set_size(grid_width, grid_height)
-
-        self._width = self._horizontal_hints.size[0] + self._padding + grid_width
-        self._height = self._vertical_hints.size[1] + self._padding + grid_height
         self.set_position(self._position)
+
 
     def set_position(self, position: tuple[int, int]) -> Self:
 
         self._position = position
+
         vertical_hint_position = (self._position[0] + self._horizontal_hints.size[0] + self._padding, self._position[1])
         horizontal_hint_position = (self._position[0], self._position[1] + self._vertical_hints.size[1] + self._padding)
         self._grid_position = (vertical_hint_position[0], horizontal_hint_position[1])
@@ -132,3 +134,4 @@ class NonogramElement(Element):
                         self._nonogram[x, y] = "x"
                     case Block.State.COLORED:
                         self._nonogram[x, y] = block.color
+
