@@ -1,7 +1,10 @@
 from typing import Self
+
 import pygame
+
 from components.element import Element
 from events import Event, EventType, Key, MouseButton
+
 
 class TextField(Element):
     _text: str
@@ -49,7 +52,7 @@ class TextField(Element):
         return self._text
 
     def _update_surface(self) -> None:
-        # Actualiza la superficie de texto
+        # Update text surface
         display_text = self._text if self._text or self._active else self._message
         self._text_surface = self._font.render(display_text, True, self._color)
         self._width, self._height = self._text_surface.get_size()

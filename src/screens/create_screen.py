@@ -1,9 +1,10 @@
-import pygame
 import tkinter as tk
-
 from tkinter import filedialog
-from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text, VerticalAlignment, \
-    DimensionSelector, RecentColors
+
+import pygame
+
+from components import ChildAlignment, Column, Container, DimensionSelector, HorizontalAlignment, RecentColors, Row, \
+    Text, VerticalAlignment
 from components.colors import Colors
 from components.create_nanogram import CreateNanogram
 from components.gradient_color import GradientColor
@@ -14,6 +15,8 @@ from screens.screen import Screen
 
 root = tk.Tk()
 root.withdraw()
+
+
 class CreateScreen(Screen):
     _engine: Engine
     _menu: Container
@@ -81,7 +84,7 @@ class CreateScreen(Screen):
 
         self.color_gradient = GradientColor((255, 0, 0), 25, 1)
         self.colors = Colors(3, 0)
-        self.lasts_colors = RecentColors(40,0)
+        self.lasts_colors = RecentColors(40, 0)
 
         row3.add_element(self.color_gradient)
         row3.add_element(self.colors)
@@ -104,12 +107,10 @@ class CreateScreen(Screen):
         )
         column1.add_element(self._exit_button)
 
-
-
         # column 2 elements
         row4 = Row().set_alignment(VerticalAlignment.CENTER)
         self.dimension_selector1 = DimensionSelector(
-            default_value = 100,
+            default_value=100,
             font=pygame.font.Font(None, 40),
             inactive_color=(0, 0, 0),
             active_color=(255, 255, 255),
@@ -123,7 +124,7 @@ class CreateScreen(Screen):
         )
         row4.add_element(self.x_dimension)
         self.dimension_selector2 = DimensionSelector(
-            default_value = 100,
+            default_value=100,
             font=pygame.font.Font(None, 40),
             inactive_color=(0, 0, 0),
             active_color=(255, 255, 255),
@@ -136,7 +137,7 @@ class CreateScreen(Screen):
             .set_child(self.dimension_selector2)
         )
         row4.add_element(self.y_dimension)
-        row4.add_element(Container(20,0))
+        row4.add_element(Container(20, 0))
         self._resize_button = (
             Container(int(self._width * 0.1), int(self._height * 0.05))
             .set_background_color((224, 99, 159))
@@ -146,10 +147,10 @@ class CreateScreen(Screen):
         row4.add_element(self._resize_button)
         self.column2.add_element(row4)
 
-        self.board = CreateNanogram(100, 100, 1,int(self._width * 0.4)) .set_selected_color((255, 0, 0))
+        self.board = CreateNanogram(100, 100, 1, int(self._width * 0.4)).set_selected_color((255, 0, 0))
         self.board_base = (Container(int(self._width * 0.4), int(self._width * 0.4)).set_child(self.board)
-                     .set_child_alignment(ChildAlignment.CENTER).set_border((0, 0, 0, 0))
-                    )
+                           .set_child_alignment(ChildAlignment.CENTER).set_border((0, 0, 0, 0))
+                           )
         self.column2.add_element(self.board_base)
 
         self.text_field = TextField(
@@ -183,7 +184,6 @@ class CreateScreen(Screen):
         self.dimension_selector2.on_any_event(event=key_event)
         self.y_dimension._update_child_position()
 
-
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
@@ -191,8 +191,11 @@ class CreateScreen(Screen):
         mouse_pos = pygame.mouse.get_pos()
 
         if self._resize_button.contains(mouse_pos):
-            if(self.dimension_selector1.get_value()!=self.dimension_selector1.get_default_value()) or (self.dimension_selector2.get_value()!=self.dimension_selector2.get_default_value()):
-                self.board = CreateNanogram(self.dimension_selector1.get_value(), self.dimension_selector2.get_value(), 1,int(self._width * 0.4)).set_selected_color((255, 0, 0)).set_selected_color(self.color_gradient.get_color())
+            if (self.dimension_selector1.get_value() != self.dimension_selector1.get_default_value()) or (
+                    self.dimension_selector2.get_value() != self.dimension_selector2.get_default_value()):
+                self.board = CreateNanogram(self.dimension_selector1.get_value(), self.dimension_selector2.get_value(),
+                                            1, int(self._width * 0.4)).set_selected_color(
+                    (255, 0, 0)).set_selected_color(self.color_gradient.get_color())
                 self.dimension_selector1.set_default_value(self.dimension_selector1.get_value())
                 self.dimension_selector2.set_default_value(self.dimension_selector2.get_value())
                 self.board_base.set_child(self.board)
@@ -247,7 +250,6 @@ class CreateScreen(Screen):
         if self.lasts_colors.contains(mouse_pos):
             self.lasts_colors.on_any_event(event)
             self.board.set_selected_color(self.lasts_colors.get_current_color())
-
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         pass

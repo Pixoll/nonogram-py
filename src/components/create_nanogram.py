@@ -1,15 +1,18 @@
 from typing import Self, TypeAlias
+
 import pygame
+from PIL import Image
 from pygame import Surface
+
 from components.block import Block
 from components.column import Column
 from components.element import Element
 from components.row import Row
 from core.nonogram import Nonogram
 from events import Event, EventType, MouseButton
-from PIL import Image
 
 rgb_t: TypeAlias = tuple[int, int, int]
+
 
 class CreateNanogram(Element):
     _surface: Surface
@@ -25,7 +28,7 @@ class CreateNanogram(Element):
 
     def __init__(self, width: int, height: int, padding: int, size: int):
         max_dimension = max(width, height)
-        block_size = (size//max_dimension)-1
+        block_size = (size // max_dimension) - 1
 
         super().__init__(
             width * (block_size + padding) + padding,
@@ -102,7 +105,7 @@ class CreateNanogram(Element):
 
     def randomizer(self) -> None:
         unique_colors = set(
-            block.color for column in self._grid._elements for block in column._elements
+            block.color for column in self._grid for block in column
             if block.color != (255, 255, 255)
         )
 
@@ -113,11 +116,9 @@ class CreateNanogram(Element):
 
         random_nonogram = Nonogram.generate((self._cwidth, self._cheight), colors)
 
-        random_matrix = random_nonogram._original
-
         for y in range(self._cheight):
             for x in range(self._cwidth):
-                color = random_matrix[y][x]
+                color = random_nonogram[x, y]
                 if color is not None:
                     self._grid._elements[x]._elements[y].set_background_color(color)
                 else:
@@ -128,9 +129,9 @@ class CreateNanogram(Element):
     def is_valid_nonogram(self) -> bool:
         unique_colors = set()
 
-        for column in self._grid._elements:
+        for column in self._grid:
             row_has_color = False
-            for block in column._elements:
+            for block in column:
                 if block.color != (255, 255, 255):
                     row_has_color = True
                     unique_colors.add(block.color)
@@ -140,7 +141,7 @@ class CreateNanogram(Element):
         num_rows = len(self._grid._elements[0]._elements)
         for row_idx in range(num_rows):
             col_has_color = False
-            for column in self._grid._elements:
+            for column in self._grid:
                 if column._elements[row_idx].color != (255, 255, 255):
                     col_has_color = True
                     unique_colors.add(column._elements[row_idx].color)

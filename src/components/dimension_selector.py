@@ -1,7 +1,10 @@
 from typing import Self
+
 import pygame
+
 from components.element import Element
 from events import Event, EventType, Key, MouseButton
+
 
 class DimensionSelector(Element):
     _default_value: int
@@ -91,7 +94,8 @@ class DimensionSelector(Element):
                     self._empty = True
             else:
                 if event.unicode.isdigit() and self._width <= self._max_width - 30:
-                    potential_value = int(self._current_value + event.unicode) if self._current_value else int(event.unicode)
+                    potential_value = int(self._current_value + event.unicode) if self._current_value else int(
+                        event.unicode)
                     if potential_value <= self._max_value:
                         self._current_value += event.unicode
                         self._empty = False

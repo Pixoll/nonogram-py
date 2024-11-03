@@ -1,9 +1,12 @@
 from typing import Self
+
 import pygame
-from components.element import Element
-from components.colored_block import ColoredBlock
+
 from components import Column
+from components.colored_block import ColoredBlock
+from components.element import Element
 from events import Event, EventType, MouseButton
+
 
 class RecentColors(Element):
     def __init__(self, block_size: int, padding: int) -> None:
