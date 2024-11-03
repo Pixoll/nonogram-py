@@ -347,6 +347,9 @@ class Nonogram:
             makedirs(save_path)
 
         if name is None:
+            name = self._name
+
+        if name is None:
             raise ValueError("Must provide name for new nonograms.")
 
         if len(name) > 50:
@@ -397,7 +400,7 @@ class Nonogram:
         self._correct_cells += 1 if is_new_correct else -1
 
     def __repr__(self):
-        title = f"{Nonogram.__name__} {self._size[0]}x{self._size[1]}:"
+        title = f"{Nonogram.__name__} \"{self._name or "[NO_NAME]"}\" {self._size[0]}x{self._size[1]}:"
         max_horizontal_hints = max(len(hints) for hints in self._horizontal_hints)
         max_vertical_hints = max(len(hints) for hints in self._vertical_hints)
         padding = "   "
