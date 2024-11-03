@@ -3,7 +3,7 @@ from pygame import Surface
 
 from assets import FontManager
 from components import ChildAlignment, ColorPicker, Container, NonogramElement
-from core.nonogram import Nonogram
+from core import Nonogram
 from engine import Engine
 from events import Event, Key, KeyEvent, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen

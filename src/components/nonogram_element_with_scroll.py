@@ -3,7 +3,7 @@ from pygame import Surface
 from components.element import Element
 from components.nonogram_element import NonogramElement
 from components.scroll_bar import ScrollBar
-from core.nonogram import Nonogram
+from core import Nonogram
 from events import Event
 
 

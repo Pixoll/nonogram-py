@@ -6,7 +6,7 @@ from components.element import Element
 from components.previous_info_nonogram import PreviousInfoNonogram
 from components.row import Row, VerticalAlignment
 from components.scroll_bar import ScrollBar
-from core.nonogram import Nonogram
+from core import Nonogram
 from events import Event
 
 

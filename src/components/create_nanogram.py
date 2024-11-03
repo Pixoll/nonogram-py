@@ -7,7 +7,7 @@ from components.block import Block
 from components.column import Column
 from components.element import Element
 from components.row import Row
-from core.nonogram import Nonogram
+from core import Nonogram
 from events import Event, EventType, MouseButton
 
 rgb_t: TypeAlias = tuple[int, int, int]

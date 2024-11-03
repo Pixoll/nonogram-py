@@ -7,7 +7,7 @@ from components.colored_block import ColoredBlock
 from components.column import Column, HorizontalAlignment
 from components.element import Element
 from components.row import Row, VerticalAlignment
-from core.nonogram import Nonogram
+from core import Hint, Nonogram
 from events import Event
 
 
@@ -15,11 +15,11 @@ class HintsElement(Element):
     _surface: Surface
     _padding: int
     _nonogram: Nonogram
-    _hints: tuple[tuple[Nonogram.Hint, ...], ...]
+    _hints: tuple[tuple[Hint, ...], ...]
 
     def __init__(
             self,
-            hints: tuple[tuple[Nonogram.Hint, ...], ...],
+            hints: tuple[tuple[Hint, ...], ...],
             block_size: int,
             padding: int,
             is_horizontal: bool
@@ -72,7 +72,7 @@ class HintsElement(Element):
         return self
 
     @property
-    def hints(self) -> tuple[tuple[Nonogram.Hint, ...], ...]:
+    def hints(self) -> tuple[tuple[Hint, ...], ...]:
         return self._hints
 
     def on_any_event(self, event: Event) -> None:

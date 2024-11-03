@@ -8,7 +8,7 @@ from components.column import Column
 from components.element import Element
 from components.hints_element import HintsElement
 from components.row import Row
-from core.nonogram import Nonogram
+from core import Nonogram
 from events import Event, EventType, MouseButton
 
 

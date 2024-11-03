@@ -4,7 +4,7 @@ from pygame import Surface
 from assets import FontManager
 from components.container import Container
 from components.text import Text
-from core.nonogram import Nonogram
+from core import Nonogram
 from events import Event, EventType, MouseButton
 
 

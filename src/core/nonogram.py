@@ -6,38 +6,14 @@ from typing import Any, Literal, Self, TypeAlias
 
 from PIL import Image
 
+from core.hint import Hint
+
 rgb_t: TypeAlias = tuple[int, int, int]
 nonogram_type_t: TypeAlias = Literal["pre_made", "user_made"]
 nonogram_matrix_t: TypeAlias = list[list[rgb_t | None]]
 
 
 class Nonogram:
-    class Hint:
-        _value: int
-        _color: rgb_t
-
-        def __init__(self, color: rgb_t):
-            self._value = 1
-            self._color = color
-
-        def __repr__(self):
-            br, bg, bb = self._color
-            luminance = br * 0.2126 + bg * 0.7152 + bb * 0.0722
-            fr, fg, fb = (255, 255, 255) if luminance < 140 else (0, 0, 0)
-            value_str = (
-                f" {self._value} " if self._value < 10
-                else f" {self._value}" if self._value < 100
-                else "100")
-            return f"\033[48;2;{br};{bg};{bb}m\033[38;2;{fr};{fg};{fb}m{value_str}\033[0m"
-
-        @property
-        def value(self) -> int:
-            return self._value
-
-        @property
-        def color(self) -> rgb_t:
-            return self._color
-
     _original: nonogram_matrix_t
     _original_transposed: nonogram_matrix_t
     _player_grid: list[list[rgb_t | Literal["x"] | None]]
@@ -569,7 +545,7 @@ class Nonogram:
 
     @staticmethod
     def _get_hints(row_or_column: list[rgb_t]) -> tuple[Hint, ...]:
-        hints: list[Nonogram.Hint] = []
+        hints: list[Hint] = []
         skipped: bool = False
 
         for color in row_or_column:
@@ -578,7 +554,7 @@ class Nonogram:
                 continue
 
             if len(hints) == 0:
-                hints.append(Nonogram.Hint(color))
+                hints.append(Hint(color))
                 skipped = False
                 continue
 
@@ -586,7 +562,7 @@ class Nonogram:
                 # noinspection PyProtectedMember
                 hints[-1]._value += 1
             else:
-                hints.append(Nonogram.Hint(color))
+                hints.append(Hint(color))
 
             skipped = False
 
