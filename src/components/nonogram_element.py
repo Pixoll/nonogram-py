@@ -2,7 +2,6 @@ from typing import Self
 
 import pygame
 from pygame import Surface
-
 from components.block import Block
 from components.column import Column
 from components.element import Element
@@ -62,16 +61,16 @@ class NonogramElement(Element):
         self._horizontal_hints.update_size(new_block_size)
         self._vertical_hints.update_size(new_block_size)
 
-        for column in self._grid:
-            for block in column.elements:
+        for column in self._grid._elements:
+            for block in column._elements:
                 block.set_size(new_block_size, new_block_size)
 
         self._width = self._horizontal_hints.size[0] + self._padding + self._grid.size[0]
         self._height = self._vertical_hints.size[1] + self._padding + self._grid.size[1]
         self.set_size(self._width, self._height)
+
         self._surface = Surface((self.size[0] + self._padding * 2, self.size[1] + self._padding * 2), pygame.SRCALPHA)
         self._surface.fill(self._background_color)
-
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = (position[0] - self._horizontal_hints.size[0] // 2, position[1])
@@ -99,6 +98,10 @@ class NonogramElement(Element):
         self._vertical_hints.render(window)
         self._horizontal_hints.render(window)
         self._grid.render(window)
+
+        pygame.draw.rect(window, (255, 0, 0), (*self._vertical_hints.position, *self._vertical_hints.size), 1)
+        pygame.draw.rect(window, (0, 255, 0), (*self._horizontal_hints.position, *self._horizontal_hints.size), 1)
+        pygame.draw.rect(window, (0, 0, 255), (*self._grid_position, *self._grid.size), 1)
 
     def on_any_event(self, event: Event) -> None:
 

@@ -32,6 +32,13 @@ class Column(ElementBundle[T]):
     def on_any_event(self, event: Event) -> None:
         pass
 
+    def set_element_sizes(self, width: int, height: int) -> Self:
+        for element in self._elements:
+            element.set_size(width, height)
+        self._update_size()
+        self._update_positions()
+        return self
+
     def _update_size(self) -> None:
         if not self._elements:
             self._width = 0

@@ -47,13 +47,21 @@ class HintsElement(Element):
     def update_size(self, new_block_size: int) -> None:
         hints_font = FontManager.get("sys", "Arial", int(new_block_size / 1.5))
 
-        #Que lo vea ruskin porque despues del pull ya no funciona xd
-        for row_or_column in self._hint_elements._elements:
-            for hint_block in row_or_column.elements:
+        for row_or_column in self._hint_elements:
+            for hint_block in row_or_column:
                 hint_block.set_size(new_block_size, new_block_size)
                 hint_block.set_font(hints_font)
 
+        self._hint_elements.set_alignment(
+            HorizontalAlignment.RIGHT if self._is_horizontal else VerticalAlignment.BOTTOM
+        )
+
         self._width, self._height = self._hint_elements.size
+        self._hint_elements.set_padding(self._padding)
+        self.set_size(self._width, self._height)
+
+        self._hint_elements.set_position(self._position)
+        print(f"Posición Final: {self._position}")
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
