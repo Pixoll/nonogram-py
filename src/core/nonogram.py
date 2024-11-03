@@ -9,7 +9,8 @@ from PIL import Image
 from core.factory import factory, make
 
 rgb_t: TypeAlias = tuple[int, int, int]
-nonogram_type_t: TypeAlias = Literal["pre_made", "image", "custom", "generated"]
+nonogram_type_t: TypeAlias = Literal["pre_made", "user_made"]
+nonogram_matrix_t: TypeAlias = list[list[rgb_t | None]]
 
 
 @factory
@@ -40,8 +41,8 @@ class Nonogram:
         def color(self) -> rgb_t:
             return self._color
 
-    _original: list[list[rgb_t | None]]
-    _original_transposed: list[list[rgb_t | None]]
+    _original: nonogram_matrix_t
+    _original_transposed: nonogram_matrix_t
     _player_grid: list[list[rgb_t | Literal["x"] | None]]
     _player_grid_transposed: list[list[rgb_t | Literal["x"] | None]]
     _palette: dict[str, rgb_t]
@@ -57,7 +58,7 @@ class Nonogram:
 
     def __init__(
             self,
-            nonogram: list[list[rgb_t | None]],
+            nonogram: nonogram_matrix_t,
             nonogram_type: nonogram_type_t,
             nonogram_id: int | None = None,
             nonogram_name: str | None = None,
@@ -101,24 +102,6 @@ class Nonogram:
 
                 self._player_grid[-1].append(None)
 
-        if nonogram_type == "image" and nonogram_id is None and len(used_colors) > 1:
-            lightest_color: rgb_t | None = None
-            highest_luminance = 0
-
-            for color in used_colors:
-                luminance = Nonogram._get_color_luminance(color)
-                if luminance > 200 and luminance > highest_luminance:
-                    highest_luminance = luminance
-                    lightest_color = color
-
-            if lightest_color is not None:
-                for row in self._original:
-                    for i in range(len(row)):
-                        if row[i] == lightest_color:
-                            row[i] = None
-
-            del used_colors[lightest_color]
-
         if palette is None:
             palette = {}
             i = 1
@@ -141,6 +124,12 @@ class Nonogram:
 
     @classmethod
     @make
+    def from_matrix(cls, data: nonogram_matrix_t, name: str) -> Self:
+        nonogram = Nonogram(data, "user_made", nonogram_name=name)
+        return nonogram
+
+    @classmethod
+    @make
     def from_pre_made(cls, nonogram_id: int) -> Self:
         nonogram_path = f"nonograms/pre_made/{nonogram_id}.json"
 
@@ -156,7 +145,7 @@ class Nonogram:
         width: int = pre_made_nonogram["width"]
         palette = Nonogram._get_palette(pre_made_nonogram["palette"])
 
-        nonogram_data: list[list[rgb_t | None]] = []
+        nonogram_data: nonogram_matrix_t = []
 
         for i in range(len(mask)):
             if i % width == 0:
@@ -166,61 +155,6 @@ class Nonogram:
             nonogram_data[-1].append(color)
 
         nonogram = Nonogram(nonogram_data, "pre_made", nonogram_id, name, palette)
-        return nonogram
-
-    @classmethod
-    @make
-    def from_image(cls, image_path: str, colors: int = 256, max_size: int = 100) -> Self:
-        image = Image.open(image_path).convert("P", palette=Image.ADAPTIVE, colors=colors).convert("RGB")
-
-        if image.width > max_size or image.height > max_size:
-            factor = image.width / max_size if image.width > image.height else image.height / max_size
-            image = image.resize((int(image.width / factor), int(image.height / factor)), Image.NEAREST)
-
-        pixels = image.load()
-        nonogram_data = []
-
-        for i in range(image.height):
-            nonogram_data.append([])
-            for j in range(image.width):
-                nonogram_data[i].append(pixels[j, i])
-
-        nonogram = Nonogram(nonogram_data, "image")
-        return nonogram
-
-    @classmethod
-    @make
-    def from_matrix(cls, data: list[list[rgb_t | None]], name: str) -> Self:
-        nonogram = Nonogram(data, "custom", nonogram_name=name)
-        return nonogram
-
-    @classmethod
-    @make
-    def generate(cls, size: tuple[int, int], colors: list[rgb_t] | None = None) -> Self:
-        if colors is None:
-            colors = [(0, 0, 0)]
-
-        test = set()
-        nonogram_data: list[list[rgb_t | None]] = []
-        total_colors = size[0] * size[1] * randrange(30, 70) / 100
-        colored = 0
-
-        for i in range(size[0]):
-            nonogram_data.append([])
-            for j in range(size[1]):
-                nonogram_data[i].append(None)
-
-        while colored < total_colors:
-            x = randrange(0, size[0])
-            y = randrange(0, size[1])
-            if nonogram_data[x][y] is None:
-                index = randrange(len(colors))
-                test.add(index)
-                color = colors[index]
-                nonogram_data[x][y] = color
-                colored += 1
-
-        nonogram = Nonogram(nonogram_data, "generated")
         return nonogram
 
     @classmethod
@@ -242,7 +176,7 @@ class Nonogram:
         palette = Nonogram._get_palette(nonogram_json["palette"])
         el_len = max([len(k) for k in palette.keys()])
 
-        nonogram_data: list[list[rgb_t | None]] = []
+        nonogram_data: nonogram_matrix_t = []
         player_grid: list[list[rgb_t | Literal["x"] | None]] = []
 
         for i in range(0, len(mask), el_len):
@@ -279,6 +213,73 @@ class Nonogram:
                 nonogram[i, j] = player_grid[j][i]
 
         return nonogram
+
+    @staticmethod
+    def matrix_from_image(
+            image_path: str,
+            colors: int = 256,
+            size: tuple[int, int] = (0, 0),
+            delete_lightest: bool = False
+    ) -> nonogram_matrix_t:
+        image = Image.open(image_path).convert("P", palette=Image.ADAPTIVE, colors=colors).convert("RGB")
+
+        if size[0] != 0 and size[1] != 0:
+            image = image.resize(size, Image.NEAREST)
+
+        pixels = image.load()
+        nonogram_data: nonogram_matrix_t = []
+        used_colors: set[rgb_t] = set()
+
+        for i in range(image.height):
+            nonogram_data.append([])
+            for j in range(image.width):
+                # noinspection PyTypeChecker
+                color: rgb_t = pixels[j, i]
+                used_colors.add(color)
+                nonogram_data[i].append(color)
+
+        if delete_lightest and len(used_colors) > 1:
+            lightest_color: rgb_t | None = None
+            highest_luminance = 0
+
+            for color in used_colors:
+                luminance = Nonogram._get_color_luminance(color)
+                if luminance > 200 and luminance > highest_luminance:
+                    highest_luminance = luminance
+                    lightest_color = color
+
+            if lightest_color is not None:
+                for row in nonogram_data:
+                    for i in range(len(row)):
+                        if row[i] == lightest_color:
+                            row[i] = None
+
+        return nonogram_data
+
+    @staticmethod
+    def matrix_randomized(size: tuple[int, int], colors: list[rgb_t] | None = None) -> nonogram_matrix_t:
+        if colors is None:
+            colors = [(0, 0, 0)]
+
+        nonogram_data: nonogram_matrix_t = []
+        total_colors = size[0] * size[1] * randrange(30, 70) / 100
+        colored = 0
+
+        for i in range(size[0]):
+            nonogram_data.append([])
+            for j in range(size[1]):
+                nonogram_data[i].append(None)
+
+        while colored < total_colors:
+            x = randrange(0, size[0])
+            y = randrange(0, size[1])
+            if nonogram_data[x][y] is None:
+                index = randrange(len(colors))
+                color = colors[index]
+                nonogram_data[x][y] = color
+                colored += 1
+
+        return nonogram_data
 
     @property
     def used_colors(self) -> tuple[rgb_t, ...]:
@@ -529,7 +530,7 @@ class Nonogram:
             palette[j + 1] = (data[i], data[i + 1], data[i + 2])
             i += 3
 
-        nonogram_data: list[list[rgb_t | None]] = []
+        nonogram_data: nonogram_matrix_t = []
         bit = 7
 
         for y in range(height):

@@ -113,15 +113,15 @@ class CreateNanogram(Element):
         if not colors:
             raise ValueError("No available colors to generate randomized nonogram.")
 
-        random_nonogram = Nonogram.generate((self._cwidth, self._cheight), colors)
+        random_nonogram = Nonogram.matrix_randomized((self._cwidth, self._cheight), colors)
 
         for y in range(self._cheight):
             for x in range(self._cwidth):
-                color = random_nonogram[x, y]
+                color = random_nonogram[y][x]
                 if color is not None:
-                    self._grid[x][y].set_background_color(color)
+                    self._grid[y][x].set_background_color(color)
                 else:
-                    self._grid[x][y].set_background_color((255, 255, 255))
+                    self._grid[y][x].set_background_color((255, 255, 255))
 
     def is_valid_nonogram(self) -> bool:
         unique_colors = set()
@@ -151,24 +151,15 @@ class CreateNanogram(Element):
         return True
 
     def generate_from_image(self, image_path: str, colors: int = 256) -> None:
-        with Image.open(image_path) as img:
-            resized_img = img.resize((self._cwidth, self._cheight), Image.NEAREST).convert("RGB")
-
-        image_matrix = []
-        pixels = resized_img.load()
-        for y in range(self._cheight):
-            row = []
-            for x in range(self._cwidth):
-                row.append(pixels[x, y])
-            image_matrix.append(row)
+        image_matrix = Nonogram.matrix_from_image(image_path, colors, (self._cwidth, self._cheight))
 
         for y in range(self._cheight):
             for x in range(self._cwidth):
                 color = image_matrix[y][x]
                 if color != (255, 255, 255):
-                    self._grid[x][y].set_background_color(color)
+                    self._grid[y][x].set_background_color(color)
                 else:
-                    self._grid[x][y].set_background_color((255, 255, 255))
+                    self._grid[y][x].set_background_color((255, 255, 255))
 
     def save(self) -> None:
         if not self.is_valid_nonogram():
