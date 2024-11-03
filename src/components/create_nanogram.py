@@ -1,7 +1,6 @@
 from typing import Self, TypeAlias
 
 import pygame
-from PIL import Image
 from pygame import Surface
 
 from components.block import Block
@@ -18,7 +17,7 @@ class CreateNanogram(Element):
     _surface: Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _padding: int
-    _grid: Row[Column[Block]]
+    _grid: Column[Row[Block]]
     _grid_position: tuple[int, int]
     _block_size: int
     _selected_color: tuple[int, int, int]
@@ -37,7 +36,7 @@ class CreateNanogram(Element):
 
         self._background_color = (192, 192, 192)
         self._padding = padding
-        self._grid = Row()
+        self._grid = Column()
         self._grid_position = (0, 0)
         self._block_size = block_size
         self._selected_color = (0, 0, 0)
@@ -46,11 +45,11 @@ class CreateNanogram(Element):
         self._name = ""
 
         for i in range(width):
-            column: Column[Block] = Column()
+            row: Row[Block] = Row()
             for j in range(height):
-                column.add_element(Block(block_size, block_size, (255, 255, 255)))
-            self._grid.add_element(column)
-            column.set_padding(padding)
+                row.add_element(Block(block_size, block_size, (255, 255, 255)))
+            self._grid.add_element(row)
+            row.set_padding(padding)
 
         self._grid.set_padding(padding)
 
