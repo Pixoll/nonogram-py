@@ -48,6 +48,7 @@ class HintsElement(Element):
         hints_font = FontManager.get("sys", "Arial", int(new_block_size / 1.5))
 
         for row_or_column in self._hint_elements:
+            row_or_column.set_element_sizes(new_block_size,new_block_size)
             for hint_block in row_or_column:
                 hint_block.set_size(new_block_size, new_block_size)
                 hint_block.set_font(hints_font)

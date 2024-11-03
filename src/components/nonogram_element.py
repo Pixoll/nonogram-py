@@ -63,7 +63,7 @@ class NonogramElement(Element):
 
         for column in self._grid._elements:
             column.set_element_sizes(new_block_size,new_block_size)
-            
+
         grid_width = self._nonogram.size[0] * (new_block_size + self._padding)
 
         grid_height = self._nonogram.size[1] * (new_block_size + self._padding)
@@ -100,10 +100,6 @@ class NonogramElement(Element):
         self._vertical_hints.render(window)
         self._horizontal_hints.render(window)
         self._grid.render(window)
-
-        pygame.draw.rect(window, (255, 0, 0), (*self._vertical_hints.position, *self._vertical_hints.size), 1)
-        pygame.draw.rect(window, (0, 255, 0), (*self._horizontal_hints.position, *self._horizontal_hints.size), 1)
-        pygame.draw.rect(window, (0, 0, 255), (*self._grid_position, *self._grid.size), 1)
 
     def on_any_event(self, event: Event) -> None:
 
