@@ -11,7 +11,7 @@ from events import Event
 
 
 class RowOfNonograms(Element):
-    _row: Row
+    _row: Row[PreviousInfoNonogram]
     _list_of_nonograms: list[Nonogram]
     _scrollbar: ScrollBar
     _selected_nonogram: PreviousInfoNonogram | None = None
@@ -25,9 +25,9 @@ class RowOfNonograms(Element):
             nonogram = Nonogram.from_pre_made(i)
             self._list_of_nonograms.append(nonogram)
 
-            size_index_str = f"{nonogram.size[0]}x{nonogram.size[1]}"
-            info_nonogram = PreviousInfoNonogram(nonogram, self._width * 0.8, self._height)
+            info_nonogram = PreviousInfoNonogram(nonogram, int(self._width * 0.8), self._height)
             self._row.add_element(info_nonogram)
+
         content_width = len(self._list_of_nonograms) * info_nonogram.size[0]
         self._scrollbar = ScrollBar(width, content_width)
 
@@ -44,21 +44,16 @@ class RowOfNonograms(Element):
         self._scrollbar.set_position((position[0], position[1] + self._height - 20))
         return self
 
-    @property
-    def nonograms(self) -> list[Nonogram]:
-        return self._list_of_nonograms
-
     def on_any_event(self, event: Event) -> None:
         self._scrollbar.on_any_event(event)
 
         for element in self._row:
-            if isinstance(element, PreviousInfoNonogram):
-                element.on_any_event(event)
+            element.on_any_event(event)
 
-                if element.is_selected():
-                    if self._selected_nonogram and self._selected_nonogram is not element:
-                        self._selected_nonogram.set_selected(False)
-                    self._selected_nonogram = element
+            if element.is_selected():
+                if self._selected_nonogram and self._selected_nonogram is not element:
+                    self._selected_nonogram.set_selected(False)
+                self._selected_nonogram = element
 
     def update(self):
         self._scrollbar.update()
