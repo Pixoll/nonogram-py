@@ -61,7 +61,6 @@ class HintsElement(Element):
         self.set_size(self._width, self._height)
 
         self._hint_elements.set_position(self._position)
-        print(f"Posición Final: {self._position}")
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
