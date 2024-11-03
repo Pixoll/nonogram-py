@@ -25,9 +25,9 @@ class RowOfNonograms(Element):
             nonogram = Nonogram.from_pre_made(i)
             self._list_of_nonograms.append(nonogram)
 
-            size_index_str = f"{nonogram.size[0]}x{nonogram.size[1]}"
-            info_nonogram = PreviousInfoNonogram(nonogram, self._width * 0.8, self._height)
+            info_nonogram = PreviousInfoNonogram(nonogram, int(self._width * 0.8), self._height)
             self._row.add_element(info_nonogram)
+
         content_width = len(self._list_of_nonograms) * info_nonogram.size[0]
         self._scrollbar = ScrollBar(width, content_width)
 
