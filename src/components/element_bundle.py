@@ -40,6 +40,15 @@ class ElementBundle(Element, ABC, Generic[T]):
         for element in self._elements:
             yield element
 
+    def __getitem__(self, index: int) -> T:
+        return self._elements[index]
+
+    def __setitem__(self, index: int, value: T) -> None:
+        self._elements[index] = value
+
+    def __len__(self) -> int:
+        return len(self._elements)
+
     def render(self, window: Surface) -> None:
         for element in self._elements:
             element.render(window)

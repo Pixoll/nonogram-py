@@ -120,9 +120,9 @@ class CreateNanogram(Element):
             for x in range(self._cwidth):
                 color = random_nonogram[x, y]
                 if color is not None:
-                    self._grid._elements[x]._elements[y].set_background_color(color)
+                    self._grid[x][y].set_background_color(color)
                 else:
-                    self._grid._elements[x]._elements[y].set_background_color((255, 255, 255))
+                    self._grid[x][y].set_background_color((255, 255, 255))
 
         print("Nonograma aleatorio generado")
 
@@ -138,13 +138,13 @@ class CreateNanogram(Element):
             if not row_has_color:
                 return False
 
-        num_rows = len(self._grid._elements[0]._elements)
+        num_rows = len(self._grid[0])
         for row_idx in range(num_rows):
             col_has_color = False
             for column in self._grid:
-                if column._elements[row_idx].color != (255, 255, 255):
+                if column[row_idx].color != (255, 255, 255):
                     col_has_color = True
-                    unique_colors.add(column._elements[row_idx].color)
+                    unique_colors.add(column[row_idx].color)
             if not col_has_color:
                 return False
 
@@ -169,9 +169,9 @@ class CreateNanogram(Element):
             for x in range(self._cwidth):
                 color = image_matrix[y][x]
                 if color != (255, 255, 255):
-                    self._grid._elements[x]._elements[y].set_background_color(color)
+                    self._grid[x][y].set_background_color(color)
                 else:
-                    self._grid._elements[x]._elements[y].set_background_color((255, 255, 255))
+                    self._grid[x][y].set_background_color((255, 255, 255))
 
         print("Nonograma generado a partir de la imagen redimensionada")
 

@@ -34,8 +34,9 @@ class RecentColors(Element):
             # Insertar el nuevo color al principio y desplazar los demás hacia abajo
             self._recent_colors = [color] + self._recent_colors[:-1]
             # Actualizar los bloques visuales con los colores recientes
-            for i, block in enumerate(self._column._elements):
-                block.set_color(self._recent_colors[i])
+
+            for i in range(len(self._column)):
+                self._column[i].set_color(self._recent_colors[i])
 
     def get_current_color(self) -> tuple[int, int, int]:
         return self._current_color
