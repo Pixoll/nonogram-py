@@ -190,4 +190,4 @@ class CreateNanogram(Element):
             ])
 
         nonogram = Nonogram.from_matrix(matrix, self._name)
-        nonogram.save(self._name)
+        nonogram.save()
