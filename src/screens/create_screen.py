@@ -1,5 +1,7 @@
 import pygame
+import tkinter as tk
 
+from tkinter import filedialog
 from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text, VerticalAlignment, \
     DimensionSelector, RecentColors
 from components.colors import Colors
@@ -10,7 +12,8 @@ from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
 
-
+root = tk.Tk()
+root.withdraw()
 class CreateScreen(Screen):
     _engine: Engine
     _menu: Container
@@ -57,13 +60,13 @@ class CreateScreen(Screen):
         )
         row2.add_element(self._upload_button)
 
-        self._pencil_button = (
+        self._randomizer_button = (
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Randomized", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
         )
-        row2.add_element(self._pencil_button)
+        row2.add_element(self._randomizer_button)
 
         self._eraser_button = (
             Container(int(self._height * 0.1), int(self._height * 0.1))
@@ -212,6 +215,17 @@ class CreateScreen(Screen):
 
         if self._eraser_button.contains(mouse_pos):
             self.board.clear()
+
+        if self._randomizer_button.contains(mouse_pos):
+            self.board.randomizer()
+
+        if self._upload_button.contains(mouse_pos):
+            file_path = filedialog.askopenfilename(
+                title="Selecciona una imagen",
+                filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.bmp;*.gif")]
+            )
+            if file_path:
+                self.board.generate_from_image(file_path)
 
         self.board.on_any_event(event)
         self.color_gradient.on_any_event(event)

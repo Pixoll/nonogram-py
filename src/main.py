@@ -16,7 +16,7 @@ Window.from_display_module().maximize()
 pygame.display.set_caption("Nonogram")
 
 engine = Engine(window)
-engine.set_screen(CreateScreen(engine))
+engine.set_screen(MainMenuScreen(engine))
 engine.run(window, clock)
 
 pygame.quit()

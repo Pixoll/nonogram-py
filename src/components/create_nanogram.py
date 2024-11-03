@@ -7,6 +7,7 @@ from components.element import Element
 from components.row import Row
 from core.nonogram import Nonogram
 from events import Event, EventType, MouseButton
+from PIL import Image
 
 rgb_t: TypeAlias = tuple[int, int, int]
 
@@ -99,12 +100,95 @@ class CreateNanogram(Element):
     def set_name(self, name: str) -> None:
         self._name = name
 
+    def randomizer(self) -> None:
+        unique_colors = set(
+            block.color for column in self._grid._elements for block in column._elements
+            if block.color != (255, 255, 255)
+        )
+
+        colors = list(unique_colors)
+        if not colors:
+            print("No hay colores disponibles para generar un nonograma aleatorio.")
+            return None
+
+        random_nonogram = Nonogram.generate((self._cwidth, self._cheight), colors)
+
+        random_matrix = random_nonogram._original
+
+        for y in range(self._cheight):
+            for x in range(self._cwidth):
+                color = random_matrix[y][x]
+                if color is not None:
+                    self._grid._elements[x]._elements[y].set_background_color(color)
+                else:
+                    self._grid._elements[x]._elements[y].set_background_color((255, 255, 255))
+
+        print("Nonograma aleatorio generado")
+
+    def is_valid_nonogram(self) -> bool:
+        unique_colors = set()
+
+        for column in self._grid._elements:
+            row_has_color = False
+            for block in column._elements:
+                if block.color != (255, 255, 255):
+                    row_has_color = True
+                    unique_colors.add(block.color)
+            if not row_has_color:
+                return False
+
+        num_rows = len(self._grid._elements[0]._elements)
+        for row_idx in range(num_rows):
+            col_has_color = False
+            for column in self._grid._elements:
+                if column._elements[row_idx].color != (255, 255, 255):
+                    col_has_color = True
+                    unique_colors.add(column._elements[row_idx].color)
+            if not col_has_color:
+                return False
+
+        if len(unique_colors) > 256:
+            return False
+
+        return True
+
+    def generate_from_image(self, image_path: str, colors: int = 256) -> None:
+        with Image.open(image_path) as img:
+            resized_img = img.resize((self._cwidth, self._cheight), Image.NEAREST).convert("RGB")
+
+        image_matrix = []
+        pixels = resized_img.load()
+        for y in range(self._cheight):
+            row = []
+            for x in range(self._cwidth):
+                row.append(pixels[x, y])
+            image_matrix.append(row)
+
+        for y in range(self._cheight):
+            for x in range(self._cwidth):
+                color = image_matrix[y][x]
+                if color != (255, 255, 255):
+                    self._grid._elements[x]._elements[y].set_background_color(color)
+                else:
+                    self._grid._elements[x]._elements[y].set_background_color((255, 255, 255))
+
+        print("Nonograma generado a partir de la imagen redimensionada")
+
     def save(self) -> None:
+        if not self.is_valid_nonogram():
+            print("Nonograma no válido")
+            return
+        print("Nonograma válido")
+
         matrix: list[list[rgb_t | None]] = []
-
         for column in self._grid:
-            matrix.append([])
-            for block in column:
-                matrix[-1].append(block.color if block.color != (255, 255, 255) else None)
+            matrix.append([
+                block.color if block.color != (255, 255, 255) else None
+                for block in column
+            ])
 
-        Nonogram.from_matrix(matrix, self._name)
+        if not self._name:
+            raise ValueError("Debe establecer un nombre para el nonograma antes de guardarlo.")
+
+        nonogram = Nonogram.from_matrix(matrix, self._name)
+        nonogram.save(self._name)
