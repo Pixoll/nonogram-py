@@ -6,14 +6,11 @@ from typing import Any, Literal, Self, TypeAlias
 
 from PIL import Image
 
-from core.factory import factory, make
-
 rgb_t: TypeAlias = tuple[int, int, int]
 nonogram_type_t: TypeAlias = Literal["pre_made", "user_made"]
 nonogram_matrix_t: TypeAlias = list[list[rgb_t | None]]
 
 
-@factory
 class Nonogram:
     class Hint:
         _value: int
@@ -25,7 +22,7 @@ class Nonogram:
 
         def __repr__(self):
             br, bg, bb = self._color
-            luminance = Nonogram._get_color_luminance(self._color)
+            luminance = br * 0.2126 + bg * 0.7152 + bb * 0.0722
             fr, fg, fb = (255, 255, 255) if luminance < 140 else (0, 0, 0)
             value_str = (
                 f" {self._value} " if self._value < 10
@@ -123,13 +120,11 @@ class Nonogram:
         self._used_colors = tuple(palette.values())
 
     @classmethod
-    @make
     def from_matrix(cls, data: nonogram_matrix_t, name: str) -> Self:
         nonogram = Nonogram(data, "user_made", nonogram_name=name)
         return nonogram
 
     @classmethod
-    @make
     def from_pre_made(cls, nonogram_id: int) -> Self:
         nonogram_path = f"nonograms/pre_made/{nonogram_id}.json"
 
@@ -158,7 +153,6 @@ class Nonogram:
         return nonogram
 
     @classmethod
-    @make
     def load(cls, nonogram_type: nonogram_type_t, nonogram_id: int) -> Self:
         nonogram_path = f"nonograms/{nonogram_type}/{nonogram_id}.json"
         if not path.exists(nonogram_path):
@@ -243,7 +237,8 @@ class Nonogram:
             highest_luminance = 0
 
             for color in used_colors:
-                luminance = Nonogram._get_color_luminance(color)
+                r, g, b = color
+                luminance = r * 0.2126 + g * 0.7152 + b * 0.0722
                 if luminance > 200 and luminance > highest_luminance:
                     highest_luminance = luminance
                     lightest_color = color
@@ -509,7 +504,6 @@ class Nonogram:
         return result
 
     @classmethod
-    @make
     def _deserialize(cls, nonogram_type: nonogram_type_t, data: bytearray) -> Self:
         nonogram_id = int.from_bytes(data[:3], byteorder="big", signed=False)
         width = data[3]
@@ -610,8 +604,3 @@ class Nonogram:
             palette[key] = (r, g, b)
 
         return palette
-
-    @staticmethod
-    def _get_color_luminance(color: rgb_t) -> float:
-        r, g, b = color
-        return r * 0.2126 + g * 0.7152 + b * 0.0722
