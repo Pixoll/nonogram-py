@@ -28,7 +28,8 @@ class RecentColors(Element):
 
     def add_color(self, color: tuple[int, int, int]) -> None:
         if color not in self._recent_colors:
-            self._recent_colors = [color] + self._recent_colors[:-1]
+            self._recent_colors.insert(0, color)
+            self._recent_colors.pop()
 
             for i in range(len(self._column)):
                 self._column[i].set_color(self._recent_colors[i])
