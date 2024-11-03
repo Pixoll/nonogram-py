@@ -3,6 +3,7 @@ from typing import Literal, Self
 
 import pygame
 
+from assets import TextureManager
 from components.element_with_child import ElementWithChild
 from events import Event
 
@@ -28,8 +29,7 @@ class Block(ElementWithChild):
 
         self._state = Block.State.EMPTY
         self._x_mark_visible = color == "x"
-
-        self._x_image = pygame.transform.scale(pygame.image.load("assets/textures/x.gif"), self.size)
+        self._x_image = TextureManager.get("x.gif", self.size)
 
     def set_background_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> Self:
         self._background_color = color
@@ -40,6 +40,18 @@ class Block(ElementWithChild):
         self._position = new_position
         self._update_child_position()
         return self
+
+    def set_size(self, width: int, height: int) -> None:
+        super().set_size(width, height)
+        self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
+        self._surface.fill(self._background_color)
+
+        self._x_image = TextureManager.get("x.gif", self.size)
+
+        if self._x_mark_visible:
+            self.toggle_x_mark()
+            self.toggle_x_mark()
+        pass
 
     def set_state(self, new_state: State, color: tuple[int, int, int] | None) -> None:
         if new_state == Block.State.COLORED:
