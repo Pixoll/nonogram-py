@@ -37,8 +37,8 @@ class Row(ElementBundle[T]):
             element.set_size(width, height)
         self._update_size()
         self._update_positions()
-
         return self
+
     def _update_size(self) -> None:
         if not self._elements:
             self._width = 0

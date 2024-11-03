@@ -2,6 +2,7 @@ from typing import Self
 
 import pygame
 from pygame import Surface
+
 from components.block import Block
 from components.column import Column
 from components.element import Element
@@ -61,9 +62,9 @@ class NonogramElement(Element):
         self._horizontal_hints.update_size(new_block_size)
         self._vertical_hints.update_size(new_block_size)
 
-        for column in self._grid._elements:
+        for column in self._grid:
             column.set_element_sizes(new_block_size, new_block_size)
-            
+
         self._width = self._horizontal_hints.size[0] + self._padding + self._grid.size[0]
         self._height = self._vertical_hints.size[1] + self._padding + self._grid.size[1]
 
@@ -72,7 +73,6 @@ class NonogramElement(Element):
         self._surface.fill(self._background_color)
 
         self.set_position(self._position)
-
 
     def set_position(self, position: tuple[int, int]) -> Self:
 
@@ -134,4 +134,3 @@ class NonogramElement(Element):
                         self._nonogram[x, y] = "x"
                     case Block.State.COLORED:
                         self._nonogram[x, y] = block.color
-
