@@ -175,13 +175,13 @@ class CreateScreen(Screen):
         pass
 
     def on_key_event(self, key_event: KeyEvent) -> None:
-        self.text_field.on_any_event(event=key_event)
+        self.text_field.on_any_event(key_event)
         self.nanogram_name._update_child_position()
 
-        self.dimension_selector1.on_any_event(event=key_event)
+        self.dimension_selector1.on_any_event(key_event)
         self.x_dimension._update_child_position()
 
-        self.dimension_selector2.on_any_event(event=key_event)
+        self.dimension_selector2.on_any_event(key_event)
         self.y_dimension._update_child_position()
 
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
