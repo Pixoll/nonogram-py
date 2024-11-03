@@ -193,9 +193,16 @@ class CreateScreen(Screen):
         if self._resize_button.contains(mouse_pos):
             if (self.dimension_selector1.get_value() != self.dimension_selector1.get_default_value()) or (
                     self.dimension_selector2.get_value() != self.dimension_selector2.get_default_value()):
-                self.board = CreateNanogram(self.dimension_selector1.get_value(), self.dimension_selector2.get_value(),
-                                            1, int(self._width * 0.4)).set_selected_color(
-                    (255, 0, 0)).set_selected_color(self.color_gradient.get_color())
+                self.board = (
+                    CreateNanogram(
+                        self.dimension_selector1.get_value(),
+                        self.dimension_selector2.get_value(),
+                        1,
+                        int(self._width * 0.4)
+                    )
+                    .set_selected_color((255, 0, 0))
+                    .set_selected_color(self.color_gradient.get_color())
+                )
                 self.dimension_selector1.set_default_value(self.dimension_selector1.get_value())
                 self.dimension_selector2.set_default_value(self.dimension_selector2.get_value())
                 self.board_base.set_child(self.board)
