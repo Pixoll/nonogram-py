@@ -111,8 +111,7 @@ class CreateNanogram(Element):
 
         colors = list(unique_colors)
         if not colors:
-            print("No available colors to generate randomized nonogram.")
-            return None
+            raise ValueError("No available colors to generate randomized nonogram.")
 
         random_nonogram = Nonogram.generate((self._cwidth, self._cheight), colors)
 
@@ -123,8 +122,6 @@ class CreateNanogram(Element):
                     self._grid[x][y].set_background_color(color)
                 else:
                     self._grid[x][y].set_background_color((255, 255, 255))
-
-        print("Generated randomized nonogram")
 
     def is_valid_nonogram(self) -> bool:
         unique_colors = set()
@@ -173,14 +170,10 @@ class CreateNanogram(Element):
                 else:
                     self._grid[x][y].set_background_color((255, 255, 255))
 
-        print("Generated nonogram from image")
-
     def save(self) -> None:
         if not self.is_valid_nonogram():
             print("Invalid nonogram")
             return
-
-        print("Valid nonogram")
 
         matrix: list[list[rgb_t | None]] = []
         for column in self._grid:
