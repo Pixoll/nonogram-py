@@ -22,12 +22,23 @@ class PlayScreen(Screen):
         self._nonogram = nonogram
         self._has_color_picker = len(nonogram.used_colors) > 1
 
+        columns = nonogram.size[0] + max([len(row) for row in nonogram.horizontal_hints])
+        rows = nonogram.size[1] + max([len(column) for column in nonogram.vertical_hints])
+        window_width, window_height = engine.window_size
+
         nonogram_container_size = (
-            int(engine.window_size[0] * 0.875) if self._has_color_picker else engine.window_size[0] - 20,
-            engine.window_size[1] - 20
+            int(window_width * 0.875) if self._has_color_picker else window_width - 20,
+            window_height - 20
         )
 
-        self._nonogram_element = NonogramElement(nonogram, 20, 1)
+        grid_ratio = columns / rows
+        window_ratio = window_width / window_height
+
+        limiting_grid_side = columns if grid_ratio > window_ratio else rows
+        limiting_window_side = window_width if grid_ratio > window_ratio else window_height
+        block_size = round(limiting_window_side * 0.875 / limiting_grid_side)
+
+        self._nonogram_element = NonogramElement(nonogram, block_size, 1)
         nonogram_container = (Container(*nonogram_container_size)
                                     .set_child_alignment(ChildAlignment.CENTER)
                                     .set_child(self._nonogram_element))
