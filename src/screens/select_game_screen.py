@@ -46,13 +46,13 @@ class SelectGameScreen(Screen):
         )
         self._row_of_nonograms = RowOfNonograms(self._width, int(self._height * 0.6))
         container2 = (
-            Container(self._width, int(self._height * 0.6))
+            Container(self._width, self._row_of_nonograms.size[1])
             .set_background_color((0, 0, 0, 200))
             .set_border((0, 0, 0, 0))
             .set_child(self._row_of_nonograms)
         )
         container3 = (
-            Container(self._width, int(self._height * 0.2))
+            Container(self._width, int(self._height * 0.8) - self._row_of_nonograms.size[1])
             .set_background_color((0, 0, 0, 200))
             .set_border((0, 0, 0, 0))
         )
