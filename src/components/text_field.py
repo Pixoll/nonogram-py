@@ -49,7 +49,10 @@ class TextField(Element):
         return self
 
     def get_text(self) -> str:
-        return self._text
+        if self._text == self._message:
+            return ""
+        else:
+            return self._text
 
     def _update_surface(self) -> None:
         # Update text surface

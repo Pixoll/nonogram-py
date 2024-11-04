@@ -160,6 +160,30 @@ class CreateNanogram(Element):
                 else:
                     self._grid[y][x].set_background_color((255, 255, 255))
 
+    def is_empty(self) -> bool:
+        for column in self._grid:
+            for block in column:
+                if block.color != (255, 255, 255):
+                    return False
+        return True
+
+    def is_nameless(self) -> bool:
+        if self._name == "":
+            return True
+        else:
+            return False
+
+    def is_correct(self) -> bool:
+        for row in self._grid:
+            if not any(block.color != (255, 255, 255) for block in row):
+                return True
+
+        num_rows = len(self._grid[0]._elements)
+        for col_idx in range(num_rows):
+            if not any(column[col_idx].color != (255, 255, 255) for column in self._grid):
+                return True
+        return False
+
     def save(self) -> None:
         if not self.is_valid_nonogram():
             print("Invalid nonogram")
@@ -171,6 +195,6 @@ class CreateNanogram(Element):
                 block.color if block.color != (255, 255, 255) else None
                 for block in column
             ])
-
+        print("GUARDANDO")
         nonogram = Nonogram(matrix, "user_made", nonogram_name=self._name)
         NonogramLoader.store_and_save(nonogram)

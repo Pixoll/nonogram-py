@@ -1,7 +1,10 @@
+import pygame
 import tkinter as tk
+
 from tkinter import filedialog
 
 import pygame
+import time
 
 from assets import FontManager
 from components import ChildAlignment, Column, Container, DimensionSelector, HorizontalAlignment, RecentColors, Row, \
@@ -16,8 +19,6 @@ from screens.screen import Screen
 
 root = tk.Tk()
 root.withdraw()
-
-
 class CreateScreen(Screen):
     _engine: Engine
     _menu: Container
@@ -60,7 +61,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Generate", FontManager.get("sys", "Arial", 15), (0, 0, 0)))
+            .set_child(Text("Generate", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._upload_button)
 
@@ -68,7 +69,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Randomized", FontManager.get("sys", "Arial", 15), (0, 0, 0)))
+            .set_child(Text("Randomized", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._randomizer_button)
 
@@ -76,7 +77,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Erase all", FontManager.get("sys", "Arial", 15), (0, 0, 0)))
+            .set_child(Text("Erase all", pygame.font.SysFont("Arial", 15), (0, 0, 0)))
         )
         row2.add_element(self._eraser_button)
 
@@ -85,7 +86,7 @@ class CreateScreen(Screen):
 
         self.color_gradient = GradientColor((255, 0, 0), 25, 1)
         self.colors = Colors(3, 0)
-        self.lasts_colors = RecentColors(40, 0)
+        self.lasts_colors = RecentColors(40,0)
 
         row3.add_element(self.color_gradient)
         row3.add_element(self.colors)
@@ -96,7 +97,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.15), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Save", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
+            .set_child(Text("Save", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
         column1.add_element(self._save_button)
 
@@ -104,14 +105,16 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.15), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Exit", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
+            .set_child(Text("Exit", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
         column1.add_element(self._exit_button)
+
+
 
         # column 2 elements
         row4 = Row().set_alignment(VerticalAlignment.CENTER)
         self.dimension_selector1 = DimensionSelector(
-            default_value=100,
+            default_value = 100,
             font=pygame.font.Font(None, 40),
             inactive_color=(0, 0, 0),
             active_color=(255, 255, 255),
@@ -125,7 +128,7 @@ class CreateScreen(Screen):
         )
         row4.add_element(self.x_dimension)
         self.dimension_selector2 = DimensionSelector(
-            default_value=100,
+            default_value = 100,
             font=pygame.font.Font(None, 40),
             inactive_color=(0, 0, 0),
             active_color=(255, 255, 255),
@@ -138,20 +141,20 @@ class CreateScreen(Screen):
             .set_child(self.dimension_selector2)
         )
         row4.add_element(self.y_dimension)
-        row4.add_element(Container(20, 0))
+        row4.add_element(Container(20,0))
         self._resize_button = (
             Container(int(self._width * 0.1), int(self._height * 0.05))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Resize", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
+            .set_child(Text("Resize", pygame.font.SysFont("Arial", 30), (0, 0, 0)))
         )
         row4.add_element(self._resize_button)
         self.column2.add_element(row4)
 
-        self.board = CreateNanogram(100, 100, 1, int(self._width * 0.4)).set_selected_color((255, 0, 0))
+        self.board = CreateNanogram(100, 100, 1,int(self._width * 0.4)) .set_selected_color((255, 0, 0))
         self.board_base = (Container(int(self._width * 0.4), int(self._width * 0.4)).set_child(self.board)
-                           .set_child_alignment(ChildAlignment.CENTER).set_border((0, 0, 0, 0))
-                           )
+                     .set_child_alignment(ChildAlignment.CENTER).set_border((0, 0, 0, 0))
+                    )
         self.column2.add_element(self.board_base)
 
         self.text_field = TextField(
@@ -172,20 +175,73 @@ class CreateScreen(Screen):
         row1.add_element(container1).add_element(container2)
         self._base.set_child(row1)
 
+        # ----------------------<| reaction widget |>----------------------
+
+        self._waiting_exit_confirmation = False
+        self._exit_time = None
+        self._dot_count = 0
+        self._last_dot_update = time.time()
+
+        self._exit_message_popup = Container(
+            self._width, self._height
+        ).set_background_color((0, 0, 0, 128)).set_child(
+            Text(
+                "Saving new nonogram.",
+                FontManager.get("sys", "Arial", 30),
+                (255, 255, 255)
+            )
+        )
+
+
+        self._showing_error_message = False
+        self._error_start_time = None
+        error_height = int(self._height * 0.1)
+        error_y = (self._height - error_height) // 2
+
+        self._error_message_popup = Container(
+            self._width, int(self._height * 0.1)
+        ).set_background_color((255, 0, 0, 180)).set_child(
+            Text(
+                "Error occurred!",
+                FontManager.get("sys", "Arial", 24),
+                (255, 255, 255)
+            )
+        ).set_position((0, error_y))
+
+    def show_error_message(self, message: str) -> None:
+        self._error_message_popup.set_child(
+            Text(message, FontManager.get("sys", "Arial", 24), (255, 255, 255))
+        )
+        self._showing_error_message = True
+        self._error_start_time = time.time()
+
     def on_any_event(self, event: Event) -> None:
         pass
 
     def on_key_event(self, key_event: KeyEvent) -> None:
+        if self._waiting_exit_confirmation:
+            return
+
+        if self._showing_error_message:
+            return
+
         self.text_field.on_any_event(key_event)
         self.nanogram_name._update_child_position()
 
-        self.dimension_selector1.on_any_event(key_event)
+        self.dimension_selector1.on_any_event(event=key_event)
         self.x_dimension._update_child_position()
 
-        self.dimension_selector2.on_any_event(key_event)
+        self.dimension_selector2.on_any_event(event=key_event)
         self.y_dimension._update_child_position()
 
+
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
+        if self._waiting_exit_confirmation:
+            return
+
+        if self._showing_error_message:
+            return
+
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 
@@ -222,13 +278,28 @@ class CreateScreen(Screen):
 
         if self._save_button.contains(mouse_pos):
             self.board.set_name(self.text_field.get_text())
+            if self.board.is_empty():
+                self.show_error_message("ERROR: Board is empty")
+                return
+            if self.board.is_nameless():
+                self.show_error_message("ERROR: Board is nameless")
+                return
+            if self.board.is_correct():
+                self.show_error_message("ERROR: Board is invalid")
+                return
             self.board.save()
+            self._waiting_exit_confirmation = True
+            self._exit_time = time.time()
+            return
 
         if self._eraser_button.contains(mouse_pos):
             self.board.clear()
 
         if self._randomizer_button.contains(mouse_pos):
-            self.board.randomizer()
+            if self.board.is_empty():
+                self.show_error_message("ERROR: Board is empty")
+            else:
+                self.board.randomizer()
 
         if self._upload_button.contains(mouse_pos):
             file_path = filedialog.askopenfilename(
@@ -259,12 +330,41 @@ class CreateScreen(Screen):
             self.lasts_colors.on_any_event(event)
             self.board.set_selected_color(self.lasts_colors.get_current_color())
 
+
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         pass
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
         pass
 
+
     def render(self) -> None:
         window = pygame.display.get_surface()
         self._base.render(window)
+
+        if self._waiting_exit_confirmation:
+            if time.time() - self._last_dot_update > 0.5:
+                self._dot_count = (self._dot_count + 1) % 4
+                dots = "." * self._dot_count
+                self._exit_message_popup.set_child(
+                    Text(
+                        f"Saving new nonogram{dots}",
+                        FontManager.get("sys", "Arial", 30),
+                        (255, 255, 255)
+                    )
+                )
+                self._last_dot_update = time.time()
+
+            self._exit_message_popup.render(window)
+
+            if time.time() - self._exit_time > 10:
+                self._waiting_exit_confirmation = False
+                from screens.workshop_screen import WorkshopScreen
+                self._engine.set_screen(WorkshopScreen(self._engine))
+
+        if self._showing_error_message:
+            self._error_message_popup.render(window)
+
+            if time.time() - self._error_start_time > 3:
+                self._showing_error_message = False
+                self._error_start_time = None
