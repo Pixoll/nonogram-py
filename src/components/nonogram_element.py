@@ -104,10 +104,9 @@ class NonogramElement(Element):
         self._grid.render(window)
 
     def on_any_event(self, event: Event) -> None:
-
-        if event.type == EventType.MOUSE_WHEEL:
-            zoom_factor = 1.1 if event.y > 0 else 0.9
-            self.set_zoom(zoom_factor)
+        # if event.type == EventType.MOUSE_WHEEL:
+        #     zoom_factor = 1.1 if event.y > 0 else 0.9
+        #     self.set_zoom(zoom_factor)
 
         if event.type != EventType.MOUSE_BUTTON_DOWN:
             return
