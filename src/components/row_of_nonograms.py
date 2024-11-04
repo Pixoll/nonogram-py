@@ -25,7 +25,7 @@ class RowOfNonograms(Element):
             nonogram = NonogramLoader.load("pre_made", i)
             self._list_of_nonograms.append(nonogram)
 
-            info_nonogram = PreviousInfoNonogram(nonogram, int(self._width * 0.8), self._height)
+            info_nonogram = PreviousInfoNonogram(nonogram, self._height, self._height)
             self._row.add_element(info_nonogram)
 
         content_width = len(self._list_of_nonograms) * info_nonogram.size[0]
