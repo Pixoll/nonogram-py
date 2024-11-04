@@ -63,7 +63,7 @@ class NonogramLoader:
         nonograms_bin[index:index + size + 2] = serialized
         nonograms_bin_index[nonogram_id] = (index, new_size)
 
-        with open(file_path, mode="rb") as file:
+        with open(file_path, mode="wb") as file:
             file.write(nonograms_bin)
 
     @staticmethod
