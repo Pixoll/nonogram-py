@@ -1,13 +1,13 @@
 {
   "id": 1735,
   "name": "Baby rattle",
-  "mask": " 223    22242   22322   34222    22243      343      344      44",
+  "mask": " 112    11131   11211   23111    11132      232      233      33",
   "width": 8,
   "height": 8,
   "palette": {
-    "2": "ffff00",
-    "3": "ef6ea8",
-    "4": "00ff00"
+    "1": "ffff00",
+    "2": "ef6ea8",
+    "3": "00ff00"
   },
   "player_mask": null,
   "completed": false

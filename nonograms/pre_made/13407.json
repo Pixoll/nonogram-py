@@ -1,12 +1,12 @@
 {
   "id": 13407,
   "name": "Raspberry",
-  "mask": "   3   2332 2333322223 2 22222 2222   22  ",
+  "mask": "   2   1221 1222211112 1 11111 1111   11  ",
   "width": 6,
   "height": 7,
   "palette": {
-    "2": "ee105a",
-    "3": "00a650"
+    "1": "ee105a",
+    "2": "00a650"
   },
   "player_mask": null,
   "completed": false

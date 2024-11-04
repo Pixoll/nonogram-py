@@ -1,14 +1,14 @@
 {
   "id": 11249,
   "name": "Duckling",
-  "mask": "  2     512  25522222   2332   222   3 3  ",
+  "mask": "  2     412  24422222   2332   222   3 3  ",
   "width": 7,
   "height": 6,
   "palette": {
     "1": "000000",
     "2": "fcf204",
     "3": "7c4a04",
-    "5": "ec1e24"
+    "4": "ec1e24"
   },
   "player_mask": null,
   "completed": false

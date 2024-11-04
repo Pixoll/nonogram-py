@@ -1,14 +1,14 @@
 {
   "id": 17398,
   "name": "Mini chicken",
-  "mask": " 33      443    514      44   4  4444444 444444   4444    5 5   ",
+  "mask": " 22      332    413      33   3  3333333 333333   3333    4 4   ",
   "width": 8,
   "height": 8,
   "palette": {
     "1": "000000",
-    "3": "ec1e24",
-    "4": "bc7a54",
-    "5": "fc7e24"
+    "2": "ec1e24",
+    "3": "bc7a54",
+    "4": "fc7e24"
   },
   "player_mask": null,
   "completed": false

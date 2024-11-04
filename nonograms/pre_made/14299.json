@@ -1,13 +1,13 @@
 {
   "id": 14299,
   "name": "Tiny chick",
-  "mask": " 444   2414    4444 4  4442   4224    44      2     22  ",
+  "mask": " 333   2313    3333 3  3332   3223    33      2     22  ",
   "width": 7,
   "height": 8,
   "palette": {
     "1": "000000",
     "2": "fcca0c",
-    "4": "fcf20c"
+    "3": "fcf20c"
   },
   "player_mask": null,
   "completed": false

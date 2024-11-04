@@ -1,13 +1,13 @@
 {
   "id": 12643,
   "name": "Evil Little Spider",
-  "mask": "   1111  1 1111 141114141 3314 41 14 4 41  4 4 4",
+  "mask": "   1111  1 1111 131113131 2213 31 13 3 31  3 3 3",
   "width": 8,
   "height": 6,
   "palette": {
     "1": "000000",
-    "3": "ec1e24",
-    "4": "7c7e7c"
+    "2": "ec1e24",
+    "3": "7c7e7c"
   },
   "player_mask": null,
   "completed": false

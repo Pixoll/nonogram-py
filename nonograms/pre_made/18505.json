@@ -1,12 +1,12 @@
 {
   "id": 18505,
   "name": "Cactus",
-  "mask": "  11    11  1 11  1111 1  1111  11   3333  3333   33  ",
+  "mask": "  11    11  1 11  1111 1  1111  11   2222  2222   22  ",
   "width": 6,
   "height": 9,
   "palette": {
     "1": "24b24c",
-    "3": "e46e34"
+    "2": "e46e34"
   },
   "player_mask": null,
   "completed": false

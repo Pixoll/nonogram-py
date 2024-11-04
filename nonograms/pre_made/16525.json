@@ -1,13 +1,13 @@
 {
   "id": 16525,
   "name": "Little flower",
-  "mask": "  4     422    2232  4222244442244   4 4    44      4   ",
+  "mask": "  3     311    1121  3111133331133   3 3    33      3   ",
   "width": 7,
   "height": 8,
   "palette": {
-    "2": "f49bc1",
-    "3": "ffff00",
-    "4": "8fc63d"
+    "1": "f49bc1",
+    "2": "ffff00",
+    "3": "8fc63d"
   },
   "player_mask": null,
   "completed": false
