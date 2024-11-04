@@ -152,11 +152,26 @@ class CreateNanogram(Element):
 
     def save(self) -> None:
         matrix: list[list[rgb_t | None]] = []
-        for column in self._grid:
+        for row in self._grid:
             matrix.append([
                 block.color if block.color != (255, 255, 255) else None
-                for block in column
+                for block in row
             ])
 
-        nonogram = Nonogram(matrix, "user_made", nonogram_name=self._name)
+        rows = len(matrix)
+        cols = len(matrix[0]) if rows > 0 else 0
+
+        top, bottom, left, right = rows, 0, cols, 0
+
+        for i in range(rows):
+            for j in range(cols):
+                if matrix[i][j] is not None:
+                    top = min(top, i)
+                    bottom = max(bottom, i)
+                    left = min(left, j)
+                    right = max(right, j)
+
+        new_matrix = [row[left:right + 1] for row in matrix[top:bottom + 1]]
+
+        nonogram = Nonogram(new_matrix, "user_made", nonogram_name=self._name)
         NonogramLoader.store_and_save(nonogram)
