@@ -27,7 +27,8 @@ class ColorPicker(Element):
             nonogram_element: NonogramElement,
             colors: tuple[tuple[int, int, int], ...],
             block_size: int,
-            padding: int
+            padding: int,
+            window_size: tuple[int, int]
     ) -> None:
         cols = min(ceil(len(colors) ** 0.5), 16)
         rows = ceil(len(colors) / cols)
@@ -51,7 +52,7 @@ class ColorPicker(Element):
             column.set_padding(padding)
 
         self._row.set_padding(padding)
-        self.set_position((1000, 300))
+        self.set_position((window_size[0] - self._width - 20, (window_size[1] - self._height) // 2))
 
         self._selected_color_index = 0
         self._selected_block = ColoredBlock(block_size, colors[self._selected_color_index]).set_position((

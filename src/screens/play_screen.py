@@ -25,11 +25,10 @@ class PlayScreen(Screen):
         self._nonogram_element = NonogramElement(nonogram, 25, 1)
         self._has_color_picker = len(nonogram.used_colors) > 1
         if self._has_color_picker:
-            self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, 50, 1)
+            self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, 50, 1, engine.window_size)
         self._menu.set_child(self._nonogram_element)
         self._completed_text = (FontManager.get("sys", "Arial", 30)
                                 .render("completed!", True, (0, 0, 0)))
-
 
     def on_any_event(self, event: Event) -> None:
         self._nonogram_element.on_any_event(event)
