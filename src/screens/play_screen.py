@@ -2,7 +2,7 @@ import pygame
 from pygame import Surface
 
 from assets import FontManager
-from components import ChildAlignment, ColorPicker, Container, NonogramElement
+from components import ChildAlignment, ColorPicker, Container, NonogramElement, Row
 from core import Nonogram
 from engine import Engine
 from events import Event, Key, KeyEvent, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -11,7 +11,6 @@ from screens.screen import Screen
 
 class PlayScreen(Screen):
     _engine: Engine
-    _menu: Container
     _nonogram: Nonogram
     _nonogram_element: NonogramElement
     _has_color_picker: bool
@@ -20,13 +19,29 @@ class PlayScreen(Screen):
 
     def __init__(self, engine: Engine, nonogram: Nonogram):
         self._engine = engine
-        self._menu = Container(*engine.window_size).set_child_alignment(ChildAlignment.CENTER)
         self._nonogram = nonogram
-        self._nonogram_element = NonogramElement(nonogram, 25, 1)
         self._has_color_picker = len(nonogram.used_colors) > 1
+
+        nonogram_container_size = (
+            int(engine.window_size[0] * 0.875) if self._has_color_picker else engine.window_size[0] - 20,
+            engine.window_size[1] - 20
+        )
+
+        self._nonogram_element = NonogramElement(nonogram, 20, 1)
+        nonogram_container = (Container(*nonogram_container_size)
+                                    .set_child_alignment(ChildAlignment.CENTER)
+                                    .set_child(self._nonogram_element))
+
+        base: Row[Container] = Row().add_element(nonogram_container)
+
         if self._has_color_picker:
-            self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, 50, 1, engine.window_size)
-        self._menu.set_child(self._nonogram_element)
+            self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, 50, 1)
+            color_picker_size = (engine.window_size[0] - nonogram_container_size[0], nonogram_container_size[1])
+            color_picker_container = (Container(*color_picker_size)
+                                            .set_child_alignment(ChildAlignment.CENTER)
+                                            .set_child(self._color_picker))
+            base.add_element(color_picker_container)
+
         self._completed_text = (FontManager.get("sys", "Arial", 30)
                                 .render("completed!", True, (0, 0, 0)))
 
@@ -54,7 +69,7 @@ class PlayScreen(Screen):
 
     def render(self) -> None:
         window = pygame.display.get_surface()
-        self._menu.render(window)
+        self._nonogram_element.render(window)
         if self._has_color_picker:
             self._color_picker.render(window)
 
