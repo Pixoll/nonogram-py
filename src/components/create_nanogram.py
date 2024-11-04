@@ -168,17 +168,14 @@ class CreateNanogram(Element):
         return True
 
     def is_nameless(self) -> bool:
-        if self._name == "":
-            return True
-        else:
-            return False
+        return self._name == ""
 
     def is_correct(self) -> bool:
         for row in self._grid:
             if not any(block.color != (255, 255, 255) for block in row):
                 return True
 
-        num_rows = len(self._grid[0]._elements)
+        num_rows = len(self._grid[0])
         for col_idx in range(num_rows):
             if not any(column[col_idx].color != (255, 255, 255) for column in self._grid):
                 return True
