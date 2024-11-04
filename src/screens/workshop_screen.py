@@ -100,7 +100,7 @@ class WorkshopScreen(Screen):
 
         if self._create_button.contains(mouse_pos):
             from screens.create_screen import CreateScreen
-            self._engine.set_screen(CreateScreen(self._engine))
+            self._engine.set_screen(CreateScreen(self._engine, (25, 25)))
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         mouse_pos = pygame.mouse.get_pos()

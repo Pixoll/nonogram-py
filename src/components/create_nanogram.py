@@ -36,7 +36,7 @@ class CreateNanogram(Element):
 
         self._background_color = (192, 192, 192)
         self._padding = padding
-        self._grid = Column()
+        self._grid = Column().set_padding(padding)
         self._grid_position = (0, 0)
         self._block_size = block_size
         self._selected_color = (0, 0, 0)
@@ -45,13 +45,10 @@ class CreateNanogram(Element):
         self._name = ""
 
         for i in range(width):
-            row: Row[Block] = Row()
+            row: Row[Block] = Row().set_padding(padding)
             for j in range(height):
                 row.add_element(Block(block_size, block_size, (255, 255, 255)))
             self._grid.add_element(row)
-            row.set_padding(padding)
-
-        self._grid.set_padding(padding)
 
         self._width = self._grid.size[0]
         self._height = self._grid.size[1]

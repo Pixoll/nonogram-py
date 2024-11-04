@@ -24,7 +24,7 @@ class CreateScreen(Screen):
     _menu: Container
     _button: Container
 
-    def __init__(self, engine: Engine):
+    def __init__(self, engine: Engine, default_grid_size: tuple[int, int]):
         self._engine = engine
         self._width, self._height = engine.window_size
 
@@ -112,11 +112,11 @@ class CreateScreen(Screen):
         # column 2 elements
         row4 = Row().set_alignment(VerticalAlignment.CENTER)
         self.dimension_selector1 = DimensionSelector(
-            default_value=100,
-            font=pygame.font.Font(None, 40),
-            inactive_color=(0, 0, 0),
-            active_color=(255, 255, 255),
-            max_width=int(self._width * 0.035),
+            default_grid_size[0],
+            pygame.font.Font(None, 40),
+            (0, 0, 0),
+            (255, 255, 255),
+            int(self._width * 0.035),
         )
         self.x_dimension = (
             Container(int(self._width * 0.1), int(self._height * 0.05))
@@ -126,11 +126,11 @@ class CreateScreen(Screen):
         )
         row4.add_element(self.x_dimension)
         self.dimension_selector2 = DimensionSelector(
-            default_value=100,
-            font=pygame.font.Font(None, 40),
-            inactive_color=(0, 0, 0),
-            active_color=(255, 255, 255),
-            max_width=int(self._width * 0.035),
+            default_grid_size[1],
+            pygame.font.Font(None, 40),
+            (0, 0, 0),
+            (255, 255, 255),
+            int(self._width * 0.035),
         )
         self.y_dimension = (
             Container(int(self._width * 0.1), int(self._height * 0.05))
@@ -149,7 +149,7 @@ class CreateScreen(Screen):
         row4.add_element(self._resize_button)
         self.column2.add_element(row4)
 
-        self.board = CreateNanogram(100, 100, 1, int(self._width * 0.4)).set_selected_color((255, 0, 0))
+        self.board = CreateNanogram(*default_grid_size, 1, int(self._width * 0.4)).set_selected_color((255, 0, 0))
         self.board_base = (Container(int(self._width * 0.4), int(self._width * 0.4)).set_child(self.board)
                            .set_child_alignment(ChildAlignment.CENTER).set_border((0, 0, 0, 0))
                            )
