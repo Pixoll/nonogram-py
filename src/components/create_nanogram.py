@@ -119,7 +119,7 @@ class CreateNanogram(Element):
                 else:
                     self._grid[y][x].set_background_color((255, 255, 255))
 
-    def is_valid_nonogram(self) -> bool:
+    def has_more_than_256_colors(self) -> bool:
         unique_colors = set()
 
         for column in self._grid:
@@ -127,10 +127,7 @@ class CreateNanogram(Element):
                 if block.color != (255, 255, 255):
                     unique_colors.add(block.color)
 
-        if len(unique_colors) > 256:
-            return False
-
-        return True
+        return len(unique_colors) > 256
 
     def generate_from_image(self, image_path: str, colors: int = 256) -> None:
         image_matrix = Nonogram.matrix_from_image(image_path, colors, (self._cwidth, self._cheight))
@@ -154,16 +151,12 @@ class CreateNanogram(Element):
         return self._name == ""
 
     def save(self) -> None:
-        if not self.is_valid_nonogram():
-            print("Invalid nonogram")
-            return
-
         matrix: list[list[rgb_t | None]] = []
         for column in self._grid:
             matrix.append([
                 block.color if block.color != (255, 255, 255) else None
                 for block in column
             ])
-        print("GUARDANDO")
+
         nonogram = Nonogram(matrix, "user_made", nonogram_name=self._name)
         NonogramLoader.store_and_save(nonogram)
