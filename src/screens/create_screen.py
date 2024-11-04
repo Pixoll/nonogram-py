@@ -113,7 +113,7 @@ class CreateScreen(Screen):
         row4 = Row().set_alignment(VerticalAlignment.CENTER)
         self.dimension_selector1 = DimensionSelector(
             default_grid_size[0],
-            pygame.font.Font(None, 40),
+            FontManager.get("local", None, 40),
             (0, 0, 0),
             (255, 255, 255),
             int(self._width * 0.035),
@@ -127,7 +127,7 @@ class CreateScreen(Screen):
         row4.add_element(self.x_dimension)
         self.dimension_selector2 = DimensionSelector(
             default_grid_size[1],
-            pygame.font.Font(None, 40),
+            FontManager.get("local", None, 40),
             (0, 0, 0),
             (255, 255, 255),
             int(self._width * 0.035),
@@ -156,11 +156,11 @@ class CreateScreen(Screen):
         self.column2.add_element(self.board_base)
 
         self.text_field = TextField(
-            text="Level name...",
-            font=pygame.font.Font(None, 40),
-            inactive_color=(0, 0, 0),
-            active_color=(255, 255, 255),
-            max_width=int(self._width * 0.3),
+            "Level name...",
+            FontManager.get("local", None, 40),
+            (0, 0, 0),
+            (255, 255, 255),
+            int(self._width * 0.3),
         )
         self.nanogram_name = (
             Container(int(self._width * 0.3), int(self._height * 0.08))

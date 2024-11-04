@@ -22,11 +22,11 @@ class FontManager:
     _BASE_DIR = "assets/fonts/"
 
     class _FontAsset:
-        _path: str
+        _path: str | None
         _size: int
         _formats: dict[tuple[bool, bool, bool, bool], Font]
 
-        def __init__(self, path: str, size: int, flags: int = 0):
+        def __init__(self, path: str | None, size: int, flags: int = 0):
             self._path = path
             self._size = size
             self._formats = {}
@@ -42,7 +42,7 @@ class FontManager:
             return self._formats[parsed_flags]
 
         @staticmethod
-        def _load(path: str, size: int, bold: bool, italic: bool, underline: bool, strikethrough: bool) -> Font:
+        def _load(path: str | None, size: int, bold: bool, italic: bool, underline: bool, strikethrough: bool) -> Font:
             font = Font(path, size)
             font.set_bold(bold)
             font.set_italic(italic)
@@ -50,10 +50,10 @@ class FontManager:
             font.set_strikethrough(strikethrough)
             return font
 
-    _FONTS: dict[tuple[str, int], _FontAsset] = {}
+    _FONTS: dict[tuple[str | None, int], _FontAsset] = {}
 
     @staticmethod
-    def get(font_type: Literal["local", "sys"], name: str, size: int, flags: int = 0) -> Font:
+    def get(font_type: Literal["local", "sys"], name: str | None, size: int, flags: int = 0) -> Font:
         path = FontManager._resolve_path(font_type, name, flags)
         font_key = (path, size)
 
@@ -63,7 +63,10 @@ class FontManager:
         return FontManager._FONTS[font_key].get(flags)
 
     @staticmethod
-    def _resolve_path(font_type: Literal["local", "sys"], name: str, flags: int = 0) -> str:
+    def _resolve_path(font_type: Literal["local", "sys"], name: str | None, flags: int = 0) -> str | None:
+        if name is None:
+            return None
+
         path: str
 
         if font_type == "sys":
