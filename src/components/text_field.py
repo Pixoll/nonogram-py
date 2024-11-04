@@ -1,6 +1,7 @@
 from typing import Self
 
 import pygame
+from pygame.font import Font
 
 from components.element import Element
 from events import Event, EventType, Key, MouseButton
@@ -9,7 +10,7 @@ from events import Event, EventType, Key, MouseButton
 class TextField(Element):
     _text: str
     _message: str
-    _font: pygame.font.Font
+    _font: Font
     _color: tuple[int, int, int]
     _active_color: tuple[int, int, int]
     _inactive_color: tuple[int, int, int]
@@ -21,7 +22,7 @@ class TextField(Element):
     def __init__(
             self,
             text: str,
-            font: pygame.font.Font,
+            font: Font,
             inactive_color: tuple[int, int, int],
             active_color: tuple[int, int, int],
             max_width: int

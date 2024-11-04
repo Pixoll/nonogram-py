@@ -1,6 +1,7 @@
 from typing import Self
 
 import pygame
+from pygame.font import Font
 
 from components.element import Element
 from events import Event
@@ -11,7 +12,7 @@ class ColoredBlock(Element):
     _position: tuple[int, int]
     _surface: pygame.Surface
     _text: str | None
-    _font: pygame.font.Font | None
+    _font: Font | None
     _text_color: tuple[int, int, int]
 
     def __init__(
@@ -19,7 +20,7 @@ class ColoredBlock(Element):
             size: int,
             color: tuple[int, int, int],
             text: str | None = None,
-            font: pygame.font.Font | None = None
+            font: Font | None = None
     ) -> None:
         super().__init__(size, size)
         self._color = color
@@ -53,7 +54,7 @@ class ColoredBlock(Element):
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._surface.fill(self._color)
 
-    def set_font(self, font: pygame.font.Font | None = None) -> None:
+    def set_font(self, font: Font | None = None) -> None:
         self._font = font
         pass
 

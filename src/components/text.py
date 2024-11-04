@@ -1,6 +1,7 @@
 from typing import Self
 
 import pygame
+from pygame.font import Font
 
 from components.element import Element
 from events import Event
@@ -8,11 +9,11 @@ from events import Event
 
 class Text(Element):
     _text: str
-    _font: pygame.font.Font
+    _font: Font
     _color: tuple[int, int, int]
     _text_surface: pygame.Surface
 
-    def __init__(self, text: str, font: pygame.font.Font, color: tuple[int, int, int]):
+    def __init__(self, text: str, font: Font, color: tuple[int, int, int]):
         text_surface = font.render(text, True, color)
         super().__init__(*text_surface.get_size())
 
@@ -36,7 +37,7 @@ class Text(Element):
         self._text_surface = self._font.render(self._text, True, self._color)
         return self
 
-    def set_font(self, font: pygame.font.Font) -> Self:
+    def set_font(self, font: Font) -> Self:
         self._font = font
         self._text_surface = self._font.render(self._text, True, self._color)
         self._width, self._height = self._text_surface.get_size()
