@@ -12,7 +12,7 @@ class TestNonogram(TestCase):
             [None, (255, 255, 255), (0, 0, 255)]
         ]
 
-        self.nonogram = Nonogram.from_matrix(self.nonogram_data, "My nonogram")
+        self.nonogram = Nonogram(self.nonogram_data, "pre_made", nonogram_name="My nonogram")
 
     def tearDown(self):
         if exists("nonograms"):
@@ -41,24 +41,6 @@ class TestNonogram(TestCase):
         self.nonogram[1, 1] = None
         self.nonogram[2, 1] = (0, 0, 255)
         self.assertTrue(self.nonogram.is_completed)
-
-    def test_save_load(self):
-        self.nonogram[0, 0] = (0, 0, 0)
-        self.nonogram.save()
-        loaded_nonogram = Nonogram.load("custom", 1)
-        self.assertEqual(self.nonogram.size, loaded_nonogram.size)
-        self.assertEqual(self.nonogram.used_colors, loaded_nonogram.used_colors)
-        self.assertEqual(
-            [[(h.value, h.color) for h in hint] for hint in self.nonogram.horizontal_hints],
-            [[(h.value, h.color) for h in hint] for hint in loaded_nonogram.horizontal_hints]
-        )
-        self.assertEqual(
-            [[(h.value, h.color) for h in hint] for hint in self.nonogram.vertical_hints],
-            [[(h.value, h.color) for h in hint] for hint in loaded_nonogram.vertical_hints]
-        )
-        self.assertEqual(self.nonogram._original, loaded_nonogram._original)
-        self.assertEqual(self.nonogram._player_grid, loaded_nonogram._player_grid)
-        self.assertEqual(self.nonogram._palette, loaded_nonogram._palette)
 
     def test_is_row_complete(self):
         self.nonogram[0, 0] = (0, 0, 0)

@@ -1,8 +1,5 @@
-import json
-import os.path as path
-from os import listdir, makedirs
 from random import randrange
-from typing import Any, Literal, Self
+from typing import Literal
 
 from PIL import Image
 
@@ -91,95 +88,6 @@ class Nonogram:
         self._name = nonogram_name
         # noinspection PyTypeChecker
         self._used_colors = tuple(palette.values())
-
-    @classmethod
-    def from_matrix(cls, data: nonogram_matrix_t, name: str) -> Self:
-        nonogram = Nonogram(data, "user_made", nonogram_name=name)
-        return nonogram
-
-    @classmethod
-    def from_pre_made(cls, nonogram_id: int) -> Self:
-        nonogram_path = f"nonograms/pre_made/{nonogram_id}.json"
-
-        if not path.exists(nonogram_path):
-            raise ValueError(f"No nonogram with id {nonogram_id}")
-
-        pre_made_nonogram: dict[str, Any]
-        with open(nonogram_path, encoding="utf-8") as nonogram_file:
-            pre_made_nonogram = json.load(nonogram_file)
-
-        name: str = pre_made_nonogram["name"]
-        mask: str = pre_made_nonogram["mask"]
-        width: int = pre_made_nonogram["width"]
-        palette = Nonogram._get_palette(pre_made_nonogram["palette"])
-
-        nonogram_data: nonogram_matrix_t = []
-
-        for i in range(len(mask)):
-            if i % width == 0:
-                nonogram_data.append([])
-
-            color = palette[mask[i]] if mask[i] in palette else None
-            nonogram_data[-1].append(color)
-
-        nonogram = Nonogram(nonogram_data, "pre_made", nonogram_id, name, palette)
-        return nonogram
-
-    @classmethod
-    def load(cls, nonogram_type: nonogram_type_t, nonogram_id: int) -> Self:
-        nonogram_path = f"nonograms/{nonogram_type}/{nonogram_id}.json"
-        if not path.exists(nonogram_path):
-            raise ValueError(f"No nonogram of type {nonogram_type} with id {nonogram_id}")
-
-        nonogram_json: Any
-        with open(nonogram_path, encoding="utf-8") as nonogram_file:
-            nonogram_json = json.load(nonogram_file)
-
-        name: str = nonogram_json["name"]
-        width: int = nonogram_json["width"]
-        height: int = nonogram_json["height"]
-        mask: str = nonogram_json["mask"]
-        player_mask: str | None = nonogram_json["player_mask"]
-        palette = Nonogram._get_palette(nonogram_json["palette"])
-        el_len = max([len(k) for k in palette.keys()])
-
-        nonogram_data: nonogram_matrix_t = []
-        player_grid: list[list[rgb_t | Literal["x"] | None]] = []
-
-        for i in range(0, len(mask), el_len):
-            if i % (width * el_len) == 0:
-                nonogram_data.append([])
-                player_grid.append([])
-
-            original_mask_element = (str(int(mask[i:i + el_len]))
-                                     if mask[i:i + el_len].isdigit()
-                                     else mask[i:i + el_len])
-
-            nonogram_data[-1].append(
-                palette[original_mask_element] if original_mask_element in palette
-                else None
-            )
-
-            if player_mask is not None:
-                player_mask_element = (str(int(player_mask[i:i + el_len]))
-                                       if player_mask[i:i + el_len].isdigit()
-                                       else player_mask[i:i + el_len])
-
-                player_grid[-1].append(
-                    palette[player_mask_element] if player_mask_element in palette
-                    else "x" if player_mask[i:i + el_len][0] == "x"
-                    else None
-                )
-            else:
-                player_grid[-1].append(None)
-
-        nonogram = Nonogram(nonogram_data, nonogram_type, nonogram_id, name, palette)
-
-        for j in range(height):
-            for i in range(width):
-                nonogram[i, j] = player_grid[j][i]
-
-        return nonogram
 
     @staticmethod
     def matrix_from_image(
@@ -282,69 +190,6 @@ class Nonogram:
 
     def is_column_complete(self, column: int) -> bool:
         return self._player_grid_transposed[column] == self._original_transposed[column]
-
-    def save(self, name: str | None = None) -> None:
-        save_path = f"nonograms/{self._type}/"
-
-        el_len = max([len(k) for k in self._palette.keys()])
-        inverse_palette: dict[rgb_t, str] = {v: k for k, v in self._palette.items()}
-
-        # noinspection PyTypeChecker
-        player_mask = "".join(["".join([
-            " " * el_len if color is None
-            else "x" * el_len if color == "x"
-            else inverse_palette[color].zfill(el_len) for color in row
-        ]) for row in self._player_grid])
-
-        if self._id is not None:
-            pre_made_nonogram: Any
-
-            with open(save_path + f"/{self._id}.json", encoding="utf-8") as nonogram_file:
-                pre_made_nonogram = json.load(nonogram_file)
-
-            pre_made_nonogram["player_mask"] = player_mask
-            pre_made_nonogram["completed"] = self.is_completed
-
-            with open(save_path + f"/{self._id}.json", "w", encoding="utf-8") as nonogram_file:
-                # noinspection PyTypeChecker
-                json.dump(pre_made_nonogram, nonogram_file, indent=2)
-
-            return
-
-        if not path.exists(save_path):
-            makedirs(save_path)
-
-        if name is None:
-            name = self._name
-
-        if name is None:
-            raise ValueError("Must provide name for new nonograms.")
-
-        if len(name) > 50:
-            raise ValueError("Name must be at most 50 characters long.")
-
-        saved_nonograms = listdir(save_path)
-        nonogram_id = int(saved_nonograms[-1].split(".")[0]) + 1 if len(saved_nonograms) > 0 else 1
-        self._id = nonogram_id
-        self._name = name
-
-        pre_made_nonogram = {
-            "id": nonogram_id,
-            "name": name,
-            "mask": "".join(["".join([
-                " " * el_len if color is None
-                else inverse_palette[color].zfill(el_len) for color in row
-            ]) for row in self._original]),
-            "width": self._size[0],
-            "height": self._size[1],
-            "palette": {k: "%02x%02x%02x" % v for k, v in self._palette.items()},
-            "player_mask": None if player_mask.strip() == "" else player_mask,
-            "completed": self.is_completed,
-        }
-
-        with open(save_path + f"/{nonogram_id}.json", "w", encoding="utf-8") as nonogram_file:
-            # noinspection PyTypeChecker
-            json.dump(pre_made_nonogram, nonogram_file, indent=2)
 
     def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
         x, y = index

@@ -7,7 +7,7 @@ from components.block import Block
 from components.column import Column
 from components.element import Element
 from components.row import Row
-from core import Nonogram
+from core import Nonogram, NonogramLoader
 from events import Event, EventType, MouseButton
 
 rgb_t: TypeAlias = tuple[int, int, int]
@@ -172,5 +172,5 @@ class CreateNanogram(Element):
                 for block in column
             ])
 
-        nonogram = Nonogram.from_matrix(matrix, self._name)
-        nonogram.save()
+        nonogram = Nonogram(matrix, "user_made", nonogram_name=self._name)
+        NonogramLoader.store_and_save(nonogram)

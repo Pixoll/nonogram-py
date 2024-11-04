@@ -6,7 +6,7 @@ from components.element import Element
 from components.previous_info_nonogram import PreviousInfoNonogram
 from components.row import Row, VerticalAlignment
 from components.scroll_bar import ScrollBar
-from core import Nonogram
+from core import Nonogram, NonogramLoader
 from events import Event
 
 
@@ -22,7 +22,7 @@ class RowOfNonograms(Element):
         self._list_of_nonograms = []
 
         for i in range(1, 100):
-            nonogram = Nonogram.from_pre_made(i)
+            nonogram = NonogramLoader.load("pre_made", i)
             self._list_of_nonograms.append(nonogram)
 
             info_nonogram = PreviousInfoNonogram(nonogram, int(self._width * 0.8), self._height)
