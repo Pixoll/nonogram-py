@@ -272,6 +272,7 @@ class CreateScreen(Screen):
 
         if self._save_button.contains(mouse_pos):
             self.board.set_name(self.text_field.get_text())
+
             if self.board.is_empty():
                 self.show_error_message("ERROR: Board is empty")
                 return
@@ -281,6 +282,10 @@ class CreateScreen(Screen):
             if self.board.has_more_than_128_colors():
                 self.show_error_message("ERROR: Board has more than 128 colors")
                 return
+            if self.board.has_empty_row_or_column_in_between():
+                self.show_error_message("ERROR: Board has empty rows or columns in between colored pixels")
+                return
+
             self.board.save()
             self._waiting_exit_confirmation = True
             self._exit_time = time.time()

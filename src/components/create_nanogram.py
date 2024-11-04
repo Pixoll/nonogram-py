@@ -129,6 +129,19 @@ class CreateNanogram(Element):
 
         return len(unique_colors) > 128
 
+    def has_empty_row_or_column_in_between(self) -> bool:
+        matrix = self._get_trimmed_matrix()
+
+        for row in matrix:
+            if all(cell is None for cell in row):
+                return True
+
+        for col in zip(*matrix):
+            if all(cell is None for cell in col):
+                return True
+
+        return False
+
     def generate_from_image(self, image_path: str, colors: int = 128) -> None:
         image_matrix = Nonogram.matrix_from_image(image_path, colors, (self._cwidth, self._cheight))
 
@@ -151,6 +164,11 @@ class CreateNanogram(Element):
         return self._name == ""
 
     def save(self) -> None:
+        matrix = self._get_trimmed_matrix()
+        nonogram = Nonogram(matrix, "user_made", nonogram_name=self._name)
+        NonogramLoader.store_and_save(nonogram)
+
+    def _get_trimmed_matrix(self) -> list[list[rgb_t | None]]:
         matrix: list[list[rgb_t | None]] = []
         for row in self._grid:
             matrix.append([
@@ -171,7 +189,4 @@ class CreateNanogram(Element):
                     left = min(left, j)
                     right = max(right, j)
 
-        new_matrix = [row[left:right + 1] for row in matrix[top:bottom + 1]]
-
-        nonogram = Nonogram(new_matrix, "user_made", nonogram_name=self._name)
-        NonogramLoader.store_and_save(nonogram)
+        return [row[left:right + 1] for row in matrix[top:bottom + 1]]
