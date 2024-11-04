@@ -77,6 +77,9 @@ class NonogramLoader:
         NonogramLoader._USER_MADE_BIN.extend(serialized)
         NonogramLoader._USER_MADE_BIN_INDEX[new_id] = (len(NonogramLoader._USER_MADE_BIN), size)
 
+        with open(f"nonograms/user_made.bin", mode="wb") as file:
+            file.write(NonogramLoader._USER_MADE_BIN)
+
         return new_id
 
     @staticmethod
