@@ -177,14 +177,12 @@ class CreateScreen(Screen):
 
         self._waiting_exit_confirmation = False
         self._exit_time = None
-        self._dot_count = 0
-        self._last_dot_update = time.time()
 
         self._exit_message_popup = Container(
             self._width, self._height
         ).set_background_color((0, 0, 0, 128)).set_child(
             Text(
-                "Saving new nonogram.",
+                "Saved new nonogram",
                 FontManager.get("sys", "Arial", 30),
                 (255, 255, 255)
             )
@@ -334,21 +332,9 @@ class CreateScreen(Screen):
         self._base.render(window)
 
         if self._waiting_exit_confirmation:
-            if time.time() - self._last_dot_update > 0.5:
-                self._dot_count = (self._dot_count + 1) % 4
-                dots = "." * self._dot_count
-                self._exit_message_popup.set_child(
-                    Text(
-                        f"Saving new nonogram{dots}",
-                        FontManager.get("sys", "Arial", 30),
-                        (255, 255, 255)
-                    )
-                )
-                self._last_dot_update = time.time()
-
             self._exit_message_popup.render(window)
 
-            if time.time() - self._exit_time > 10:
+            if time.time() - self._exit_time > 1:
                 self._waiting_exit_confirmation = False
                 from screens.workshop_screen import WorkshopScreen
                 self._engine.set_screen(WorkshopScreen(self._engine))
@@ -356,6 +342,6 @@ class CreateScreen(Screen):
         if self._showing_error_message:
             self._error_message_popup.render(window)
 
-            if time.time() - self._error_start_time > 3:
+            if time.time() - self._error_start_time > 2:
                 self._showing_error_message = False
                 self._error_start_time = None
