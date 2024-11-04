@@ -2,15 +2,12 @@ import json
 import os.path as path
 from os import listdir, makedirs
 from random import randrange
-from typing import Any, Literal, Self, TypeAlias
+from typing import Any, Literal, Self
 
 from PIL import Image
 
 from core.hint import Hint
-
-rgb_t: TypeAlias = tuple[int, int, int]
-nonogram_type_t: TypeAlias = Literal["pre_made", "user_made"]
-nonogram_matrix_t: TypeAlias = list[list[rgb_t | None]]
+from core.types import nonogram_matrix_t, nonogram_type_t, rgb_t
 
 
 class Nonogram:

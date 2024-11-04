@@ -1,6 +1,4 @@
-from typing import Self, TypeAlias
-
-rgb_t: TypeAlias = tuple[int, int, int]
+from core.types import rgb_t
 
 
 class Hint:
