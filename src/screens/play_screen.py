@@ -14,6 +14,7 @@ class PlayScreen(Screen):
     _menu: Container
     _nonogram: Nonogram
     _nonogram_element: NonogramElement
+    _has_color_picker: bool
     _color_picker: ColorPicker
     _completed_text: Surface
 
@@ -22,7 +23,9 @@ class PlayScreen(Screen):
         self._menu = Container(1280, 720).set_child_alignment(ChildAlignment.CENTER)
         self._nonogram = nonogram
         self._nonogram_element = NonogramElement(nonogram, 25, 1)
-        self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, 50, 1)
+        self._has_color_picker = len(nonogram.used_colors) > 1
+        if self._has_color_picker:
+            self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, 50, 1)
         self._menu.set_child(self._nonogram_element)
         self._completed_text = (FontManager.get("sys", "Arial", 30)
                                 .render("completed!", True, (0, 0, 0)))
@@ -30,7 +33,8 @@ class PlayScreen(Screen):
 
     def on_any_event(self, event: Event) -> None:
         self._nonogram_element.on_any_event(event)
-        self._color_picker.on_any_event(event)
+        if self._has_color_picker:
+            self._color_picker.on_any_event(event)
 
     def on_key_event(self, key_event: KeyEvent) -> None:
         if key_event.key == Key.ESCAPE:
@@ -52,7 +56,8 @@ class PlayScreen(Screen):
     def render(self) -> None:
         window = pygame.display.get_surface()
         self._menu.render(window)
-        self._color_picker.render(window)
+        if self._has_color_picker:
+            self._color_picker.render(window)
 
         if self._nonogram.is_completed:
             window.blit(self._completed_text, (0, 0))
