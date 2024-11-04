@@ -28,7 +28,7 @@ class RowOfNonograms(Element):
             info_nonogram = PreviousInfoNonogram(nonogram, self._height, self._height)
             self._row.add_element(info_nonogram)
 
-        content_width = len(self._list_of_nonograms) * info_nonogram.size[0]
+        content_width = len(self._list_of_nonograms) * self._height
         self._scrollbar = ScrollBar(width, content_width)
 
         self._row.set_alignment(VerticalAlignment.CENTER)
