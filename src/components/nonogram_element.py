@@ -75,7 +75,6 @@ class NonogramElement(Element):
         self.set_position(self._position)
 
     def set_position(self, position: tuple[int, int]) -> Self:
-
         self._position = position
 
         vertical_hint_position = (self._position[0] + self._horizontal_hints.size[0] + self._padding, self._position[1])

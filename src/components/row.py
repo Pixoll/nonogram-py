@@ -59,7 +59,7 @@ class Row(ElementBundle[T]):
                 case VerticalAlignment.TOP:
                     y_offset = 0
                 case VerticalAlignment.CENTER:
-                    y_offset = (self._max_height - element._height) / 2
+                    y_offset = (self._max_height - element._height) // 2
                 case VerticalAlignment.BOTTOM:
                     y_offset = (self._max_height - element._height)
 
