@@ -280,9 +280,6 @@ class CreateScreen(Screen):
             if self.board.is_nameless():
                 self.show_error_message("ERROR: Board is nameless")
                 return
-            if self.board.is_correct():
-                self.show_error_message("ERROR: Board is invalid")
-                return
             self.board.save()
             self._waiting_exit_confirmation = True
             self._exit_time = time.time()

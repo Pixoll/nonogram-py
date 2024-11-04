@@ -123,23 +123,9 @@ class CreateNanogram(Element):
         unique_colors = set()
 
         for column in self._grid:
-            row_has_color = False
             for block in column:
                 if block.color != (255, 255, 255):
-                    row_has_color = True
                     unique_colors.add(block.color)
-            if not row_has_color:
-                return False
-
-        num_rows = len(self._grid[0])
-        for row_idx in range(num_rows):
-            col_has_color = False
-            for column in self._grid:
-                if column[row_idx].color != (255, 255, 255):
-                    col_has_color = True
-                    unique_colors.add(column[row_idx].color)
-            if not col_has_color:
-                return False
 
         if len(unique_colors) > 256:
             return False
@@ -166,17 +152,6 @@ class CreateNanogram(Element):
 
     def is_nameless(self) -> bool:
         return self._name == ""
-
-    def is_correct(self) -> bool:
-        for row in self._grid:
-            if not any(block.color != (255, 255, 255) for block in row):
-                return True
-
-        num_rows = len(self._grid[0])
-        for col_idx in range(num_rows):
-            if not any(column[col_idx].color != (255, 255, 255) for column in self._grid):
-                return True
-        return False
 
     def save(self) -> None:
         if not self.is_valid_nonogram():
