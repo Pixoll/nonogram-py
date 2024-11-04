@@ -68,7 +68,7 @@ class NonogramLoader:
 
     @staticmethod
     def store_and_save(nonogram: Nonogram) -> int:
-        new_id = next(reversed(NonogramLoader._USER_MADE)) if len(NonogramLoader._USER_MADE) > 0 else 1
+        new_id = next(reversed(NonogramLoader._USER_MADE)) + 1 if len(NonogramLoader._USER_MADE) > 0 else 1
         nonogram._id = new_id
 
         serialized, size = NonogramLoader._serialize(nonogram)
