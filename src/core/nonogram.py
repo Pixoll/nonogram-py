@@ -80,8 +80,8 @@ class Nonogram:
                 i += 1
 
         self._palette = palette
-        self._original_transposed = list([list(column) for column in zip(*self._original)])
-        self._player_grid_transposed = list([list(column) for column in zip(*self._player_grid)])
+        self._original_transposed = [list(column) for column in zip(*self._original)]
+        self._player_grid_transposed = [list(column) for column in zip(*self._player_grid)]
         self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in self._original])
         self._vertical_hints = tuple([Nonogram._get_hints(column) for column in self._original_transposed])
         self._size = (len(self._original[0]), len(self._original))
