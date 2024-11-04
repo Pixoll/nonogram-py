@@ -117,10 +117,6 @@ class NonogramLoader:
         if nonogram._id is None or nonogram._name is None:
             raise ValueError("Nonogram id and name must be present when serializing.")
 
-        for y in range(nonogram._size[1]):
-            for x in range(nonogram._size[0]):
-                nonogram[x, y] = nonogram._original[y][x]
-
         inverse_palette: dict[rgb_t, int] = {v: int(k) + 1 for k, v in nonogram._palette.items()}
         binary = len(inverse_palette) == 1
 
