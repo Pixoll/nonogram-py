@@ -5,6 +5,7 @@ from core.nonogram import Nonogram
 from core.types import nonogram_matrix_t, nonogram_type_t, rgb_t
 
 
+# noinspection PyProtectedMember
 class NonogramLoader:
     _PRE_MADE: OrderedDict[int, Nonogram | None] = OrderedDict()
     _PRE_MADE_BIN = bytearray()
@@ -23,6 +24,9 @@ class NonogramLoader:
     def load(nonogram_type: nonogram_type_t, nonogram_id: int) -> Nonogram:
         nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
 
+        if nonogram_id not in nonograms_dict:
+            raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} does not exist.")
+
         if nonograms_dict[nonogram_id] is not None:
             return nonograms_dict[nonogram_id]
 
@@ -32,21 +36,29 @@ class NonogramLoader:
 
         index, size = nonograms_bin_index[nonogram_id]
         nonogram = NonogramLoader._deserialize(nonogram_type, nonograms_bin[index + 2: index + size + 2])
+        nonograms_dict[nonogram_id] = nonogram
 
         return nonogram
 
     @staticmethod
     def save(nonogram_type: nonogram_type_t, nonogram_id: int) -> None:
+        nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
         nonograms_bin = NonogramLoader._PRE_MADE_BIN if nonogram_type == "pre_made" else NonogramLoader._USER_MADE_BIN
         nonograms_bin_index = (NonogramLoader._PRE_MADE_BIN_INDEX if nonogram_type == "pre_made"
                                else NonogramLoader._USER_MADE_BIN_INDEX)
 
+        if nonogram_id not in nonograms_dict:
+            raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} does not exist.")
+
+        nonogram = nonograms_dict[nonogram_id]
+
+        if nonogram is None:
+            raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} has not been loaded yet.")
+
         file_path = f"nonograms/{nonogram_type}.bin"
 
         index, size = nonograms_bin_index[nonogram_id]
-
-        serialized = NonogramLoader._serialize(nonogram_type, nonogram_id)
-        new_size = int.from_bytes(serialized[:2], byteorder="big", signed=False)
+        serialized, new_size = NonogramLoader._serialize(nonogram)
 
         nonograms_bin[index:index + size + 2] = serialized
         nonograms_bin_index[nonogram_id] = (index, new_size)
@@ -84,12 +96,8 @@ class NonogramLoader:
 
             i += size + 2
 
-    # noinspection PyProtectedMember
     @staticmethod
-    def _serialize(nonogram_type: nonogram_type_t, nonogram_id: int) -> bytearray:
-        nonogram = (NonogramLoader._PRE_MADE[nonogram_id] if nonogram_type == "pre_made"
-                    else NonogramLoader._USER_MADE[nonogram_id])
-
+    def _serialize(nonogram: Nonogram) -> tuple[bytearray, int]:
         if nonogram._id is None or nonogram._name is None:
             raise ValueError("Nonogram id and name must be present when serializing.")
 
@@ -159,11 +167,12 @@ class NonogramLoader:
         if not empty and not completed:
             result.extend(player_mask)
 
-        result_size = len(result).to_bytes(2, byteorder="big", signed=False)
-        result.insert(0, result_size[1])
-        result.insert(0, result_size[0])
+        result_size = len(result)
+        result_size_bytes = len(result).to_bytes(2, byteorder="big", signed=False)
+        result.insert(0, result_size_bytes[1])
+        result.insert(0, result_size_bytes[0])
 
-        return result
+        return result, result_size
 
     @staticmethod
     def _deserialize(nonogram_type: nonogram_type_t, data: bytearray) -> Nonogram:
