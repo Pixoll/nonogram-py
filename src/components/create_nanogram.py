@@ -119,7 +119,7 @@ class CreateNanogram(Element):
                 else:
                     self._grid[y][x].set_background_color((255, 255, 255))
 
-    def has_more_than_256_colors(self) -> bool:
+    def has_more_than_128_colors(self) -> bool:
         unique_colors = set()
 
         for column in self._grid:
@@ -127,9 +127,9 @@ class CreateNanogram(Element):
                 if block.color != (255, 255, 255):
                     unique_colors.add(block.color)
 
-        return len(unique_colors) > 256
+        return len(unique_colors) > 128
 
-    def generate_from_image(self, image_path: str, colors: int = 256) -> None:
+    def generate_from_image(self, image_path: str, colors: int = 128) -> None:
         image_matrix = Nonogram.matrix_from_image(image_path, colors, (self._cwidth, self._cheight))
 
         for y in range(self._cheight):

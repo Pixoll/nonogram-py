@@ -69,6 +69,9 @@ class Nonogram:
 
                 self._player_grid[-1].append(None)
 
+        if len(used_colors) > 128:
+            raise ValueError("Nonogram cannot have more than 128 colors.")
+
         if palette is None:
             palette = {}
             i = 1
@@ -92,10 +95,13 @@ class Nonogram:
     @staticmethod
     def matrix_from_image(
             image_path: str,
-            colors: int = 256,
+            colors: int = 128,
             size: tuple[int, int] = (0, 0),
             delete_lightest: bool = False
     ) -> nonogram_matrix_t:
+        if colors > 128:
+            raise ValueError("Nonogram cannot have more than 128 colors.")
+
         image = Image.open(image_path).convert("P", palette=Image.ADAPTIVE, colors=colors).convert("RGB")
 
         if size[0] != 0 and size[1] != 0:
@@ -136,6 +142,9 @@ class Nonogram:
     def matrix_randomized(size: tuple[int, int], colors: list[rgb_t] | None = None) -> nonogram_matrix_t:
         if colors is None:
             colors = [(0, 0, 0)]
+
+        if len(colors) > 128:
+            raise ValueError("Nonogram cannot have more than 128 colors.")
 
         nonogram_data: nonogram_matrix_t = []
         total_colors = size[0] * size[1] * randrange(30, 70) / 100

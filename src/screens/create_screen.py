@@ -278,8 +278,8 @@ class CreateScreen(Screen):
             if self.board.is_nameless():
                 self.show_error_message("ERROR: Board is nameless")
                 return
-            if self.board.has_more_than_256_colors():
-                self.show_error_message("ERROR: Board has more than 256 colors")
+            if self.board.has_more_than_128_colors():
+                self.show_error_message("ERROR: Board has more than 128 colors")
                 return
             self.board.save()
             self._waiting_exit_confirmation = True
