@@ -20,7 +20,7 @@ class PlayScreen(Screen):
 
     def __init__(self, engine: Engine, nonogram: Nonogram):
         self._engine = engine
-        self._menu = Container(1280, 720).set_child_alignment(ChildAlignment.CENTER)
+        self._menu = Container(*engine.window_size).set_child_alignment(ChildAlignment.CENTER)
         self._nonogram = nonogram
         self._nonogram_element = NonogramElement(nonogram, 25, 1)
         self._has_color_picker = len(nonogram.used_colors) > 1

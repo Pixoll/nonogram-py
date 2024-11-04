@@ -14,7 +14,7 @@ class StatisticsScreen(Screen):
 
     def __init__(self, engine: Engine):
         self._engine = engine
-        self._menu = Container(1280, 720).set_child_alignment(ChildAlignment.CENTER)
+        self._menu = Container(*engine.window_size).set_child_alignment(ChildAlignment.CENTER)
 
         self._button = (
             Container(200, 100)
