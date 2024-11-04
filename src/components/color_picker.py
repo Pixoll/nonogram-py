@@ -52,6 +52,7 @@ class ColorPicker(Element):
             column.set_padding(padding)
 
         self._row.set_padding(padding)
+        self._selected_block = None
         self.set_position((window_size[0] - self._width - 20, (window_size[1] - self._height) // 2))
 
         self._selected_color_index = 0
@@ -66,6 +67,11 @@ class ColorPicker(Element):
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
         self._row.set_position(position)
+        if self._selected_block is not None:
+            self._selected_block.set_position((
+                self.position[0] + (self._row.size[0] - self._block_size) // 2,
+                self.position[1] + self._row.size[1] + self._block_size
+            ))
         return self
 
     def on_any_event(self, event: Event) -> None:
