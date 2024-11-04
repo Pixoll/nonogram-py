@@ -67,6 +67,19 @@ class NonogramLoader:
             file.write(nonograms_bin)
 
     @staticmethod
+    def store_and_save(nonogram: Nonogram) -> int:
+        new_id = next(reversed(NonogramLoader._USER_MADE)) if len(NonogramLoader._USER_MADE) > 0 else 1
+        nonogram._id = new_id
+
+        serialized, size = NonogramLoader._serialize(nonogram)
+
+        NonogramLoader._USER_MADE[new_id] = nonogram
+        NonogramLoader._USER_MADE_BIN.extend(serialized)
+        NonogramLoader._USER_MADE_BIN_INDEX[new_id] = (len(NonogramLoader._USER_MADE_BIN), size)
+
+        return new_id
+
+    @staticmethod
     def _preload_nonograms_of_type(nonogram_type: nonogram_type_t) -> None:
         nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
         nonograms_bin = NonogramLoader._PRE_MADE_BIN if nonogram_type == "pre_made" else NonogramLoader._USER_MADE_BIN
