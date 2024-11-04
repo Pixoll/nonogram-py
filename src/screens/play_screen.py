@@ -2,10 +2,10 @@ import pygame
 from pygame import Surface
 
 from assets import FontManager
-from components import ChildAlignment, ColorPicker, Container, NonogramElement, Row
+from components import ChildAlignment, ColorPicker, Container, NonogramElement, Row, Text
 from core import Nonogram
 from engine import Engine
-from events import Event, Key, KeyEvent, MouseButtonEvent, MouseMotionEvent, QuitEvent
+from events import Event, EventType, Key, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
 
 
@@ -40,8 +40,8 @@ class PlayScreen(Screen):
 
         self._nonogram_element = NonogramElement(nonogram, block_size, 1)
         nonogram_container = (Container(*nonogram_container_size)
-                                    .set_child_alignment(ChildAlignment.CENTER)
-                                    .set_child(self._nonogram_element))
+                              .set_child_alignment(ChildAlignment.CENTER)
+                              .set_child(self._nonogram_element))
 
         base: Row[Container] = Row().add_element(nonogram_container)
 
@@ -49,9 +49,16 @@ class PlayScreen(Screen):
             self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, 50, 1)
             color_picker_size = (engine.window_size[0] - nonogram_container_size[0], nonogram_container_size[1])
             color_picker_container = (Container(*color_picker_size)
-                                            .set_child_alignment(ChildAlignment.CENTER)
-                                            .set_child(self._color_picker))
+                                      .set_child_alignment(ChildAlignment.CENTER)
+                                      .set_child(self._color_picker))
             base.add_element(color_picker_container)
+
+        self._back_button = (Container(100, 50)
+                             .set_position((20, 20))
+                             .set_background_color((224, 91, 93))
+                             .set_border((224, 91, 93))
+                             .set_child_alignment(ChildAlignment.CENTER)
+                             .set_child(Text("Back", FontManager.get("sys", "Arial", 20), (0, 0, 0))))
 
         self._completed_text = (FontManager.get("sys", "Arial", 30)
                                 .render("completed!", True, (0, 0, 0)))
@@ -63,11 +70,18 @@ class PlayScreen(Screen):
 
     def on_key_event(self, key_event: KeyEvent) -> None:
         if key_event.key == Key.ESCAPE:
-            from screens.main_menu_screen import MainMenuScreen
-            self._engine.set_screen(MainMenuScreen(self._engine))
+            from screens.select_game_screen import SelectGameScreen
+            self._engine.set_screen(SelectGameScreen(self._engine))
 
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
-        pass
+        if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
+            return
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        if self._back_button.contains(mouse_pos):
+            from screens.select_game_screen import SelectGameScreen
+            self._engine.set_screen(SelectGameScreen(self._engine))
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         pass
@@ -80,9 +94,12 @@ class PlayScreen(Screen):
 
     def render(self) -> None:
         window = pygame.display.get_surface()
+
         self._nonogram_element.render(window)
         if self._has_color_picker:
             self._color_picker.render(window)
 
+        self._back_button.render(window)
+
         if self._nonogram.is_completed:
-            window.blit(self._completed_text, (0, 0))
+            window.blit(self._completed_text, (20, 50))
