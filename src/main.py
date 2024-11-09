@@ -1,4 +1,5 @@
 import pygame
+# noinspection PyProtectedMember
 from pygame._sdl2 import Window
 
 from assets import SoundManager
