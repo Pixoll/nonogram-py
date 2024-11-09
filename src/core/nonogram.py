@@ -46,17 +46,6 @@ class Nonogram:
             self._player_grid.append([])
 
             for color in row:
-                if nonogram_type == "pre_made":
-                    self._original[-1].append(color)
-
-                    if color is None:
-                        self._correct_cells += 1
-                    else:
-                        used_colors.add(color)
-
-                    self._player_grid[-1].append(None)
-                    continue
-
                 if color is None or color == (255, 255, 255):
                     self._original[-1].append(None)
                     self._correct_cells += 1
@@ -71,14 +60,15 @@ class Nonogram:
         if len(used_colors) > 128:
             raise ValueError("Nonogram cannot have more than 128 colors.")
 
-        if palette is None:
-            palette = {}
+        if palette is not None:
+            self._palette = palette
+        else:
+            self._palette = {}
             i = 1
             for color in used_colors:
-                palette[str(i)] = color
+                self._palette[str(i)] = color
                 i += 1
 
-        self._palette = palette
         self._vertical_hints = [Nonogram._get_hints(column) for column in zip(*self._original)]
         self._used_colors = tuple(used_colors)
 
