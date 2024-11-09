@@ -1,5 +1,5 @@
 from random import randrange
-from typing import Iterable, Literal
+from typing import Literal, Sequence
 
 from PIL import Image
 
@@ -162,11 +162,11 @@ class Nonogram:
         return self._used_colors
 
     @property
-    def horizontal_hints(self) -> Iterable[Iterable[Hint]]:
+    def horizontal_hints(self) -> Sequence[Sequence[Hint]]:
         return self._horizontal_hints
 
     @property
-    def vertical_hints(self) -> Iterable[Iterable[Hint]]:
+    def vertical_hints(self) -> Sequence[Sequence[Hint]]:
         return self._vertical_hints
 
     @property
@@ -253,7 +253,7 @@ class Nonogram:
         return title + "\n" + grid
 
     @staticmethod
-    def _get_hints(row_or_column: Iterable[rgb_t]) -> list[Hint]:
+    def _get_hints(row_or_column: Sequence[rgb_t]) -> list[Hint]:
         hints: list[Hint] = []
         skipped: bool = False
 
