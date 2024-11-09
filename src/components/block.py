@@ -23,6 +23,7 @@ class Block(ElementWithChild):
     def __init__(self, width: int, height: int, color: tuple[int, int, int] | Literal["x"] | None):
         super().__init__(width, height)
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
+        # noinspection PyTypeChecker
         self._background_color = color if type(color) is tuple else (255, 255, 255)
 
         self._surface.fill(self._background_color)

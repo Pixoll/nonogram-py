@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, Sequence
 
 from pygame import Surface
 
@@ -15,11 +15,11 @@ class HintsElement(Element):
     _surface: Surface
     _padding: int
     _nonogram: Nonogram
-    _hints: tuple[tuple[Hint, ...], ...]
+    _hints: Sequence[Sequence[Hint]]
 
     def __init__(
             self,
-            hints: tuple[tuple[Hint, ...], ...],
+            hints: Sequence[Sequence[Hint]],
             block_size: int,
             padding: int,
             is_horizontal: bool
@@ -72,7 +72,7 @@ class HintsElement(Element):
         return self
 
     @property
-    def hints(self) -> tuple[tuple[Hint, ...], ...]:
+    def hints(self) -> Sequence[Sequence[Hint]]:
         return self._hints
 
     def on_any_event(self, event: Event) -> None:

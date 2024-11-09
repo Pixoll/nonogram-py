@@ -13,7 +13,7 @@ from events import Event
 class RowOfNonograms(Element):
     _row: Row[PreviousInfoNonogram]
     _list_of_nonograms: list[Nonogram]
-    _scrollbar: ScrollBar
+    _scrollbar: ScrollBar | None
     _selected_nonogram: PreviousInfoNonogram | None = None
 
     def __init__(self, width: int, height: int, nonograms_type: nonogram_type_t):
