@@ -1,5 +1,5 @@
 from random import randrange
-from typing import Literal
+from typing import Iterable, Literal
 
 from PIL import Image
 
@@ -9,9 +9,7 @@ from core.types import nonogram_matrix_t, nonogram_type_t, rgb_t
 
 class Nonogram:
     _original: nonogram_matrix_t
-    _original_transposed: nonogram_matrix_t
     _player_grid: list[list[rgb_t | Literal["x"] | None]]
-    _player_grid_transposed: list[list[rgb_t | Literal["x"] | None]]
     _palette: dict[str, rgb_t]
     _used_colors: tuple[rgb_t, ...]
     _horizontal_hints: tuple[tuple[Hint, ...], ...]
@@ -80,10 +78,8 @@ class Nonogram:
                 i += 1
 
         self._palette = palette
-        self._original_transposed = [list(column) for column in zip(*self._original)]
-        self._player_grid_transposed = [list(column) for column in zip(*self._player_grid)]
         self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in self._original])
-        self._vertical_hints = tuple([Nonogram._get_hints(column) for column in self._original_transposed])
+        self._vertical_hints = tuple([Nonogram._get_hints(column) for column in zip(*self._original)])
         self._size = (len(self._original[0]), len(self._original))
         self._number_of_cells = self._size[0] * self._size[1]
         self._type = nonogram_type
@@ -195,10 +191,18 @@ class Nonogram:
         return self._correct_cells == self._number_of_cells
 
     def is_row_complete(self, row: int) -> bool:
-        return self._player_grid[row] == self._original[row]
+        for x in range(self._size[0]):
+            cell = self._player_grid[row][x]
+            if (None if cell == "x" else cell) != self._original[row][x]:
+                return False
+        return True
 
     def is_column_complete(self, column: int) -> bool:
-        return self._player_grid_transposed[column] == self._original_transposed[column]
+        for y in range(self._size[1]):
+            cell = self._player_grid[y][column]
+            if (None if cell == "x" else cell) != self._original[y][column]:
+                return False
+        return True
 
     def __getitem__(self, index: tuple[int, int]) -> rgb_t | Literal["x"] | None:
         x, y = index
@@ -214,7 +218,6 @@ class Nonogram:
         is_new_correct = (None if new_value == "x" else new_value) == self._original[y][x]
 
         self._player_grid[y][x] = new_value
-        self._player_grid_transposed[x][y] = new_value
 
         if is_old_correct == is_new_correct:
             return
@@ -255,7 +258,7 @@ class Nonogram:
         return title + "\n" + grid
 
     @staticmethod
-    def _get_hints(row_or_column: list[rgb_t]) -> tuple[Hint, ...]:
+    def _get_hints(row_or_column: Iterable[rgb_t]) -> tuple[Hint, ...]:
         hints: list[Hint] = []
         skipped: bool = False
 
