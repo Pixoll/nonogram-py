@@ -35,20 +35,20 @@ class TestNonogram(TestCase):
 
     def test_completion(self):
         self.nonogram[0, 0] = (0, 0, 0)
-        self.nonogram[1, 0] = None
+        self.nonogram[1, 0] = "x"
         self.nonogram[2, 0] = (255, 0, 0)
-        self.nonogram[0, 1] = None
-        self.nonogram[1, 1] = None
+        self.nonogram[0, 1] = "x"
+        self.nonogram[1, 1] = "x"
         self.nonogram[2, 1] = (0, 0, 255)
         self.assertTrue(self.nonogram.is_completed)
 
     def test_is_row_complete(self):
         self.nonogram[0, 0] = (0, 0, 0)
-        self.nonogram[1, 0] = None
+        self.nonogram[1, 0] = "x"
         self.nonogram[2, 0] = (255, 0, 0)
         self.assertTrue(self.nonogram.is_row_complete(0))
 
     def test_is_column_complete(self):
         self.nonogram[0, 0] = (0, 0, 0)
-        self.nonogram[0, 1] = None
+        self.nonogram[0, 1] = "x"
         self.assertTrue(self.nonogram.is_column_complete(0))
