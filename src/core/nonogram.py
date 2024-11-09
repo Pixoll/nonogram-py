@@ -265,16 +265,3 @@ class Nonogram:
             skipped = False
 
         return hints
-
-    @staticmethod
-    def _get_palette(palette_json: dict[str, str]) -> dict[str, rgb_t]:
-        palette: dict[str, rgb_t] = {}
-
-        for key, color_str in palette_json.items():
-            r1, r2, g1, g2, b1, b2 = color_str
-            r = int(r1 + r2, 16)
-            g = int(g1 + g2, 16)
-            b = int(b1 + b2, 16)
-            palette[key] = (r, g, b)
-
-        return palette
