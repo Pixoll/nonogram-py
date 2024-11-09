@@ -11,9 +11,9 @@ class Nonogram:
     _original: nonogram_matrix_t
     _player_grid: list[list[rgb_t | Literal["x"] | None]]
     _palette: dict[str, rgb_t]
-    _used_colors: tuple[rgb_t, ...]
-    _horizontal_hints: tuple[tuple[Hint, ...], ...]
-    _vertical_hints: tuple[tuple[Hint, ...], ...]
+    _used_colors: set[rgb_t]
+    _horizontal_hints: list[list[Hint]]
+    _vertical_hints: list[list[Hint]]
     _size: tuple[int, int]
     _number_of_cells: int
     _correct_cells: int
@@ -31,9 +31,15 @@ class Nonogram:
     ):
         self._original = []
         self._player_grid = []
+        self._horizontal_hints = []
         self._correct_cells = 0
+        self._size = (len(nonogram[0]), len(nonogram))
+        self._number_of_cells = self._size[0] * self._size[1]
+        self._type = nonogram_type
+        self._id = nonogram_id
+        self._name = nonogram_name
 
-        used_colors: dict[rgb_t, int] = {}
+        used_colors: set[rgb_t] = set()
 
         for row in nonogram:
             self._original.append([])
@@ -46,10 +52,7 @@ class Nonogram:
                     if color is None:
                         self._correct_cells += 1
                     else:
-                        if color not in used_colors:
-                            used_colors[color] = 1
-                        else:
-                            used_colors[color] += 1
+                        used_colors.add(color)
 
                     self._player_grid[-1].append(None)
                     continue
@@ -59,13 +62,11 @@ class Nonogram:
                     self._correct_cells += 1
                 else:
                     self._original[-1].append(color)
-
-                    if color not in used_colors:
-                        used_colors[color] = 1
-                    else:
-                        used_colors[color] += 1
+                    used_colors.add(color)
 
                 self._player_grid[-1].append(None)
+
+            self._horizontal_hints.append(Nonogram._get_hints(row))
 
         if len(used_colors) > 128:
             raise ValueError("Nonogram cannot have more than 128 colors.")
@@ -73,20 +74,14 @@ class Nonogram:
         if palette is None:
             palette = {}
             i = 1
-            for color in used_colors.keys():
+            for color in used_colors:
                 palette[str(i)] = color
                 i += 1
 
         self._palette = palette
-        self._horizontal_hints = tuple([Nonogram._get_hints(row) for row in self._original])
-        self._vertical_hints = tuple([Nonogram._get_hints(column) for column in zip(*self._original)])
-        self._size = (len(self._original[0]), len(self._original))
-        self._number_of_cells = self._size[0] * self._size[1]
-        self._type = nonogram_type
-        self._id = nonogram_id
-        self._name = nonogram_name
+        self._vertical_hints = [Nonogram._get_hints(column) for column in zip(*self._original)]
         # noinspection PyTypeChecker
-        self._used_colors = tuple(palette.values())
+        self._used_colors = used_colors
 
     @staticmethod
     def matrix_from_image(
@@ -163,15 +158,15 @@ class Nonogram:
         return nonogram_data
 
     @property
-    def used_colors(self) -> tuple[rgb_t, ...]:
+    def used_colors(self) -> Iterable[rgb_t]:
         return self._used_colors
 
     @property
-    def horizontal_hints(self) -> tuple[tuple[Hint, ...], ...]:
+    def horizontal_hints(self) -> Iterable[Iterable[Hint]]:
         return self._horizontal_hints
 
     @property
-    def vertical_hints(self) -> tuple[tuple[Hint, ...], ...]:
+    def vertical_hints(self) -> Iterable[Iterable[Hint]]:
         return self._vertical_hints
 
     @property
@@ -258,7 +253,7 @@ class Nonogram:
         return title + "\n" + grid
 
     @staticmethod
-    def _get_hints(row_or_column: Iterable[rgb_t]) -> tuple[Hint, ...]:
+    def _get_hints(row_or_column: Iterable[rgb_t]) -> list[Hint]:
         hints: list[Hint] = []
         skipped: bool = False
 
@@ -280,7 +275,7 @@ class Nonogram:
 
             skipped = False
 
-        return tuple(hints)
+        return hints
 
     @staticmethod
     def _get_palette(palette_json: dict[str, str]) -> dict[str, rgb_t]:
