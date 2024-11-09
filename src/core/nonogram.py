@@ -11,7 +11,7 @@ class Nonogram:
     _original: nonogram_matrix_t
     _player_grid: list[list[rgb_t | Literal["x"] | None]]
     _palette: dict[str, rgb_t]
-    _used_colors: set[rgb_t]
+    _used_colors: tuple[rgb_t, ...]
     _horizontal_hints: list[list[Hint]]
     _vertical_hints: list[list[Hint]]
     _size: tuple[int, int]
@@ -80,8 +80,7 @@ class Nonogram:
 
         self._palette = palette
         self._vertical_hints = [Nonogram._get_hints(column) for column in zip(*self._original)]
-        # noinspection PyTypeChecker
-        self._used_colors = used_colors
+        self._used_colors = tuple(used_colors)
 
     @staticmethod
     def matrix_from_image(
@@ -158,7 +157,7 @@ class Nonogram:
         return nonogram_data
 
     @property
-    def used_colors(self) -> Iterable[rgb_t]:
+    def used_colors(self) -> tuple[rgb_t, ...]:
         return self._used_colors
 
     @property
