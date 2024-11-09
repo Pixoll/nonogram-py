@@ -16,7 +16,7 @@ class Colors(Element):
         super().__init__(cant_columns * (block_size + padding) - padding,
                          cant_colors * (block_size + padding) - padding)
         self._block_size = block_size
-        self._selected_color = None  # Almacena el color seleccionado
+        self._selected_color = None
         self._column1: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
         self._column2: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
         self._column3: Column[ColoredBlock] = Column().set_alignment(HorizontalAlignment.CENTER)
