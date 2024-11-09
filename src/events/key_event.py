@@ -285,8 +285,8 @@ class KeyScan(Enum):
     NUM_LOCK_CLEAR = pygame.KSCAN_NUMLOCKCLEAR
     O = pygame.KSCAN_O
     P = pygame.KSCAN_P
-    PAGEDOWN = pygame.KSCAN_PAGEDOWN
-    PAGEUP = pygame.KSCAN_PAGEUP
+    PAGE_DOWN = pygame.KSCAN_PAGEDOWN
+    PAGE_UP = pygame.KSCAN_PAGEUP
     PAUSE = pygame.KSCAN_PAUSE
     PERIOD = pygame.KSCAN_PERIOD
     POWER = pygame.KSCAN_POWER
