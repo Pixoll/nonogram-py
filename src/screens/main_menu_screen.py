@@ -1,7 +1,7 @@
 import pygame
 
 from assets import FontManager
-from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text
+from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text, VerticalAlignment
 from engine import Engine
 from events import Event, EventType, Key, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
@@ -19,13 +19,14 @@ class MainMenuScreen(Screen):
             .set_child_alignment(ChildAlignment.CENTER)
             .set_border((0, 132, 134))
             .set_background_color((0, 132, 134))
-            .set_image("bg_main_menu.jpg")
+            .set_image("menu_background.png")
         )
 
         column1 = Column()
         column2 = Column()
+        column3 = Column()
 
-        title = (
+        """title = (
             Container(int(self._width * 0.4), int(self._height * 0.3))
             .set_background_color((255, 255, 255))
             .set_border((255, 255, 255))
@@ -39,7 +40,7 @@ class MainMenuScreen(Screen):
             )
         )
 
-        column1.add_element(title)
+        column1.add_element(title)"""
 
         self._play_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
@@ -55,7 +56,7 @@ class MainMenuScreen(Screen):
             .set_child(Text("Workshop", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
         )
 
-        self._statistics_button = (
+        """self._statistics_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
@@ -67,7 +68,8 @@ class MainMenuScreen(Screen):
             .set_background_color((118, 224, 148))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Settings", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
-        )
+
+        )"""
 
         self._exit_button = (
             Container(int(self._width * 0.1), int(self._height * 0.1))
@@ -118,31 +120,39 @@ class MainMenuScreen(Screen):
 
         (column2.add_element(self._play_button)
          .add_element(self._workshop_button)
-         .add_element(self._statistics_button)
-         .add_element(self._settings_button)
+         #.add_element(self._statistics_button)
+         #.add_element(self._settings_button)
          .add_element(self._exit_button)
          .set_padding(int(self._height * 0.08))
-         .set_alignment(HorizontalAlignment.LEFT))
+         .set_alignment(HorizontalAlignment.CENTER))
 
         container1 = (
-            Container(int(self._width * 0.6), self._height)
+            Container(int(self._width * 0.2), self._height)
             .set_background_color((255, 255, 255, 0))
             .set_border((0, 0, 0, 0))
             .set_child(column1)
         )
 
         container2 = (
-            Container(int(self._width * 0.4), self._height)
+            Container(int(self._width * 0.4), int(self._height//2))
             .set_background_color((0, 0, 0, 150))
             .set_border((0, 0, 0, 0))
             .set_child(column2)
+        )
+        container3 = (
+            Container(int(self._width * 0.2), self._height)
+            .set_background_color((255, 255, 255, 0))
+            .set_border((0, 0, 0, 0))
+            .set_child(column3)
         )
 
         self._row1 = (
             Row()
             .add_element(container1)
             .add_element(container2)
+            .add_element(container3)
         )
+
 
         self._base.set_child(self._row1)
 
@@ -188,7 +198,7 @@ class MainMenuScreen(Screen):
             self._engine.set_screen(WorkshopScreen(self._engine))
             return
 
-        if self._statistics_button.contains(mouse_pos):
+        """if self._statistics_button.contains(mouse_pos):
             from screens.statistics_screen import StatisticsScreen
             self._engine.set_screen(StatisticsScreen(self._engine))
             return
@@ -196,7 +206,7 @@ class MainMenuScreen(Screen):
         if self._settings_button.contains(mouse_pos):
             from screens.settings_screen import SettingsScreen
             self._engine.set_screen(SettingsScreen(self._engine))
-            return
+            return"""
 
         if self._exit_button.contains(mouse_pos):
             self._waiting_exit_confirmation = True
@@ -214,3 +224,5 @@ class MainMenuScreen(Screen):
 
         if self._waiting_exit_confirmation:
             self._exit_confirmation_popup.render(window)
+            
+
