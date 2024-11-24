@@ -218,13 +218,8 @@ class CreateScreen(Screen):
             return
 
         self.name_field.on_any_event(key_event)
-        self.nanogram_name.update_child_position()
-
         self.dimension_selector1.on_any_event(key_event)
-        self.x_dimension.update_child_position()
-
         self.dimension_selector2.on_any_event(key_event)
-        self.y_dimension.update_child_position()
 
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
         if self._waiting_exit_confirmation:
@@ -337,6 +332,9 @@ class CreateScreen(Screen):
 
     def render(self) -> None:
         window = pygame.display.get_surface()
+        self.nanogram_name.update_child_position()
+        self.x_dimension.update_child_position()
+        self.y_dimension.update_child_position()
         self._base.render(window)
 
         if self._waiting_exit_confirmation:
