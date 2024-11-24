@@ -92,9 +92,10 @@ class DimensionSelector(Element):
             elif event.key == Key.RETURN:
                 self.set_active(False)
             else:
-                if event.unicode.isdigit() and self._width <= self._max_width - 30:
-                    potential_value = int(self._current_value + event.unicode) if self._current_value else int(
-                        event.unicode)
+                if event.unicode.isdigit():
+                    potential_value = (int(self._current_value + event.unicode)
+                                       if self._current_value
+                                       else int(event.unicode))
                     if potential_value <= self._max_value:
                         self._current_value += event.unicode
                         self._empty = False
