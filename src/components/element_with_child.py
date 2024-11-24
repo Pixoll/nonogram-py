@@ -29,15 +29,15 @@ class ElementWithChild(Element, ABC):
 
     def set_child(self, child: Element) -> Self:
         self._child = child
-        self._update_child_position()
+        self.update_child_position()
         return self
 
     def set_child_alignment(self, alignment: ChildAlignment) -> Self:
         self._child_alignment = alignment
-        self._update_child_position()
+        self.update_child_position()
         return self
 
-    def _update_child_position(self) -> None:
+    def update_child_position(self) -> None:
         if self._child is None:
             return
 

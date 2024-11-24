@@ -45,7 +45,7 @@ class Container(ElementWithChild):
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
-        self._update_child_position()
+        self.update_child_position()
         return self
 
     def set_image(self, image_path: str) -> Self:
@@ -60,7 +60,7 @@ class Container(ElementWithChild):
         self._surface.fill(self._background_color)
         self._draw_border()
         if self._child:
-            self._update_child_position()
+            self.update_child_position()
 
     def on_any_event(self, event: Event) -> None:
         if self._child is not None:

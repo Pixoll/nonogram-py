@@ -39,7 +39,7 @@ class Block(ElementWithChild):
 
     def set_position(self, new_position: tuple[int, int]) -> Self:
         self._position = new_position
-        self._update_child_position()
+        self.update_child_position()
         return self
 
     def set_size(self, width: int, height: int) -> None:
