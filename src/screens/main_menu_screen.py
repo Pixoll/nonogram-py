@@ -33,7 +33,7 @@ class MainMenuScreen(Screen):
             .set_child(
                 Text(
                     "NANOGRAM",
-                    FontManager.get("sys", "Arial", 80),
+                    FontManager.get_default(80),
                     (99, 99, 224)
                 )
                 .set_color((152, 99, 224))
@@ -46,28 +46,28 @@ class MainMenuScreen(Screen):
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 178, 171))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Play", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
+            .set_child(Text("Play", FontManager.get_default(30), (0, 0, 0)))
         )
 
         self._workshop_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 224, 99))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Workshop", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
+            .set_child(Text("Workshop", FontManager.get_default(30), (0, 0, 0)))
         )
 
         """self._statistics_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Statistics", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
+            .set_child(Text("Statistics", FontManager.get_default(30), (0, 0, 0)))
         )
 
         self._settings_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((118, 224, 148))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Settings", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
+            .set_child(Text("Settings", FontManager.get_default(30), (0, 0, 0)))
 
         )"""
 
@@ -75,18 +75,18 @@ class MainMenuScreen(Screen):
             Container(int(self._width * 0.1), int(self._height * 0.1))
             .set_background_color((224, 91, 93))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Exit", FontManager.get("sys", "Arial", 30), (0, 0, 0)))
+            .set_child(Text("Exit", FontManager.get_default(30), (0, 0, 0)))
         )
 
         self._cancel_exit_button = (
             Container(int(self._width * 0.075), int(self._width * 0.025))
             .set_border((64, 128, 64))
-            .set_child(Text("cancel", FontManager.get("sys", "Arial", 20), (0, 0, 0)))
+            .set_child(Text("cancel", FontManager.get_default(20), (0, 0, 0)))
         )
         self._confirm_exit_button = (
             Container(int(self._width * 0.075), int(self._width * 0.025))
             .set_border((128, 64, 64))
-            .set_child(Text("ok", FontManager.get("sys", "Arial", 20), (0, 0, 0)))
+            .set_child(Text("ok", FontManager.get_default(20), (0, 0, 0)))
         )
 
         self._exit_confirmation_popup = (
@@ -104,7 +104,7 @@ class MainMenuScreen(Screen):
                     Column()
                     .set_padding(15)
                     .add_element(
-                        Text("Are you sure you want to exit?", FontManager.get("sys", "Arial", 20), (0, 0, 0))
+                        Text("Are you sure you want to exit?", FontManager.get_default(20), (0, 0, 0))
                     )
                     .add_element(
                         Row()

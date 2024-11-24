@@ -58,9 +58,9 @@ class PlayScreen(Screen):
                              .set_background_color((224, 91, 93))
                              .set_border((224, 91, 93))
                              .set_child_alignment(ChildAlignment.CENTER)
-                             .set_child(Text("Back", FontManager.get("sys", "Arial", 20), (0, 0, 0))))
+                             .set_child(Text("Back", FontManager.get_default(20), (0, 0, 0))))
 
-        self._completed_text = (FontManager.get("sys", "Arial", 30)
+        self._completed_text = (FontManager.get_default(30)
                                 .render("completed!", True, (0, 0, 0)))
 
     def on_any_event(self, event: Event) -> None:

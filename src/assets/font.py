@@ -20,6 +20,7 @@ class FontFormat:
 
 class FontManager:
     _BASE_DIR = "assets/fonts/"
+    _DEFAULT_FONT_PATH = _BASE_DIR + "PixeloidSans.ttf"
 
     class _FontAsset:
         _path: str | None
@@ -59,6 +60,15 @@ class FontManager:
 
         if font_key not in FontManager._FONTS:
             FontManager._FONTS[font_key] = FontManager._FontAsset(path, size, flags)
+
+        return FontManager._FONTS[font_key].get(flags)
+
+    @staticmethod
+    def get_default(size: int, flags: int = 0) -> Font:
+        font_key = (FontManager._DEFAULT_FONT_PATH, size)
+
+        if font_key not in FontManager._FONTS:
+            FontManager._FONTS[font_key] = FontManager._FontAsset(FontManager._DEFAULT_FONT_PATH, size, flags)
 
         return FontManager._FONTS[font_key].get(flags)
 

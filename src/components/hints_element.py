@@ -27,7 +27,7 @@ class HintsElement(Element):
         super().__init__(0, 0)
         self._hints = hints
         self._padding = padding
-        hints_font = FontManager.get("sys", "Arial", int(block_size / 1.5))
+        hints_font = FontManager.get_default(int(block_size / 1.5))
         self._is_horizontal = is_horizontal
         self._hint_elements: Column[Row[ColoredBlock]] | Row[Column[ColoredBlock]] = (
             Column() if is_horizontal else Row())
@@ -49,7 +49,7 @@ class HintsElement(Element):
         self._width, self._height = self._hint_elements.size
 
     def update_size(self, new_block_size: int) -> None:
-        hints_font = FontManager.get("sys", "Arial", int(new_block_size / 1.5))
+        hints_font = FontManager.get_default(int(new_block_size / 1.5))
 
         for row_or_column in self._hint_elements:
             row_or_column.set_element_sizes(new_block_size, new_block_size)
