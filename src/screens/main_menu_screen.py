@@ -80,12 +80,12 @@ class MainMenuScreen(Screen):
         self._cancel_exit_button = (
             Container(int(self._width * 0.075), int(self._width * 0.025))
             .set_border((64, 128, 64))
-            .set_child(Text("cancel", engine.regular_font, (0, 0, 0)))
+            .set_child(Text("no", engine.regular_font, (0, 0, 0)))
         )
         self._confirm_exit_button = (
             Container(int(self._width * 0.075), int(self._width * 0.025))
             .set_border((128, 64, 64))
-            .set_child(Text("ok", engine.regular_font, (0, 0, 0)))
+            .set_child(Text("yes", engine.regular_font, (0, 0, 0)))
         )
 
         self._exit_confirmation_popup = (

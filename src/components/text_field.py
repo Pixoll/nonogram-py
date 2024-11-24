@@ -55,36 +55,34 @@ class TextField(Element):
         else:
             return self._text
 
+    def set_active(self, active: bool) -> Self:
+        if active:
+            self._active = True
+            self._color = self._active_color
+            if self._empty:
+                self._text = ""
+        else:
+            if self._text == "":
+                self._empty = True
+            self._active = False
+            self._color = self._inactive_color
+            if self._empty:
+                self._text = self._message
+        self._update_surface()
+        return self
+
     def _update_surface(self) -> None:
-        # Update text surface
         display_text = self._text if self._text or self._active else self._message
         self._text_surface = self._font.render(display_text, True, self._color)
         self._width, self._height = self._text_surface.get_size()
 
     def on_any_event(self, event: Event) -> None:
-        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:
-            mouse_pos = pygame.mouse.get_pos()
-            if self.contains(mouse_pos):
-                self._active = True
-                self._color = self._active_color
-                if self._empty:
-                    self._text = ""
-            else:
-                if self._text == "":
-                    self._empty = True
-                self._active = False
-                self._color = self._inactive_color
-                if self._empty:
-                    self._text = self._message
-            self._update_surface()
-
         if self._active and event.type == EventType.KEY_DOWN:
             self._empty = False
             if event.key == Key.BACKSPACE:
                 self._text = self._text[:-1]
             elif event.key == Key.RETURN:
-                self._active = False
-                self._color = self._inactive_color
+                self.set_active(False)
             else:
                 if self._width <= self._max_width - 30:
                     self._text += event.unicode

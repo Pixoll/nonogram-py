@@ -63,7 +63,8 @@ class Container(ElementWithChild):
             self._update_child_position()
 
     def on_any_event(self, event: Event) -> None:
-        pass
+        if self._child is not None:
+            self._child.on_any_event(event)
 
     def render(self, window: pygame.Surface) -> None:
         if self._image:

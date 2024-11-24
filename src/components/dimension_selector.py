@@ -4,7 +4,7 @@ import pygame
 from pygame.font import Font
 
 from components.element import Element
-from events import Event, EventType, Key, MouseButton
+from events import Event, EventType, Key
 
 
 class DimensionSelector(Element):
@@ -57,6 +57,20 @@ class DimensionSelector(Element):
             self._update_surface()
         return self
 
+    def set_active(self, active: bool) -> Self:
+        if active:
+            self._active = True
+            self._color = self._active_color
+            if self._empty:
+                self._current_value = ""
+        else:
+            if self._current_value == "":
+                self._empty = True
+            self._active = False
+            self._color = self._inactive_color
+        self._update_surface()
+        return self
+
     def get_value(self) -> int:
         return int(self._current_value) if self._current_value else self._default_value
 
@@ -70,29 +84,12 @@ class DimensionSelector(Element):
         self._width, self._height = self._text_surface.get_size()
 
     def on_any_event(self, event: Event) -> None:
-        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT:
-            mouse_pos = pygame.mouse.get_pos()
-            if self.contains(mouse_pos):
-                self._active = True
-                self._color = self._active_color
-                if self._empty:
-                    self._current_value = ""
-            else:
-                if self._current_value == "":
-                    self._empty = True
-                self._active = False
-                self._color = self._inactive_color
-            self._update_surface()
-
         if self._active and event.type == EventType.KEY_DOWN:
             if event.key == Key.BACKSPACE:
                 self._current_value = self._current_value[:-1]
                 self._empty = self._current_value == ""
             elif event.key == Key.RETURN:
-                self._active = False
-                self._color = self._inactive_color
-                if self._current_value == "":
-                    self._empty = True
+                self.set_active(False)
             else:
                 if event.unicode.isdigit() and self._width <= self._max_width - 30:
                     potential_value = int(self._current_value + event.unicode) if self._current_value else int(

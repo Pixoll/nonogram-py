@@ -154,7 +154,7 @@ class CreateScreen(Screen):
                            )
         self.column2.add_element(self.board_base)
 
-        self.text_field = TextField(
+        self.name_field = TextField(
             "Level name...",
             engine.regular_font,
             (0, 0, 0),
@@ -165,7 +165,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.3), int(self._height * 0.08))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(self.text_field)
+            .set_child(self.name_field)
         )
         self.column2.add_element(self.nanogram_name)
 
@@ -217,7 +217,7 @@ class CreateScreen(Screen):
         if self._showing_error_message:
             return
 
-        self.text_field.on_any_event(key_event)
+        self.name_field.on_any_event(key_event)
         self.nanogram_name._update_child_position()
 
         self.dimension_selector1.on_any_event(key_event)
@@ -238,6 +238,16 @@ class CreateScreen(Screen):
 
         mouse_pos = pygame.mouse.get_pos()
 
+        self.dimension_selector1.set_active(self.x_dimension.contains(mouse_pos))
+        self.dimension_selector2.set_active(self.y_dimension.contains(mouse_pos))
+        self.name_field.set_active(self.nanogram_name.contains(mouse_pos))
+
+        self.dimension_selector1.on_any_event(event)
+        self.dimension_selector2.on_any_event(event)
+        self.board.on_any_event(event)
+        self.color_gradient.on_any_event(event)
+        self.name_field.on_any_event(event)
+
         if self._resize_button.contains(mouse_pos):
             if (self.dimension_selector1.get_value() != self.dimension_selector1.get_default_value()) or (
                     self.dimension_selector2.get_value() != self.dimension_selector2.get_default_value()):
@@ -254,21 +264,15 @@ class CreateScreen(Screen):
                 self.dimension_selector1.set_default_value(self.dimension_selector1.get_value())
                 self.dimension_selector2.set_default_value(self.dimension_selector2.get_value())
                 self.board_base.set_child(self.board)
-
-        if self.dimension_selector1.on_any_event(event):
-            self.dimension_selector1.on_any_event(event)
-            self.x_dimension.set_child(self.dimension_selector1)
-
-        if self.dimension_selector2.on_any_event(event):
-            self.dimension_selector2.on_any_event(event)
-            self.y_dimension.set_child(self.dimension_selector2)
+            return
 
         if self._exit_button.contains(mouse_pos):
             from screens.workshop_screen import WorkshopScreen
             self._engine.set_screen(WorkshopScreen(self._engine))
+            return
 
         if self._save_button.contains(mouse_pos):
-            self.board.set_name(self.text_field.get_text())
+            self.board.set_name(self.name_field.get_text())
 
             if self.board.is_empty():
                 self.show_error_message("ERROR: Board is empty")
@@ -290,12 +294,14 @@ class CreateScreen(Screen):
 
         if self._eraser_button.contains(mouse_pos):
             self.board.clear()
+            return
 
         if self._randomizer_button.contains(mouse_pos):
             if self.board.is_empty():
                 self.show_error_message("ERROR: Board is empty")
             else:
                 self.board.randomizer()
+            return
 
         if self._upload_button.contains(mouse_pos):
             file_path = filedialog.askopenfilename(
@@ -304,27 +310,24 @@ class CreateScreen(Screen):
             )
             if file_path:
                 self.board.generate_from_image(file_path)
-
-        self.board.on_any_event(event)
-        self.color_gradient.on_any_event(event)
-
-        if self.text_field.on_any_event(event):
-            self.text_field.on_any_event(event)
-            self.nanogram_name.set_child(self.text_field)
+            return
 
         if self.color_gradient.contains(mouse_pos):
             new_color = self.color_gradient.get_color()
             self.board.set_selected_color(new_color)
             self.lasts_colors.add_color(new_color)
+            return
 
         if self.colors.contains(mouse_pos):
             self.colors.on_any_event(event)
             self.color_gradient.paint_gradient(self.colors.get_selected_color())
             self.board.set_selected_color(self.color_gradient.get_color())
+            return
 
         if self.lasts_colors.contains(mouse_pos):
             self.lasts_colors.on_any_event(event)
             self.board.set_selected_color(self.lasts_colors.get_current_color())
+            return
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         pass
