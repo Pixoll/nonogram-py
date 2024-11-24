@@ -1,6 +1,5 @@
 import pygame
 
-from assets import FontManager
 from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text, VerticalAlignment
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -28,7 +27,7 @@ class WorkshopScreen(Screen):
             Container(int(self._width * 0.2), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("My nonograms", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("My nonograms", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._my_button)
 
@@ -36,7 +35,7 @@ class WorkshopScreen(Screen):
             Container(int(self._width * 0.2), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Create", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Create", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._create_button)
 
@@ -44,7 +43,7 @@ class WorkshopScreen(Screen):
             Container(int(self._width * 0.2), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Saved", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Saved", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._saved_button)
 
@@ -54,7 +53,7 @@ class WorkshopScreen(Screen):
             Container(int(self._width * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Return", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._return_button)
 
@@ -66,7 +65,7 @@ class WorkshopScreen(Screen):
             Container(int(self._width * 0.4), int(self._width * 0.3))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("image1", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("image1", engine.regular_font, (0, 0, 0)))
         )
         column2.add_element(self._ref_image)
 
@@ -74,7 +73,7 @@ class WorkshopScreen(Screen):
             Container(int(self._width * 0.4), int(self._width * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("info1", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("info1", engine.regular_font, (0, 0, 0)))
         )
 
         column2.add_element(self._ref_info)
@@ -106,16 +105,16 @@ class WorkshopScreen(Screen):
         mouse_pos = pygame.mouse.get_pos()
 
         if self._my_button.contains(mouse_pos):
-            self._ref_info.set_child(Text("info1", FontManager.get_default(30), (0, 0, 0)))
-            self._ref_image.set_child(Text("image1", FontManager.get_default(30), (0, 0, 0)))
+            self._ref_info.set_child(Text("info1", self._engine.regular_font, (0, 0, 0)))
+            self._ref_image.set_child(Text("image1", self._engine.regular_font, (0, 0, 0)))
 
         elif self._create_button.contains(mouse_pos):
-            self._ref_info.set_child(Text("info2", FontManager.get_default(30), (0, 0, 0)))
-            self._ref_image.set_child(Text("image2", FontManager.get_default(30), (0, 0, 0)))
+            self._ref_info.set_child(Text("info2", self._engine.regular_font, (0, 0, 0)))
+            self._ref_image.set_child(Text("image2", self._engine.regular_font, (0, 0, 0)))
 
         elif self._saved_button.contains(mouse_pos):
-            self._ref_info.set_child(Text("info3", FontManager.get_default(30), (0, 0, 0)))
-            self._ref_image.set_child(Text("image3", FontManager.get_default(30), (0, 0, 0)))
+            self._ref_info.set_child(Text("info3", self._engine.regular_font, (0, 0, 0)))
+            self._ref_image.set_child(Text("image3", self._engine.regular_font, (0, 0, 0)))
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
         pass

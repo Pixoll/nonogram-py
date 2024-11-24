@@ -1,7 +1,6 @@
 import pygame
 from pygame import Surface
 
-from assets import FontManager
 from components import ChildAlignment, ColorPicker, Container, NonogramElement, Row, Text
 from core import Nonogram
 from engine import Engine
@@ -58,10 +57,9 @@ class PlayScreen(Screen):
                              .set_background_color((224, 91, 93))
                              .set_border((224, 91, 93))
                              .set_child_alignment(ChildAlignment.CENTER)
-                             .set_child(Text("Back", FontManager.get_default(20), (0, 0, 0))))
+                             .set_child(Text("Back", engine.regular_font, (0, 0, 0))))
 
-        self._completed_text = (FontManager.get_default(30)
-                                .render("completed!", True, (0, 0, 0)))
+        self._completed_text = engine.regular_font.render("completed!", True, (0, 0, 0))
 
     def on_any_event(self, event: Event) -> None:
         self._nonogram_element.on_any_event(event)

@@ -4,7 +4,6 @@ from tkinter import filedialog
 
 import pygame
 
-from assets import FontManager
 from components import ChildAlignment, Column, Container, DimensionSelector, HorizontalAlignment, RecentColors, Row, \
     Text, VerticalAlignment
 from components.colors import Colors
@@ -61,7 +60,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Generate", FontManager.get_default(15), (0, 0, 0)))
+            .set_child(Text("Generate", engine.small_font, (0, 0, 0)))
         )
         row2.add_element(self._upload_button)
 
@@ -69,7 +68,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Randomized", FontManager.get_default(15), (0, 0, 0)))
+            .set_child(Text("Randomized", engine.small_font, (0, 0, 0)))
         )
         row2.add_element(self._randomizer_button)
 
@@ -77,7 +76,7 @@ class CreateScreen(Screen):
             Container(int(self._height * 0.1), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Erase all", FontManager.get_default(15), (0, 0, 0)))
+            .set_child(Text("Erase all", engine.small_font, (0, 0, 0)))
         )
         row2.add_element(self._eraser_button)
 
@@ -97,7 +96,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.15), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Save", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Save", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._save_button)
 
@@ -105,7 +104,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.15), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Exit", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Exit", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._exit_button)
 
@@ -113,7 +112,7 @@ class CreateScreen(Screen):
         row4 = Row().set_alignment(VerticalAlignment.CENTER)
         self.dimension_selector1 = DimensionSelector(
             default_grid_size[0],
-            FontManager.get_default(40),
+            engine.regular_font,
             (0, 0, 0),
             (255, 255, 255),
             int(self._width * 0.035),
@@ -127,7 +126,7 @@ class CreateScreen(Screen):
         row4.add_element(self.x_dimension)
         self.dimension_selector2 = DimensionSelector(
             default_grid_size[1],
-            FontManager.get_default(40),
+            engine.regular_font,
             (0, 0, 0),
             (255, 255, 255),
             int(self._width * 0.035),
@@ -144,7 +143,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.1), int(self._height * 0.05))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Resize", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Resize", engine.regular_font, (0, 0, 0)))
         )
         row4.add_element(self._resize_button)
         self.column2.add_element(row4)
@@ -157,7 +156,7 @@ class CreateScreen(Screen):
 
         self.text_field = TextField(
             "Level name...",
-            FontManager.get_default(40),
+            engine.regular_font,
             (0, 0, 0),
             (255, 255, 255),
             int(self._width * 0.3),
@@ -183,7 +182,7 @@ class CreateScreen(Screen):
         ).set_background_color((0, 0, 0, 128)).set_child(
             Text(
                 "Saved new nonogram",
-                FontManager.get_default(30),
+                engine.regular_font,
                 (255, 255, 255)
             )
         )
@@ -198,15 +197,13 @@ class CreateScreen(Screen):
         ).set_background_color((255, 0, 0, 180)).set_child(
             Text(
                 "Error occurred!",
-                FontManager.get_default(24),
+                engine.regular_font,
                 (255, 255, 255)
             )
         ).set_position((0, error_y))
 
     def show_error_message(self, message: str) -> None:
-        self._error_message_popup.set_child(
-            Text(message, FontManager.get_default(24), (255, 255, 255))
-        )
+        self._error_message_popup.set_child(Text(message, self._engine.regular_font, (255, 255, 255)))
         self._showing_error_message = True
         self._error_start_time = time.time()
 

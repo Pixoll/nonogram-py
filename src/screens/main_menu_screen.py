@@ -1,7 +1,6 @@
 import pygame
 
-from assets import FontManager
-from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text, VerticalAlignment
+from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text
 from engine import Engine
 from events import Event, EventType, Key, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
@@ -46,28 +45,28 @@ class MainMenuScreen(Screen):
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 178, 171))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Play", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Play", engine.regular_font, (0, 0, 0)))
         )
 
         self._workshop_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((207, 224, 99))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Workshop", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Workshop", engine.regular_font, (0, 0, 0)))
         )
 
         """self._statistics_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Statistics", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Statistics", engine.regular_font, (0, 0, 0)))
         )
 
         self._settings_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
             .set_background_color((118, 224, 148))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Settings", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Settings", engine.regular_font, (0, 0, 0)))
 
         )"""
 
@@ -75,18 +74,18 @@ class MainMenuScreen(Screen):
             Container(int(self._width * 0.1), int(self._height * 0.1))
             .set_background_color((224, 91, 93))
             .set_border((0, 0, 0, 0))
-            .set_child(Text("Exit", FontManager.get_default(30), (0, 0, 0)))
+            .set_child(Text("Exit", engine.regular_font, (0, 0, 0)))
         )
 
         self._cancel_exit_button = (
             Container(int(self._width * 0.075), int(self._width * 0.025))
             .set_border((64, 128, 64))
-            .set_child(Text("cancel", FontManager.get_default(20), (0, 0, 0)))
+            .set_child(Text("cancel", engine.regular_font, (0, 0, 0)))
         )
         self._confirm_exit_button = (
             Container(int(self._width * 0.075), int(self._width * 0.025))
             .set_border((128, 64, 64))
-            .set_child(Text("ok", FontManager.get_default(20), (0, 0, 0)))
+            .set_child(Text("ok", engine.regular_font, (0, 0, 0)))
         )
 
         self._exit_confirmation_popup = (
@@ -94,7 +93,7 @@ class MainMenuScreen(Screen):
             .set_background_color((0, 0, 0, 128))
             .set_border((0, 0, 0, 0))
             .set_child(
-                Container(int(self._width * 0.225), int(self._width * 0.1))
+                Container(int(self._width * 0.275), int(self._width * 0.1))
                 .set_position((
                     (self._width - int(self._width * 0.225)) // 2,
                     (self._height - int(self._width * 0.1)) // 2)
@@ -104,7 +103,7 @@ class MainMenuScreen(Screen):
                     Column()
                     .set_padding(15)
                     .add_element(
-                        Text("Are you sure you want to exit?", FontManager.get_default(20), (0, 0, 0))
+                        Text("Are you sure you want to exit?", engine.regular_font, (0, 0, 0))
                     )
                     .add_element(
                         Row()

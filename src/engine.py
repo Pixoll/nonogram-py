@@ -1,15 +1,25 @@
 import pygame
+from pygame.font import Font
+
 import events
+from assets import FontManager
 from screens.screen import Screen
 
 
 class Engine:
     _screen: Screen | None
     _window: pygame.Surface
+    _big_font: Font
+    _regular_font: Font
+    _small_font: Font
 
     def __init__(self, window: pygame.Surface):
         self._screen = None
         self._window = window
+        width = self._window.get_width()
+        self._big_font = FontManager.get_default(int(width * 0.0225))
+        self._regular_font = FontManager.get_default(int(width * 0.015))
+        self._small_font = FontManager.get_default(int(width * 0.0075))
 
     def set_screen(self, screen: Screen) -> None:
         self._screen = screen
@@ -17,6 +27,18 @@ class Engine:
     @property
     def window_size(self) -> tuple[int, int]:
         return self._window.get_size()
+
+    @property
+    def big_font(self) -> Font:
+        return self._big_font
+
+    @property
+    def regular_font(self) -> Font:
+        return self._regular_font
+
+    @property
+    def small_font(self) -> Font:
+        return self._small_font
 
     def run(self, window: pygame.Surface, clock: pygame.time.Clock) -> None:
         if self._screen is None:

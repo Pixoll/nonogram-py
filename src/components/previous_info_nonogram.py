@@ -18,7 +18,7 @@ class PreviousInfoNonogram(Container):
         super().__init__(width, height)
         self._nonogram = nonogram
         size = f"{self._nonogram.size[0]}x{self._nonogram.size[1]}"
-        self._size = Text(size, FontManager.get_default(60), (99, 99, 224))
+        self._size = Text(size, FontManager.get_default(height // 6), (99, 99, 224))
         self.set_child(self._size)
         self.set_background_color((255, 255, 255))
         self.set_border((99, 99, 224))
