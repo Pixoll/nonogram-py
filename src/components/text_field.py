@@ -1,10 +1,11 @@
+from time import time
 from typing import Self
 
 import pygame
 from pygame.font import Font
 
 from components.element import Element
-from events import Event, EventType, Key, MouseButton
+from events import Event, EventType, Key
 
 
 class TextField(Element):
@@ -18,6 +19,7 @@ class TextField(Element):
     _active: bool
     _max_width: int
     _empty: bool
+    _last_update_time: float
 
     def __init__(
             self,
@@ -39,6 +41,7 @@ class TextField(Element):
         self._active = False
         self._max_width = max_width
         self._empty = True
+        self._last_update_time = 0
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
@@ -58,7 +61,6 @@ class TextField(Element):
     def set_active(self, active: bool) -> Self:
         if active:
             self._active = True
-            self._color = self._active_color
             if self._empty:
                 self._text = ""
         else:
@@ -72,7 +74,7 @@ class TextField(Element):
         return self
 
     def _update_surface(self) -> None:
-        display_text = self._text if self._text or self._active else self._message
+        display_text = self._text or self._message
         self._text_surface = self._font.render(display_text, True, self._color)
         self._width, self._height = self._text_surface.get_size()
 
@@ -89,4 +91,9 @@ class TextField(Element):
             self._update_surface()
 
     def render(self, window) -> None:
+        if self._active and self._last_update_time + 0.5 <= (now := time()):
+            self._color = self._inactive_color if self._color == self._active_color else self._active_color
+            self._update_surface()
+            self._last_update_time = now
+
         window.blit(self._text_surface, self._position)

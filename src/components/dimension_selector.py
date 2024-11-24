@@ -1,3 +1,4 @@
+from time import time
 from typing import Self
 
 import pygame
@@ -19,6 +20,7 @@ class DimensionSelector(Element):
     _max_width: int
     _empty: bool
     _max_value: int = 100
+    _last_update_time: float
 
     def __init__(
             self,
@@ -40,6 +42,7 @@ class DimensionSelector(Element):
         self._active = False
         self._max_width = max_width
         self._empty = True
+        self._last_update_time = 0
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
@@ -60,7 +63,6 @@ class DimensionSelector(Element):
     def set_active(self, active: bool) -> Self:
         if active:
             self._active = True
-            self._color = self._active_color
             if self._empty:
                 self._current_value = ""
         else:
@@ -78,9 +80,8 @@ class DimensionSelector(Element):
         return self._default_value
 
     def _update_surface(self) -> None:
-        display_text = self._current_value if self._current_value or self._active else str(self._default_value)
-        display_color = self._active_color if self._active else self._inactive_color
-        self._text_surface = self._font.render(display_text, True, display_color)
+        display_text = self._current_value or str(self._default_value)
+        self._text_surface = self._font.render(display_text, True, self._color)
         self._width, self._height = self._text_surface.get_size()
 
     def on_any_event(self, event: Event) -> None:
@@ -100,4 +101,9 @@ class DimensionSelector(Element):
             self._update_surface()
 
     def render(self, window) -> None:
+        if self._active and self._last_update_time + 0.5 <= (now := time()):
+            self._color = self._inactive_color if self._color == self._active_color else self._active_color
+            self._update_surface()
+            self._last_update_time = now
+
         window.blit(self._text_surface, self._position)

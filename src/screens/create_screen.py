@@ -20,7 +20,7 @@ root.withdraw()
 
 class CreateScreen(Screen):
     _engine: Engine
-    _menu: Container
+    _base: Container
     _button: Container
 
     def __init__(self, engine: Engine, default_grid_size: tuple[int, int]):
