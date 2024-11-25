@@ -12,15 +12,17 @@ class Container(ElementWithChild):
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _border_color: tuple[int, int, int] | tuple[int, int, int, int]
     _border_width: int
+    _corner_radius: int
     _image: pygame.Surface | None
 
-    def __init__(self, width: int, height: int):
+    def __init__(self, width: int, height: int, corner_radius: int = -1):
         super().__init__(width, height)
 
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._background_color = (0, 0, 0, 0)
-        self._border_color = (255, 255, 255)
+        self._border_color = (0, 0, 0, 0)
         self._border_width = 1
+        self._corner_radius = corner_radius
 
         self._surface.fill(self._background_color)
         self._draw_border()
@@ -76,4 +78,17 @@ class Container(ElementWithChild):
             self._child.render(window)
 
     def _draw_border(self) -> None:
-        pygame.draw.rect(self._surface, self._border_color, self._surface.get_rect(), self._border_width)
+        rect_image = pygame.Surface(self.size, pygame.SRCALPHA)
+        pygame.draw.rect(rect_image, (255, 255, 255), (0, 0, *self.size), border_radius=self._corner_radius)
+
+        self._surface = self._surface.copy().convert_alpha()
+        self._surface.blit(rect_image, (0, 0), None, pygame.BLEND_RGBA_MIN)
+
+        if self._border_width != 0:
+            pygame.draw.rect(
+                self._surface,
+                self._border_color,
+                self._surface.get_rect(),
+                self._border_width,
+                self._corner_radius
+            )
