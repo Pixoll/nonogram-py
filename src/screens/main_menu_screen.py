@@ -16,36 +16,34 @@ class MainMenuScreen(Screen):
         self._base = (
             Container(self._width, self._height)
             .set_child_alignment(ChildAlignment.CENTER)
-            .set_border((0, 132, 134))
-            .set_background_color((0, 132, 134))
             .set_image("menu_background.png")
         )
 
         column = Column()
 
         self._play_button = (
-            Container(int(self._width * 0.3), int(self._height * 0.1))
-            .set_background_color((207, 178, 171))
+            Container(int(self._width * 0.2), int(self._height * 0.1), 25)
+            .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Play", engine.regular_font, (0, 0, 0)))
         )
 
         self._workshop_button = (
-            Container(int(self._width * 0.3), int(self._height * 0.1))
-            .set_background_color((207, 224, 99))
+            Container(int(self._width * 0.2), int(self._height * 0.1), 25)
+            .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Workshop", engine.regular_font, (0, 0, 0)))
         )
 
         """self._statistics_button = (
-            Container(int(self._width * 0.3), int(self._height * 0.1))
+            Container(int(self._width * 0.2), int(self._height * 0.1))
             .set_background_color((224, 99, 159))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Statistics", engine.regular_font, (0, 0, 0)))
         )
 
         self._settings_button = (
-            Container(int(self._width * 0.3), int(self._height * 0.1))
+            Container(int(self._width * 0.2), int(self._height * 0.1))
             .set_background_color((118, 224, 148))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Settings", engine.regular_font, (0, 0, 0)))
@@ -53,20 +51,21 @@ class MainMenuScreen(Screen):
         )"""
 
         self._exit_button = (
-            Container(int(self._width * 0.1), int(self._height * 0.1))
+            Container(int(self._width * 0.1), int(self._height * 0.1), 25)
             .set_background_color((224, 91, 93))
-            .set_border((0, 0, 0, 0))
             .set_child(Text("Exit", engine.regular_font, (0, 0, 0)))
         )
 
         self._cancel_exit_button = (
-            Container(int(self._width * 0.075), int(self._width * 0.025))
+            Container(int(self._width * 0.075), int(self._width * 0.025), 25)
             .set_border((64, 128, 64))
+            .set_border_width(2)
             .set_child(Text("no", engine.regular_font, (0, 0, 0)))
         )
         self._confirm_exit_button = (
-            Container(int(self._width * 0.075), int(self._width * 0.025))
+            Container(int(self._width * 0.075), int(self._width * 0.025), 25)
             .set_border((128, 64, 64))
+            .set_border_width(2)
             .set_child(Text("yes", engine.regular_font, (0, 0, 0)))
         )
 
@@ -75,7 +74,7 @@ class MainMenuScreen(Screen):
             .set_background_color((0, 0, 0, 128))
             .set_border((0, 0, 0, 0))
             .set_child(
-                Container(int(self._width * 0.275), int(self._width * 0.1))
+                Container(int(self._width * 0.275), int(self._width * 0.09), 25)
                 .set_position((
                     (self._width - int(self._width * 0.225)) // 2,
                     (self._height - int(self._width * 0.1)) // 2)
@@ -104,7 +103,7 @@ class MainMenuScreen(Screen):
          # .add_element(self._statistics_button)
          # .add_element(self._settings_button)
          .add_element(self._exit_button)
-         .set_padding(int(self._height * 0.08))
+         .set_padding(int(self._height * 0.04))
          .set_alignment(HorizontalAlignment.CENTER))
 
         self._base.set_child(Row().add_element(column))
