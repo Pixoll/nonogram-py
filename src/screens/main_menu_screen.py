@@ -1,5 +1,6 @@
 import pygame
 
+from assets import FontManager
 from components import ChildAlignment, Column, Container, HorizontalAlignment, Row, Text
 from engine import Engine
 from events import Event, EventType, Key, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -17,9 +18,22 @@ class MainMenuScreen(Screen):
             Container(self._width, self._height)
             .set_child_alignment(ChildAlignment.CENTER)
             .set_image("bg.jpg")
-            .set_child(Container(self._width, self._height)
-                       .set_child_alignment(ChildAlignment.CENTER)
-                       .set_image("menu_background.png"))
+            .set_child(
+                Container(self._width, self._height)
+                .set_child_alignment(ChildAlignment.CENTER)
+                .set_image("menu_background.png")
+            )
+        )
+
+        self._title: Container = (
+            Container(self._width, self._height)
+            .set_child(
+                Container(self._width, int(self._height * 0.95))
+                .set_child_alignment(ChildAlignment.TOP_CENTER)
+                .set_child(
+                    Text("Nonogram", FontManager.get_default(int(self._width * 0.04)), (0, 0, 0))
+                )
+            )
         )
 
         column = Column()
@@ -188,6 +202,7 @@ class MainMenuScreen(Screen):
     def render(self) -> None:
         window = pygame.display.get_surface()
         self._base.render(window)
+        self._title.render(window)
 
         if self._waiting_exit_confirmation:
             self._exit_confirmation_popup.render(window)
