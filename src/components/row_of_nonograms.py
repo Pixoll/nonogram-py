@@ -3,7 +3,7 @@ from typing import Self
 import pygame
 
 from components.element import Element
-from components.previous_info_nonogram import PreviousInfoNonogram
+from components.nonogram_info_preview import NonogramInfoPreview
 from components.row import Row, VerticalAlignment
 from components.scroll_bar import ScrollBar
 from core import Nonogram, nonogram_type_t, NonogramLoader
@@ -11,10 +11,10 @@ from events import Event
 
 
 class RowOfNonograms(Element):
-    _row: Row[PreviousInfoNonogram]
+    _row: Row[NonogramInfoPreview]
     _list_of_nonograms: list[Nonogram]
     _scrollbar: ScrollBar | None
-    _selected_nonogram: PreviousInfoNonogram | None = None
+    _selected_nonogram: NonogramInfoPreview | None = None
 
     def __init__(self, width: int, height: int, nonograms_type: nonogram_type_t):
         super().__init__(width, height)
@@ -29,7 +29,7 @@ class RowOfNonograms(Element):
 
             self._list_of_nonograms.append(nonogram)
 
-            info_nonogram = PreviousInfoNonogram(nonogram, self._height, self._height)
+            info_nonogram = NonogramInfoPreview(nonogram, self._height, self._height)
             self._row.add_element(info_nonogram)
 
         if len(self._list_of_nonograms) == 0:

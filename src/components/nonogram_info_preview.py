@@ -9,7 +9,7 @@ from events import Event, EventType, MouseButton
 
 
 # TODO should be implemented in row_of_nonograms.py
-class PreviousInfoNonogram(Container):
+class NonogramInfoPreview(Container):
     _nonogram: Nonogram
     _size: Text
     _selected: bool
