@@ -1,13 +1,16 @@
-from typing import Self
+from typing import Generic, Self, TypeVar
 
 import pygame
 
 from assets import TextureManager
+from components.element import Element
 from components.element_with_child import ElementWithChild
 from events import Event
 
+T = TypeVar("T", bound=Element)
 
-class Container(ElementWithChild):
+
+class Container(ElementWithChild[T], Generic[T]):
     _surface: pygame.Surface
     _background_color: tuple[int, int, int] | tuple[int, int, int, int]
     _border_color: tuple[int, int, int] | tuple[int, int, int, int]

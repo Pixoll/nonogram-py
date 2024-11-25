@@ -1,6 +1,6 @@
 from abc import ABC
 from enum import auto, Enum
-from typing import Self
+from typing import Generic, TypeVar
 
 from components.element import Element
 
@@ -17,8 +17,12 @@ class ChildAlignment(Enum):
     BOTTOM_RIGHT = auto()
 
 
-class ElementWithChild(Element, ABC):
-    _child: Element | None
+T = TypeVar("T", bound=Element)
+S = TypeVar("S", bound="ElementBundle")
+
+
+class ElementWithChild(Element, ABC, Generic[T]):
+    _child: T | None
     _child_alignment: ChildAlignment
 
     def __init__(self, width: int, height: int, alignment: ChildAlignment = ChildAlignment.CENTER):
@@ -27,12 +31,16 @@ class ElementWithChild(Element, ABC):
         self._child = None
         self._child_alignment = alignment
 
-    def set_child(self, child: Element) -> Self:
+    def set_child(self, child: T) -> S:
         self._child = child
         self.update_child_position()
         return self
 
-    def set_child_alignment(self, alignment: ChildAlignment) -> Self:
+    @property
+    def child(self) -> T:
+        return self._child
+
+    def set_child_alignment(self, alignment: ChildAlignment) -> S:
         self._child_alignment = alignment
         self.update_child_position()
         return self
