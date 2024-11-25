@@ -34,7 +34,7 @@ class CreateScreen(Screen):
         )
 
         column1 = Column().set_alignment(HorizontalAlignment.CENTER).set_padding(int(self._height * 0.05))
-        self.column2 = Column().set_alignment(HorizontalAlignment.CENTER).set_padding(int(self._height * 0.03))
+        self._column2 = Column().set_alignment(HorizontalAlignment.CENTER).set_padding(int(self._height * 0.03))
         row1 = Row().set_alignment(VerticalAlignment.CENTER)
         container1 = (
             Container(int(self._width * 0.4), int(self._height))
@@ -44,7 +44,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.6), int(self._height))
             .set_background_color((0, 0, 0, 128))
             .set_border((0, 0, 0, 128))
-            .set_child(self.column2)
+            .set_child(self._column2)
         )
 
         tooltip_size = (int(self._width * 0.1), int(self._height * 0.05))
@@ -97,13 +97,13 @@ class CreateScreen(Screen):
         row3 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._height * 0.05))
 
         block_size = int(self._height * 0.04)
-        self.colors = Colors(block_size // 5, 1)
-        self.color_gradient = GradientColor((255, 0, 0), block_size, 1)
-        self.lasts_colors = RecentColors(block_size, 1)
+        self._colors = Colors(block_size // 5, 1)
+        self._color_gradient = GradientColor((255, 0, 0), block_size, 1)
+        self._lasts_colors = RecentColors(block_size, 1)
 
-        row3.add_element(self.color_gradient)
-        row3.add_element(self.colors)
-        row3.add_element(self.lasts_colors)
+        row3.add_element(self._color_gradient)
+        row3.add_element(self._colors)
+        row3.add_element(self._lasts_colors)
         column1.add_element(row3)
 
         self._save_button = (
@@ -121,7 +121,7 @@ class CreateScreen(Screen):
         column1.add_element(self._return_button)
 
         row4 = Row().set_alignment(VerticalAlignment.CENTER)
-        self.dimension_selector1 = DimensionSelector(
+        self._dimension_selector1 = DimensionSelector(
             default_grid_size[0],
             engine.regular_font,
             (0, 0, 0),
@@ -131,7 +131,7 @@ class CreateScreen(Screen):
         self._x_dimension = (
             Container(int(self._width * 0.06), int(self._height * 0.075), 25)
             .set_background_color((54, 169, 251))
-            .set_child(self.dimension_selector1)
+            .set_child(self._dimension_selector1)
         )
         row4.add_element(self._x_dimension)
 
@@ -141,7 +141,7 @@ class CreateScreen(Screen):
 
         row4.add_element(Container(10, 0))
 
-        self.dimension_selector2 = DimensionSelector(
+        self._dimension_selector2 = DimensionSelector(
             default_grid_size[1],
             engine.regular_font,
             (0, 0, 0),
@@ -152,7 +152,7 @@ class CreateScreen(Screen):
             Container(int(self._width * 0.06), int(self._height * 0.075), 25)
             .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
-            .set_child(self.dimension_selector2)
+            .set_child(self._dimension_selector2)
         )
         row4.add_element(self._y_dimension)
 
@@ -164,15 +164,15 @@ class CreateScreen(Screen):
             .set_child(Text("Resize", engine.regular_font, (0, 0, 0)))
         )
         row4.add_element(self._resize_button)
-        self.column2.add_element(row4)
+        self._column2.add_element(row4)
 
-        self.board = CreateNanogram(*default_grid_size, 1, int(self._width * 0.4)).set_selected_color((255, 0, 0))
-        self.board_base = (Container(int(self._width * 0.4), int(self._width * 0.4))
-                           .set_child_alignment(ChildAlignment.CENTER)
-                           .set_child(self.board))
-        self.column2.add_element(self.board_base)
+        self._board = CreateNanogram(*default_grid_size, 1, int(self._width * 0.4)).set_selected_color((255, 0, 0))
+        self._board_base = (Container(int(self._width * 0.4), int(self._width * 0.4))
+                            .set_child_alignment(ChildAlignment.CENTER)
+                            .set_child(self._board))
+        self._column2.add_element(self._board_base)
 
-        self.name_field = TextField(
+        self._name_field = TextField(
             "Level name...",
             engine.regular_font,
             (0, 0, 0),
@@ -182,9 +182,9 @@ class CreateScreen(Screen):
         self._nanogram_name = (
             Container(int(self._width * 0.3), int(self._height * 0.075), 25)
             .set_background_color((54, 169, 251))
-            .set_child(self.name_field)
+            .set_child(self._name_field)
         )
-        self.column2.add_element(self._nanogram_name)
+        self._column2.add_element(self._nanogram_name)
 
         row1.add_element(container1).add_element(container2)
         self._base.set_child(row1)
@@ -234,9 +234,9 @@ class CreateScreen(Screen):
         if self._showing_error_message:
             return
 
-        self.name_field.on_any_event(key_event)
-        self.dimension_selector1.on_any_event(key_event)
-        self.dimension_selector2.on_any_event(key_event)
+        self._name_field.on_any_event(key_event)
+        self._dimension_selector1.on_any_event(key_event)
+        self._dimension_selector2.on_any_event(key_event)
 
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
         if self._waiting_exit_confirmation:
@@ -250,32 +250,32 @@ class CreateScreen(Screen):
 
         mouse_pos = pygame.mouse.get_pos()
 
-        self.dimension_selector1.set_active(self._x_dimension.contains(mouse_pos))
-        self.dimension_selector2.set_active(self._y_dimension.contains(mouse_pos))
-        self.name_field.set_active(self._nanogram_name.contains(mouse_pos))
+        self._dimension_selector1.set_active(self._x_dimension.contains(mouse_pos))
+        self._dimension_selector2.set_active(self._y_dimension.contains(mouse_pos))
+        self._name_field.set_active(self._nanogram_name.contains(mouse_pos))
 
-        self.dimension_selector1.on_any_event(event)
-        self.dimension_selector2.on_any_event(event)
-        self.board.on_any_event(event)
-        self.color_gradient.on_any_event(event)
-        self.name_field.on_any_event(event)
+        self._dimension_selector1.on_any_event(event)
+        self._dimension_selector2.on_any_event(event)
+        self._board.on_any_event(event)
+        self._color_gradient.on_any_event(event)
+        self._name_field.on_any_event(event)
 
         if self._resize_button.contains(mouse_pos):
-            if (self.dimension_selector1.get_value() != self.dimension_selector1.get_default_value()) or (
-                    self.dimension_selector2.get_value() != self.dimension_selector2.get_default_value()):
-                self.board = (
+            if (self._dimension_selector1.get_value() != self._dimension_selector1.get_default_value()) or (
+                    self._dimension_selector2.get_value() != self._dimension_selector2.get_default_value()):
+                self._board = (
                     CreateNanogram(
-                        self.dimension_selector1.get_value(),
-                        self.dimension_selector2.get_value(),
+                        self._dimension_selector1.get_value(),
+                        self._dimension_selector2.get_value(),
                         1,
                         int(self._width * 0.4)
                     )
                     .set_selected_color((255, 0, 0))
-                    .set_selected_color(self.color_gradient.get_color())
+                    .set_selected_color(self._color_gradient.get_color())
                 )
-                self.dimension_selector1.set_default_value(self.dimension_selector1.get_value())
-                self.dimension_selector2.set_default_value(self.dimension_selector2.get_value())
-                self.board_base.set_child(self.board)
+                self._dimension_selector1.set_default_value(self._dimension_selector1.get_value())
+                self._dimension_selector2.set_default_value(self._dimension_selector2.get_value())
+                self._board_base.set_child(self._board)
             return
 
         if self._return_button.contains(mouse_pos):
@@ -285,35 +285,35 @@ class CreateScreen(Screen):
             return
 
         if self._save_button.contains(mouse_pos):
-            self.board.set_name(self.name_field.get_text())
+            self._board.set_name(self._name_field.get_text())
 
-            if self.board.is_empty():
+            if self._board.is_empty():
                 self.show_error_message("ERROR: Board is empty")
                 return
-            if self.board.is_nameless():
+            if self._board.is_nameless():
                 self.show_error_message("ERROR: Board is nameless")
                 return
-            if self.board.has_more_than_128_colors():
+            if self._board.has_more_than_128_colors():
                 self.show_error_message("ERROR: Board has more than 128 colors")
                 return
-            if self.board.has_empty_row_or_column_in_between():
+            if self._board.has_empty_row_or_column_in_between():
                 self.show_error_message("ERROR: Board has empty rows or columns in between colored pixels")
                 return
 
-            self.board.save()
+            self._board.save()
             self._waiting_exit_confirmation = True
             self._exit_time = time.time()
             return
 
         if self._erase_all_button.contains(mouse_pos):
-            self.board.clear()
+            self._board.clear()
             return
 
         if self._randomizer_button.contains(mouse_pos):
-            if self.board.is_empty():
+            if self._board.is_empty():
                 self.show_error_message("ERROR: Board is empty")
             else:
-                self.board.randomizer()
+                self._board.randomizer()
             return
 
         if self._upload_button.contains(mouse_pos):
@@ -322,25 +322,25 @@ class CreateScreen(Screen):
                 filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.bmp;*.gif")]
             )
             if file_path:
-                self.board.generate_from_image(file_path)
+                self._board.generate_from_image(file_path)
             return
 
-        if self.color_gradient.contains(mouse_pos):
-            new_color = self.color_gradient.get_color()
-            self.board.set_selected_color(new_color)
-            self.lasts_colors.add_color(new_color)
-            self.lasts_colors.reset_color()
+        if self._color_gradient.contains(mouse_pos):
+            new_color = self._color_gradient.get_color()
+            self._board.set_selected_color(new_color)
+            self._lasts_colors.add_color(new_color)
+            self._lasts_colors.reset_color()
             return
 
-        if self.colors.contains(mouse_pos):
-            self.colors.on_any_event(event)
-            self.color_gradient.paint_gradient(self.colors.get_selected_color())
-            self.board.set_selected_color(self.color_gradient.get_color())
+        if self._colors.contains(mouse_pos):
+            self._colors.on_any_event(event)
+            self._color_gradient.paint_gradient(self._colors.get_selected_color())
+            self._board.set_selected_color(self._color_gradient.get_color())
             return
 
-        if self.lasts_colors.contains(mouse_pos):
-            self.lasts_colors.on_any_event(event)
-            self.board.set_selected_color(self.lasts_colors.get_current_color())
+        if self._lasts_colors.contains(mouse_pos):
+            self._lasts_colors.on_any_event(event)
+            self._board.set_selected_color(self._lasts_colors.get_current_color())
             return
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
