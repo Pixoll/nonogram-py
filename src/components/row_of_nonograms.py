@@ -55,7 +55,7 @@ class RowOfNonograms(Element):
         self._position = position
         self._row.set_position(position)
         if self._scrollbar is not None:
-            self._scrollbar.set_position((position[0], position[1] + self._height - 20))
+            self._scrollbar.set_position((position[0], position[1] + self._height))
         return self
 
     def on_any_event(self, event: Event) -> None:
