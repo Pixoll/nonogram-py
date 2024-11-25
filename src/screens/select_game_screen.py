@@ -15,25 +15,21 @@ class SelectGameScreen(Screen):
         self._width, self._height = engine.window_size
         self._base = (
             Container(self._width, self._height)
-            .set_child_alignment(ChildAlignment.CENTER)
-            .set_border((0, 132, 134))
-            .set_background_color((0, 132, 134))
-            .set_image("select.jpg")
+            .set_child_alignment(ChildAlignment.TOP_CENTER)
+            .set_image("bg.jpg")
         )
         row1 = Row()
         self._play_button = (
-            Container(int(self._width * 0.3), int(self._height * 0.1))
-            .set_background_color((198, 191, 166))
-            .set_border((0, 0, 0, 0))
+            Container(int(self._width * 0.15), int(self._height * 0.1), 25)
+            .set_background_color((108, 224, 124))
             .set_child(Text("Play", engine.regular_font, (0, 0, 0)))
         )
-        self._back_button = (
-            Container(int(self._width * 0.3), int(self._height * 0.1))
-            .set_background_color((198, 191, 166))
-            .set_border((0, 0, 0, 0))
-            .set_child(Text("Back", engine.regular_font, (0, 0, 0)))
+        self._return_button = (
+            Container(int(self._width * 0.15), int(self._height * 0.1), 25)
+            .set_background_color((224, 91, 93))
+            .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
         )
-        row1.add_element(self._back_button)
+        row1.add_element(self._return_button)
         row1.add_element(self._play_button)
         row1.set_padding(300)
 
@@ -117,7 +113,12 @@ class SelectGameScreen(Screen):
             self._engine.set_screen(MainMenuScreen(self._engine))
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
-        pass
+        mouse_pos = pygame.mouse.get_pos()
+
+        cursor_in_clickable = (self._play_button.contains(mouse_pos)
+                               or self._return_button.contains(mouse_pos))
+
+        pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
         pass
