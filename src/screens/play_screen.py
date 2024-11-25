@@ -1,7 +1,7 @@
 import pygame
 from pygame import Surface
 
-from components import ChildAlignment, ColorPicker, Container, NonogramElement, Row, Text
+from components import ChildAlignment, ColorPicker, Container, NonogramElement, Text
 from core import Nonogram
 from engine import Engine
 from events import Event, EventType, Key, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -18,46 +18,37 @@ class PlayScreen(Screen):
 
     def __init__(self, engine: Engine, nonogram: Nonogram):
         self._engine = engine
+        self._width, self._height = engine.window_size
         self._nonogram = nonogram
         self._has_color_picker = len(nonogram.used_colors) > 1
 
+        self._background = Container(self._width, self._height).set_image("bg.jpg")
+
         columns = nonogram.size[0] + max([len(row) for row in nonogram.horizontal_hints])
         rows = nonogram.size[1] + max([len(column) for column in nonogram.vertical_hints])
-        window_width, window_height = engine.window_size
-
-        nonogram_container_size = (
-            int(window_width * 0.875) if self._has_color_picker else window_width - 20,
-            window_height - 20
-        )
 
         grid_ratio = columns / rows
-        window_ratio = window_width / window_height
+        window_ratio = self._width / self._height
 
         limiting_grid_side = columns if grid_ratio > window_ratio else rows
-        limiting_window_side = window_width if grid_ratio > window_ratio else window_height
+        limiting_window_side = self._width if grid_ratio > window_ratio else self._height
         block_size = round(limiting_window_side * 0.875 / limiting_grid_side)
 
         self._nonogram_element = NonogramElement(nonogram, block_size, 1)
-        nonogram_container = (Container(*nonogram_container_size)
+        self._nonogram_container = (Container(self._width, self._height)
                               .set_child_alignment(ChildAlignment.CENTER)
                               .set_child(self._nonogram_element))
 
-        base: Row[Container] = Row().add_element(nonogram_container)
-
         if self._has_color_picker:
             self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, 50, 1)
-            color_picker_size = (engine.window_size[0] - nonogram_container_size[0], nonogram_container_size[1])
-            color_picker_container = (Container(*color_picker_size)
-                                      .set_child_alignment(ChildAlignment.CENTER)
+            self._color_picker_container = (Container(int(self._width * 0.975), self._height)
+                                      .set_child_alignment(ChildAlignment.CENTER_RIGHT)
                                       .set_child(self._color_picker))
-            base.add_element(color_picker_container)
 
-        self._back_button = (Container(100, 50)
+        self._back_button = (Container(int(self._width * 0.1), int(self._height * 0.1), 25)
                              .set_position((20, 20))
                              .set_background_color((224, 91, 93))
-                             .set_border((224, 91, 93))
-                             .set_child_alignment(ChildAlignment.CENTER)
-                             .set_child(Text("Back", engine.regular_font, (0, 0, 0))))
+                             .set_child(Text("Return", engine.regular_font, (0, 0, 0))))
 
         self._completed_text = engine.regular_font.render("completed!", True, (0, 0, 0))
 
@@ -93,9 +84,11 @@ class PlayScreen(Screen):
     def render(self) -> None:
         window = pygame.display.get_surface()
 
-        self._nonogram_element.render(window)
+        self._background.render(window)
+        self._nonogram_container.render(window)
+
         if self._has_color_picker:
-            self._color_picker.render(window)
+            self._color_picker_container.render(window)
 
         self._back_button.render(window)
 
