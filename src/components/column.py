@@ -59,7 +59,7 @@ class Column(ElementBundle[T]):
                 case HorizontalAlignment.LEFT:
                     x_offset = 0
                 case HorizontalAlignment.CENTER:
-                    x_offset = (self._max_width - element._width) / 2
+                    x_offset = (self._max_width - element._width) // 2
                 case HorizontalAlignment.RIGHT:
                     x_offset = (self._max_width - element._width)
 
