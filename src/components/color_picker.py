@@ -46,14 +46,14 @@ class ColorPicker(Element):
             for j in range(rows):
                 index = i + j * cols
                 if index < len(colors):
-                    column.add_element(ColoredBlock(block_size, colors[index]))
+                    column.add_element(ColoredBlock(block_size, block_size, colors[index]))
             self._row.add_element(column)
             column.set_padding(padding)
 
         self._row.set_padding(padding)
 
         self._selected_color_index = 0
-        self._selected_block = ColoredBlock(block_size, colors[self._selected_color_index]).set_position((
+        self._selected_block = ColoredBlock(block_size, block_size, colors[self._selected_color_index]).set_position((
             self.position[0] + (self._row.size[0] - block_size) // 2,
             self.position[1] + self._row.size[1] + block_size
         ))

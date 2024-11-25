@@ -45,3 +45,6 @@ class Element(ABC):
     @abstractmethod
     def render(self, window: Surface) -> None:
         pass
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__} {self._width}x{self._height} {self._position}"

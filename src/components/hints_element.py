@@ -35,7 +35,7 @@ class HintsElement(Element):
             row_or_column: Row[ColoredBlock] | Column[ColoredBlock] = Row() if is_horizontal else Column()
 
             for hint in hints[i]:
-                hint_block = ColoredBlock(block_size, hint.color, str(hint.value), hints_font)
+                hint_block = ColoredBlock(block_size, block_size, hint.color, str(hint.value), hints_font)
                 row_or_column.add_element(hint_block)
 
             row_or_column.set_padding(padding)

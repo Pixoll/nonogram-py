@@ -18,7 +18,7 @@ class RecentColors(Element):
 
         self._column = Column()
         for color in self._recent_colors:
-            self._column.add_element(ColoredBlock(block_size, color))
+            self._column.add_element(ColoredBlock(block_size, block_size, color))
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
 
     def set_position(self, position: tuple[int, int]) -> Self:

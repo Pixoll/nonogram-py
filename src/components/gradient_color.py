@@ -18,9 +18,8 @@ class GradientColor(Element):
     _block_size: int
 
     def __init__(self, color: tuple[int, int, int], block_size: int, padding: int) -> None:
-
-        cols = 10  # Fixed 10 columns
-        rows = 10  # Fixed 10 rows
+        cols = 10
+        rows = 10
 
         super().__init__(cols * (block_size + padding) - padding, rows * (block_size + padding) - padding)
 
@@ -35,11 +34,11 @@ class GradientColor(Element):
         aux2 = 1
         columns: list[Column[ColoredBlock]] = []
 
-        for i in range(10):
+        for i in range(cols):
             aux1 = 1
             column: Column[ColoredBlock] = Column()
-            for j in range(10):
-                block = ColoredBlock(self._block_size, darken_color(self._color, aux1))
+            for j in range(rows):
+                block = ColoredBlock(self._block_size, self._block_size, darken_color(self._color, aux1))
                 if block.color == self._selected_color:
                     self._selected_block = block
                     block.change_state()
@@ -64,33 +63,18 @@ class GradientColor(Element):
         return self
 
     def paint_gradient(self, color: tuple[int, int, int]) -> None:
-        aux_row = Row().set_alignment(VerticalAlignment.CENTER)
-        _color = color
+        self._selected_color = color
+        aux_color = color
         aux2 = 1
-        columns: list[Column[ColoredBlock]] = []
-        self._selected_color = _color
 
-        for i in range(10):
+        for column in reversed(self._row):
             aux1 = 1
-            column: Column[ColoredBlock] = Column()
-            for j in range(10):
-                block = ColoredBlock(self._block_size, darken_color(_color, aux1))
-                if block.color == self._selected_color:
-                    self._selected_block = block
-                    block.change_state()
-                column.add_element(block)
-                aux1 = aux1 + 1
-            columns.append(column)
-            column.set_padding(self._padding)
-            _color = lighten_color(_color, aux2)
-            aux2 = aux2 + 1
+            for block in column:
+                block.set_color(darken_color(aux_color, aux1))
+                aux1 += 1
 
-        for column in reversed(columns):
-            aux_row.add_element(column)
-
-        aux_row.set_padding(self._padding)
-        self._row = aux_row
-        self._row.set_position(self._position)
+            aux_color = lighten_color(aux_color, aux2)
+            aux2 += 1
 
     def on_any_event(self, event: Event) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:

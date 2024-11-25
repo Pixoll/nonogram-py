@@ -17,12 +17,13 @@ class ColoredBlock(Element):
 
     def __init__(
             self,
-            size: int,
+            width: int,
+            height: int,
             color: tuple[int, int, int],
             text: str | None = None,
             font: Font | None = None
     ) -> None:
-        super().__init__(size, size)
+        super().__init__(width, height)
         self._color = color
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._surface.fill(self._color)
