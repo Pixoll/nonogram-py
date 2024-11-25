@@ -22,13 +22,13 @@ class WorkshopScreen(Screen):
         column1 = Column().set_alignment(HorizontalAlignment.LEFT).set_padding(int(self._height * 0.05))
         row1 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._width * 0.18))
 
-        self._my_button = (
+        self._my_nonograms_button = (
             Container(int(self._width * 0.2), int(self._height * 0.1), 25)
             .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
             .set_child(Text("My nonograms", engine.regular_font, (0, 0, 0)))
         )
-        column1.add_element(self._my_button)
+        column1.add_element(self._my_nonograms_button)
 
         self._create_button = (
             Container(int(self._width * 0.2), int(self._height * 0.1), 25)
@@ -92,9 +92,9 @@ class WorkshopScreen(Screen):
 
         mouse_pos = pygame.mouse.get_pos()
 
-        if self._return_button.contains(mouse_pos):
-            from screens.main_menu_screen import MainMenuScreen
-            self._engine.set_screen(MainMenuScreen(self._engine))
+        if self._my_nonograms_button.contains(mouse_pos):
+            from screens.select_game_screen import SelectGameScreen
+            self._engine.set_screen(SelectGameScreen(self._engine, "user_made"))
             pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
@@ -104,17 +104,23 @@ class WorkshopScreen(Screen):
             pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
+        if self._return_button.contains(mouse_pos):
+            from screens.main_menu_screen import MainMenuScreen
+            self._engine.set_screen(MainMenuScreen(self._engine))
+            pygame.mouse.set_cursor(self._engine.arrow_cursor)
+            return
+
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         mouse_pos = pygame.mouse.get_pos()
 
-        cursor_in_clickable = (self._my_button.contains(mouse_pos)
+        cursor_in_clickable = (self._my_nonograms_button.contains(mouse_pos)
                                or self._create_button.contains(mouse_pos)
                                or self._saved_button.contains(mouse_pos)
                                or self._return_button.contains(mouse_pos))
 
         pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)
 
-        if self._my_button.contains(mouse_pos):
+        if self._my_nonograms_button.contains(mouse_pos):
             self._ref_info.set_child(Text("info1", self._engine.regular_font, (0, 0, 0)))
             self._ref_image.set_child(Text("image1", self._engine.regular_font, (0, 0, 0)))
             return

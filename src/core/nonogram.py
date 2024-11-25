@@ -171,6 +171,10 @@ class Nonogram:
         return self._name
 
     @property
+    def type(self) -> nonogram_type_t:
+        return self._type
+
+    @property
     def is_completed(self) -> bool:
         return self._correct_cells == self._number_of_cells
 

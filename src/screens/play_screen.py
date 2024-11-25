@@ -69,7 +69,7 @@ class PlayScreen(Screen):
     def on_key_event(self, key_event: KeyEvent) -> None:
         if key_event.key == Key.ESCAPE:
             from screens.select_game_screen import SelectGameScreen
-            self._engine.set_screen(SelectGameScreen(self._engine))
+            self._engine.set_screen(SelectGameScreen(self._engine, self._nonogram.type))
 
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
@@ -79,7 +79,7 @@ class PlayScreen(Screen):
 
         if self._back_button.contains(mouse_pos):
             from screens.select_game_screen import SelectGameScreen
-            self._engine.set_screen(SelectGameScreen(self._engine))
+            self._engine.set_screen(SelectGameScreen(self._engine, self._nonogram.type))
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         pass

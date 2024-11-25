@@ -145,7 +145,7 @@ class MainMenuScreen(Screen):
 
         if self._play_button.contains(mouse_pos):
             from screens.select_game_screen import SelectGameScreen
-            self._engine.set_screen(SelectGameScreen(self._engine))
+            self._engine.set_screen(SelectGameScreen(self._engine, "pre_made"))
             pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
