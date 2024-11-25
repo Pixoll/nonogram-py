@@ -177,7 +177,7 @@ class CreateScreen(Screen):
             engine.regular_font,
             (0, 0, 0),
             (255, 255, 255),
-            int(self._width * 0.3),
+            int(self._width * 0.275),
         )
         self._nanogram_name = (
             Container(int(self._width * 0.3), int(self._height * 0.075), 25)
