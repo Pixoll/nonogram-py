@@ -18,7 +18,7 @@ class RowOfNonograms(Element):
 
     def __init__(self, width: int, height: int, nonograms_type: nonogram_type_t):
         super().__init__(width, height)
-        self._row = Row()
+        self._row = Row().set_alignment(VerticalAlignment.CENTER)
         self._list_of_nonograms = []
 
         for i in range(1, 101):
@@ -29,17 +29,15 @@ class RowOfNonograms(Element):
 
             self._list_of_nonograms.append(nonogram)
 
-            info_nonogram = NonogramInfoPreview(nonogram, self._height, self._height)
+            info_nonogram = NonogramInfoPreview(nonogram, height, height)
             self._row.add_element(info_nonogram)
 
-        if len(self._list_of_nonograms) == 0:
+        if len(self._list_of_nonograms) * height <= width:
             self._scrollbar = None
             return
 
         content_width = len(self._list_of_nonograms) * self._height
         self._scrollbar = ScrollBar(width, content_width)
-
-        self._row.set_alignment(VerticalAlignment.CENTER)
 
     def deselect(self) -> None:
         if self._selected_nonogram is not None:
