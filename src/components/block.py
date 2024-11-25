@@ -70,14 +70,14 @@ class Block(ElementWithChild):
 
             return
 
-        if self._state == Block.State.CROSSED:
-            self.toggle_x_mark()
-            self._state = Block.State.EMPTY
-            self.set_background_color((255, 255, 255))
-        else:
+        if new_state == Block.State.CROSSED:
             self._state = Block.State.CROSSED
             self.set_background_color((255, 255, 255))
             self.toggle_x_mark()
+        else:
+            self.toggle_x_mark()
+            self._state = Block.State.EMPTY
+            self.set_background_color((255, 255, 255))
 
     @property
     def color(self) -> tuple[int, int, int]:

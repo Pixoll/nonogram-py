@@ -120,7 +120,12 @@ class NonogramElement(Element):
                 if not block.contains(mouse_pos):
                     continue
 
-                block.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)
+                new_state = (
+                    Block.State.COLORED if event.button == MouseButton.LEFT
+                    else Block.State.CROSSED if block.state != Block.State.CROSSED
+                    else Block.State.EMPTY
+                )
+                block.set_state(new_state, self._selected_color)
 
                 x = (mouse_pos[0] - self._grid_position[0]) // (self._block_size + self._padding)
                 y = (mouse_pos[1] - self._grid_position[1]) // (self._block_size + self._padding)

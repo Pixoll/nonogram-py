@@ -245,6 +245,8 @@ class CreateScreen(Screen):
         if self._showing_error_message:
             return
 
+        self._board.on_any_event(event)
+
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 
@@ -256,7 +258,6 @@ class CreateScreen(Screen):
 
         self._dimension_selector1.on_any_event(event)
         self._dimension_selector2.on_any_event(event)
-        self._board.on_any_event(event)
         self._color_gradient.on_any_event(event)
         self._name_field.on_any_event(event)
 
