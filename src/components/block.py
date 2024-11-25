@@ -30,7 +30,7 @@ class Block(ElementWithChild):
 
         self._state = Block.State.EMPTY
         self._x_mark_visible = color == "x"
-        self._x_image = TextureManager.get("x.gif", self.size)
+        self._x_image = TextureManager.get("x.png", self.size)
 
     def set_background_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> Self:
         self._background_color = color
