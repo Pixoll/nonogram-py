@@ -14,7 +14,6 @@ class GradientColor(Element):
     _row: Row[Column[ColoredBlock]]
     _padding: int
     _position: tuple[int, int]
-    _background_color: tuple[int, int, int]
     _block_size: int
 
     def __init__(self, color: tuple[int, int, int], block_size: int, padding: int) -> None:
@@ -26,7 +25,6 @@ class GradientColor(Element):
         self._color = color
         self._block_size = block_size
         self._padding = padding
-        self._background_color = (255, 255, 255)
         self._row = Row().set_alignment(VerticalAlignment.CENTER)
         self._selected_block = None
         self._selected_color = color
@@ -55,7 +53,7 @@ class GradientColor(Element):
         self._row.set_padding(self._padding)
 
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
-        self._surface.fill(self._background_color)
+        self._surface.fill((255, 255, 255, 128))
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
