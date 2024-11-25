@@ -16,42 +16,41 @@ class WorkshopScreen(Screen):
         self._base = (
             Container(self._width, self._height)
             .set_child_alignment(ChildAlignment.CENTER)
-            .set_border((0, 0, 0, 0))
-            .set_background_color((0, 0, 0, 0))
+            .set_image("bg.jpg")
         )
 
         column1 = Column().set_alignment(HorizontalAlignment.LEFT).set_padding(int(self._height * 0.05))
         row1 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._width * 0.18))
 
         self._my_button = (
-            Container(int(self._width * 0.2), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
+            Container(int(self._width * 0.2), int(self._height * 0.1), 25)
+            .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
             .set_child(Text("My nonograms", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._my_button)
 
         self._create_button = (
-            Container(int(self._width * 0.2), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
+            Container(int(self._width * 0.2), int(self._height * 0.1), 25)
+            .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Create", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._create_button)
 
         self._saved_button = (
-            Container(int(self._width * 0.2), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
+            Container(int(self._width * 0.2), int(self._height * 0.1), 25)
+            .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Saved", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._saved_button)
 
-        column1.add_element(Container(0, int(self._height * 0.08)))
+        # column1.add_element(Container(0, int(self._height * 0.08), 25))
 
         self._return_button = (
-            Container(int(self._width * 0.1), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
+            Container(int(self._width * 0.1), int(self._height * 0.1), 25)
+            .set_background_color((224, 91, 93))
             .set_border((0, 0, 0, 0))
             .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
         )
@@ -63,7 +62,7 @@ class WorkshopScreen(Screen):
 
         self._ref_image = (
             Container(int(self._width * 0.4), int(self._width * 0.3))
-            .set_background_color((224, 99, 159))
+            .set_background_color((224, 130, 178))
             .set_border((0, 0, 0, 0))
             .set_child(Text("image1", engine.regular_font, (0, 0, 0)))
         )
@@ -71,7 +70,7 @@ class WorkshopScreen(Screen):
 
         self._ref_info = (
             Container(int(self._width * 0.4), int(self._width * 0.1))
-            .set_background_color((224, 99, 159))
+            .set_background_color((224, 130, 178))
             .set_border((0, 0, 0, 0))
             .set_child(Text("info1", engine.regular_font, (0, 0, 0)))
         )

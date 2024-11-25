@@ -77,7 +77,7 @@ class MainMenuScreen(Screen):
             .set_background_color((0, 0, 0, 128))
             .set_border((0, 0, 0, 0))
             .set_child(
-                Container(int(self._width * 0.275), int(self._width * 0.09), 25)
+                Container(int(self._width * 0.3), int(self._width * 0.09), 25)
                 .set_position((
                     (self._width - int(self._width * 0.225)) // 2,
                     (self._height - int(self._width * 0.1)) // 2)
