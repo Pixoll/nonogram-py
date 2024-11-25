@@ -21,25 +21,7 @@ class MainMenuScreen(Screen):
             .set_image("menu_background.png")
         )
 
-        column1 = Column()
-        column2 = Column()
-        column3 = Column()
-
-        """title = (
-            Container(int(self._width * 0.4), int(self._height * 0.3))
-            .set_background_color((255, 255, 255))
-            .set_border((255, 255, 255))
-            .set_child(
-                Text(
-                    "NANOGRAM",
-                    FontManager.get_default(80),
-                    (99, 99, 224)
-                )
-                .set_color((152, 99, 224))
-            )
-        )
-
-        column1.add_element(title)"""
+        column = Column()
 
         self._play_button = (
             Container(int(self._width * 0.3), int(self._height * 0.1))
@@ -117,43 +99,15 @@ class MainMenuScreen(Screen):
 
         self._waiting_exit_confirmation = False
 
-        (column2.add_element(self._play_button)
+        (column.add_element(self._play_button)
          .add_element(self._workshop_button)
-         #.add_element(self._statistics_button)
-         #.add_element(self._settings_button)
+         # .add_element(self._statistics_button)
+         # .add_element(self._settings_button)
          .add_element(self._exit_button)
          .set_padding(int(self._height * 0.08))
          .set_alignment(HorizontalAlignment.CENTER))
 
-        container1 = (
-            Container(int(self._width * 0.2), self._height)
-            .set_background_color((255, 255, 255, 0))
-            .set_border((0, 0, 0, 0))
-            .set_child(column1)
-        )
-
-        container2 = (
-            Container(int(self._width * 0.4), int(self._height//2))
-            .set_background_color((0, 0, 0, 150))
-            .set_border((0, 0, 0, 0))
-            .set_child(column2)
-        )
-        container3 = (
-            Container(int(self._width * 0.2), self._height)
-            .set_background_color((255, 255, 255, 0))
-            .set_border((0, 0, 0, 0))
-            .set_child(column3)
-        )
-
-        self._row1 = (
-            Row()
-            .add_element(container1)
-            .add_element(container2)
-            .add_element(container3)
-        )
-
-
-        self._base.set_child(self._row1)
+        self._base.set_child(Row().add_element(column))
 
     def on_any_event(self, event: Event) -> None:
         pass
@@ -223,5 +177,3 @@ class MainMenuScreen(Screen):
 
         if self._waiting_exit_confirmation:
             self._exit_confirmation_popup.render(window)
-            
-
