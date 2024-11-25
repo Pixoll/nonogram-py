@@ -31,7 +31,7 @@ class NonogramElement(Element):
         )
 
         self._nonogram = nonogram
-        self._background_color = (192, 192, 192)
+        self._background_color = (0, 0, 0, 128)
         self._padding = padding
         self._grid = Row()
         self._grid_position = (0, 0)
