@@ -13,10 +13,13 @@ class MainMenuScreen(Screen):
         self._engine = engine
         self._width, self._height = engine.window_size
 
-        self._base = (
+        self._base: Container[Container] = (
             Container(self._width, self._height)
             .set_child_alignment(ChildAlignment.CENTER)
-            .set_image("menu_background.png")
+            .set_image("bg.jpg")
+            .set_child(Container(self._width, self._height)
+                       .set_child_alignment(ChildAlignment.CENTER)
+                       .set_image("menu_background.png"))
         )
 
         column = Column()
@@ -106,7 +109,7 @@ class MainMenuScreen(Screen):
          .set_padding(int(self._height * 0.04))
          .set_alignment(HorizontalAlignment.CENTER))
 
-        self._base.set_child(Row().add_element(column))
+        self._base.child.set_child(column)
 
     def on_any_event(self, event: Event) -> None:
         pass
