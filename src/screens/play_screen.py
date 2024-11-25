@@ -1,7 +1,6 @@
 from math import floor
 
 import pygame
-from pygame import Surface
 
 from components import ChildAlignment, ColorPicker, Container, NonogramElement, Text
 from core import Nonogram
@@ -16,7 +15,6 @@ class PlayScreen(Screen):
     _nonogram_element: NonogramElement
     _has_color_picker: bool
     _color_picker: ColorPicker
-    _completed_text: Surface
 
     def __init__(self, engine: Engine, nonogram: Nonogram):
         self._engine = engine
@@ -64,7 +62,14 @@ class PlayScreen(Screen):
             .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
         )
 
-        self._completed_text = engine.regular_font.render("completed!", True, (0, 0, 0))
+        self._completed_popup: Container = (
+            Container(self._width, self._height)
+            .set_child(
+                Container(int(self._width * 0.2), int(self._width * 0.1), 25)
+                .set_background_color((0, 0, 0, 192))
+                .set_child(Text("Completed!", engine.big_font, (255, 255, 255)))
+            )
+        )
 
     def on_any_event(self, event: Event) -> None:
         self._nonogram_element.on_any_event(event)
@@ -112,4 +117,4 @@ class PlayScreen(Screen):
         self._return_button.render(window)
 
         if self._nonogram.is_completed:
-            window.blit(self._completed_text, (20, 50))
+            self._completed_popup.render(window)
