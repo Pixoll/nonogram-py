@@ -113,12 +113,12 @@ class CreateScreen(Screen):
         )
         column1.add_element(self._save_button)
 
-        self._exit_button = (
+        self._return_button = (
             Container(int(self._width * 0.15), int(self._height * 0.1), 25)
             .set_background_color((224, 91, 93))
             .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
         )
-        column1.add_element(self._exit_button)
+        column1.add_element(self._return_button)
 
         row4 = Row().set_alignment(VerticalAlignment.CENTER)
         self.dimension_selector1 = DimensionSelector(
@@ -128,12 +128,12 @@ class CreateScreen(Screen):
             (255, 255, 255),
             int(self._width * 0.035),
         )
-        self.x_dimension = (
+        self._x_dimension = (
             Container(int(self._width * 0.06), int(self._height * 0.075), 25)
             .set_background_color((54, 169, 251))
             .set_child(self.dimension_selector1)
         )
-        row4.add_element(self.x_dimension)
+        row4.add_element(self._x_dimension)
 
         row4.add_element(Container(13, 0))
 
@@ -148,13 +148,13 @@ class CreateScreen(Screen):
             (255, 255, 255),
             int(self._width * 0.035),
         )
-        self.y_dimension = (
+        self._y_dimension = (
             Container(int(self._width * 0.06), int(self._height * 0.075), 25)
             .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
             .set_child(self.dimension_selector2)
         )
-        row4.add_element(self.y_dimension)
+        row4.add_element(self._y_dimension)
 
         row4.add_element(Container(20, 0))
 
@@ -179,12 +179,12 @@ class CreateScreen(Screen):
             (255, 255, 255),
             int(self._width * 0.3),
         )
-        self.nanogram_name = (
+        self._nanogram_name = (
             Container(int(self._width * 0.3), int(self._height * 0.075), 25)
             .set_background_color((54, 169, 251))
             .set_child(self.name_field)
         )
-        self.column2.add_element(self.nanogram_name)
+        self.column2.add_element(self._nanogram_name)
 
         row1.add_element(container1).add_element(container2)
         self._base.set_child(row1)
@@ -250,9 +250,9 @@ class CreateScreen(Screen):
 
         mouse_pos = pygame.mouse.get_pos()
 
-        self.dimension_selector1.set_active(self.x_dimension.contains(mouse_pos))
-        self.dimension_selector2.set_active(self.y_dimension.contains(mouse_pos))
-        self.name_field.set_active(self.nanogram_name.contains(mouse_pos))
+        self.dimension_selector1.set_active(self._x_dimension.contains(mouse_pos))
+        self.dimension_selector2.set_active(self._y_dimension.contains(mouse_pos))
+        self.name_field.set_active(self._nanogram_name.contains(mouse_pos))
 
         self.dimension_selector1.on_any_event(event)
         self.dimension_selector2.on_any_event(event)
@@ -278,9 +278,10 @@ class CreateScreen(Screen):
                 self.board_base.set_child(self.board)
             return
 
-        if self._exit_button.contains(mouse_pos):
+        if self._return_button.contains(mouse_pos):
             from screens.workshop_screen import WorkshopScreen
             self._engine.set_screen(WorkshopScreen(self._engine))
+            pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
         if self._save_button.contains(mouse_pos):
@@ -345,6 +346,18 @@ class CreateScreen(Screen):
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         mouse_pos = pygame.mouse.get_pos()
 
+        cursor_in_clickable = (self._upload_button.contains(mouse_pos)
+                               or self._randomizer_button.contains(mouse_pos)
+                               or self._erase_all_button.contains(mouse_pos)
+                               or self._save_button.contains(mouse_pos)
+                               or self._return_button.contains(mouse_pos)
+                               or self._x_dimension.contains(mouse_pos)
+                               or self._y_dimension.contains(mouse_pos)
+                               or self._resize_button.contains(mouse_pos)
+                               or self._nanogram_name.contains(mouse_pos))
+
+        pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)
+
         self._show_upload_tooltip = False
         self._show_randomizer_tooltip = False
         self._show_erase_all_tooltip = False
@@ -369,9 +382,9 @@ class CreateScreen(Screen):
 
     def render(self) -> None:
         window = pygame.display.get_surface()
-        self.nanogram_name.update_child_position()
-        self.x_dimension.update_child_position()
-        self.y_dimension.update_child_position()
+        self._nanogram_name.update_child_position()
+        self._x_dimension.update_child_position()
+        self._y_dimension.update_child_position()
         self._base.render(window)
 
         if self._show_upload_tooltip:

@@ -53,26 +53,26 @@ class MainMenuScreen(Screen):
 
         )"""
 
-        self._exit_button = (
+        self._exit_button: Container = (
             Container(int(self._width * 0.1), int(self._height * 0.1), 25)
             .set_background_color((224, 91, 93))
             .set_child(Text("Exit", engine.regular_font, (0, 0, 0)))
         )
 
-        self._cancel_exit_button = (
+        self._cancel_exit_button: Container = (
             Container(int(self._width * 0.075), int(self._width * 0.025), 25)
             .set_border((64, 128, 64))
             .set_border_width(2)
             .set_child(Text("no", engine.regular_font, (0, 0, 0)))
         )
-        self._confirm_exit_button = (
+        self._confirm_exit_button: Container = (
             Container(int(self._width * 0.075), int(self._width * 0.025), 25)
             .set_border((128, 64, 64))
             .set_border_width(2)
             .set_child(Text("yes", engine.regular_font, (0, 0, 0)))
         )
 
-        self._exit_confirmation_popup = (
+        self._exit_confirmation_popup: Container = (
             Container(self._width, self._height)
             .set_background_color((0, 0, 0, 128))
             .set_border((0, 0, 0, 0))
@@ -146,11 +146,13 @@ class MainMenuScreen(Screen):
         if self._play_button.contains(mouse_pos):
             from screens.select_game_screen import SelectGameScreen
             self._engine.set_screen(SelectGameScreen(self._engine))
+            pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
         if self._workshop_button.contains(mouse_pos):
             from screens.workshop_screen import WorkshopScreen
             self._engine.set_screen(WorkshopScreen(self._engine))
+            pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
         """if self._statistics_button.contains(mouse_pos):
@@ -165,10 +167,20 @@ class MainMenuScreen(Screen):
 
         if self._exit_button.contains(mouse_pos):
             self._waiting_exit_confirmation = True
+            pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
-        pass
+        mouse_pos = pygame.mouse.get_pos()
+
+        cursor_in_clickable = ((self._confirm_exit_button.contains(mouse_pos)
+                                or self._cancel_exit_button.contains(mouse_pos))
+                               if self._waiting_exit_confirmation
+                               else (self._play_button.contains(mouse_pos)
+                                     or self._workshop_button.contains(mouse_pos)
+                                     or self._exit_button.contains(mouse_pos)))
+
+        pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
         pass

@@ -95,25 +95,39 @@ class WorkshopScreen(Screen):
         if self._return_button.contains(mouse_pos):
             from screens.main_menu_screen import MainMenuScreen
             self._engine.set_screen(MainMenuScreen(self._engine))
+            pygame.mouse.set_cursor(self._engine.arrow_cursor)
+            return
 
         if self._create_button.contains(mouse_pos):
             from screens.create_screen import CreateScreen
             self._engine.set_screen(CreateScreen(self._engine, (25, 25)))
+            pygame.mouse.set_cursor(self._engine.arrow_cursor)
+            return
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
         mouse_pos = pygame.mouse.get_pos()
 
+        cursor_in_clickable = (self._my_button.contains(mouse_pos)
+                               or self._create_button.contains(mouse_pos)
+                               or self._saved_button.contains(mouse_pos)
+                               or self._return_button.contains(mouse_pos))
+
+        pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)
+
         if self._my_button.contains(mouse_pos):
             self._ref_info.set_child(Text("info1", self._engine.regular_font, (0, 0, 0)))
             self._ref_image.set_child(Text("image1", self._engine.regular_font, (0, 0, 0)))
+            return
 
-        elif self._create_button.contains(mouse_pos):
+        if self._create_button.contains(mouse_pos):
             self._ref_info.set_child(Text("info2", self._engine.regular_font, (0, 0, 0)))
             self._ref_image.set_child(Text("image2", self._engine.regular_font, (0, 0, 0)))
+            return
 
-        elif self._saved_button.contains(mouse_pos):
+        if self._saved_button.contains(mouse_pos):
             self._ref_info.set_child(Text("info3", self._engine.regular_font, (0, 0, 0)))
             self._ref_image.set_child(Text("image3", self._engine.regular_font, (0, 0, 0)))
+            return
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
         pass

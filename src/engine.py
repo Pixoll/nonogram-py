@@ -1,4 +1,5 @@
 import pygame
+from pygame import Cursor
 from pygame.font import Font
 
 import events
@@ -12,6 +13,8 @@ class Engine:
     _big_font: Font
     _regular_font: Font
     _small_font: Font
+    _arrow_cursor: Cursor
+    _hand_cursor: Cursor
 
     def __init__(self, window: pygame.Surface):
         self._screen = None
@@ -20,6 +23,8 @@ class Engine:
         self._big_font = FontManager.get_default(int(width * 0.0225))
         self._regular_font = FontManager.get_default(int(width * 0.015))
         self._small_font = FontManager.get_default(int(width * 0.0075))
+        self._arrow_cursor = Cursor(pygame.SYSTEM_CURSOR_ARROW)
+        self._hand_cursor = Cursor(pygame.SYSTEM_CURSOR_HAND)
 
     def set_screen(self, screen: Screen) -> None:
         self._screen = screen
@@ -39,6 +44,14 @@ class Engine:
     @property
     def small_font(self) -> Font:
         return self._small_font
+
+    @property
+    def arrow_cursor(self) -> Cursor:
+        return self._arrow_cursor
+
+    @property
+    def hand_cursor(self) -> Cursor:
+        return self._hand_cursor
 
     def run(self, window: pygame.Surface, clock: pygame.time.Clock) -> None:
         if self._screen is None:
