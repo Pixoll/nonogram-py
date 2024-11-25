@@ -53,12 +53,30 @@ class Container(ElementWithChild[T], Generic[T]):
         self.update_child_position()
         return self
 
-    def set_image(self, image_path: str) -> Self:
-        self._image = TextureManager.get(image_path, self.size)
+    def set_image(self, image_path: str, stretch: bool = True) -> Self:
+        if stretch:
+            self._image = TextureManager.get(image_path, self.size)
+        else:
+            self._image = TextureManager.get(image_path)
+            image_width = self._image.get_width()
+            image_height = self._image.get_height()
+
+            container_ratio = self._width / self._height
+            image_ratio = image_width / image_height
+
+            limiting_container_side = self._height if container_ratio > image_ratio else self._width
+            limiting_image_side = image_height if container_ratio > image_ratio else image_width
+            factor = limiting_container_side / limiting_image_side
+
+            new_width = int(image_width * factor)
+            new_height = int(image_height * factor)
+
+            self._image = pygame.transform.scale(self._image, (new_width, new_height))
+
         self._surface.blit(self._image, (0, 0))
         return self
 
-    def set_size(self, width: int, height: int):
+    def set_size(self, width: int, height: int) -> Self:
         self._width = width
         self._height = height
         self._surface = pygame.Surface((width, height), pygame.SRCALPHA)
@@ -66,6 +84,12 @@ class Container(ElementWithChild[T], Generic[T]):
         self._draw_border()
         if self._child:
             self.update_child_position()
+        return self
+
+    def fit_to_image(self) -> Self:
+        if self._image is None:
+            return self
+        return self.set_size(*self._image.get_size())
 
     def on_any_event(self, event: Event) -> None:
         if self._child is not None:

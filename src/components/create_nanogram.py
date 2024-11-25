@@ -34,7 +34,7 @@ class CreateNanogram(Element):
             height * (block_size + padding) + padding
         )
 
-        self._background_color = (192, 192, 192)
+        self._background_color = (255, 255, 255, 128)
         self._padding = padding
         self._grid = Column().set_padding(padding)
         self._grid_position = (0, 0)

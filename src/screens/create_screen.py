@@ -30,8 +30,7 @@ class CreateScreen(Screen):
         self._base = (
             Container(self._width, self._height)
             .set_child_alignment(ChildAlignment.CENTER_LEFT)
-            .set_border((0, 0, 0, 0))
-            .set_background_color((0, 0, 0, 0))
+            .set_image("bg.jpg")
         )
 
         column1 = Column().set_alignment(HorizontalAlignment.CENTER).set_padding(int(self._height * 0.05))
@@ -39,53 +38,68 @@ class CreateScreen(Screen):
         row1 = Row().set_alignment(VerticalAlignment.CENTER)
         container1 = (
             Container(int(self._width * 0.4), int(self._height))
-            .set_background_color((0, 0, 0, 50))
-            .set_border((0, 0, 0, 50))
             .set_child(column1)
         )
         container2 = (
             Container(int(self._width * 0.6), int(self._height))
-            .set_background_color((0, 0, 0, 150))
-            .set_border((0, 0, 0, 150))
+            .set_background_color((0, 0, 0, 128))
+            .set_border((0, 0, 0, 128))
             .set_child(self.column2)
         )
 
-        # column 1 elements
+        tooltip_size = (int(self._width * 0.1), int(self._height * 0.05))
 
-        # row 1 elements
         row2 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._width * 0.05))
         column1.add_element(row2)
 
         self._upload_button = (
             Container(int(self._height * 0.1), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
-            .set_border((0, 0, 0, 0))
-            .set_child(Text("Generate", engine.small_font, (0, 0, 0)))
+            .set_image("open_icon.png", False)
+            .fit_to_image()
         )
         row2.add_element(self._upload_button)
 
+        self._upload_tooltip: Container = (
+            Container(*tooltip_size, 15)
+            .set_background_color((255, 255, 255, 128))
+            .set_child(Text("Generate from image", engine.small_font, (0, 0, 0)))
+        )
+        self._show_upload_tooltip = False
+
         self._randomizer_button = (
             Container(int(self._height * 0.1), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
-            .set_border((0, 0, 0, 0))
-            .set_child(Text("Randomized", engine.small_font, (0, 0, 0)))
+            .set_image("randomize_icon.png", False)
+            .fit_to_image()
         )
         row2.add_element(self._randomizer_button)
 
-        self._eraser_button = (
-            Container(int(self._height * 0.1), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
-            .set_border((0, 0, 0, 0))
-            .set_child(Text("Erase all", engine.small_font, (0, 0, 0)))
+        self._randomizer_tooltip: Container = (
+            Container(*tooltip_size, 15)
+            .set_background_color((255, 255, 255, 128))
+            .set_child(Text("Randomize board", engine.small_font, (0, 0, 0)))
         )
-        row2.add_element(self._eraser_button)
+        self._show_randomizer_tooltip = False
 
-        #  row 2 elements
+        self._erase_all_button = (
+            Container(int(self._height * 0.1), int(self._height * 0.1))
+            .set_image("erase_all_icon.png", False)
+            .fit_to_image()
+        )
+        row2.add_element(self._erase_all_button)
+
+        self._erase_all_tooltip: Container = (
+            Container(*tooltip_size, 15)
+            .set_background_color((255, 255, 255, 128))
+            .set_child(Text("Clear board", engine.small_font, (0, 0, 0)))
+        )
+        self._show_erase_all_tooltip = False
+
         row3 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._height * 0.05))
 
-        self.color_gradient = GradientColor((255, 0, 0), 25, 1)
-        self.colors = Colors(3, 0)
-        self.lasts_colors = RecentColors(40, 0)
+        block_size = int(self._height * 0.04)
+        self.colors = Colors(block_size // 5, 1)
+        self.color_gradient = GradientColor((255, 0, 0), block_size, 1)
+        self.lasts_colors = RecentColors(block_size, 1)
 
         row3.add_element(self.color_gradient)
         row3.add_element(self.colors)
@@ -93,22 +107,19 @@ class CreateScreen(Screen):
         column1.add_element(row3)
 
         self._save_button = (
-            Container(int(self._width * 0.15), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
-            .set_border((0, 0, 0, 0))
+            Container(int(self._width * 0.15), int(self._height * 0.1), 25)
+            .set_background_color((108, 224, 124))
             .set_child(Text("Save", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._save_button)
 
         self._exit_button = (
-            Container(int(self._width * 0.15), int(self._height * 0.1))
-            .set_background_color((224, 99, 159))
-            .set_border((0, 0, 0, 0))
-            .set_child(Text("Exit", engine.regular_font, (0, 0, 0)))
+            Container(int(self._width * 0.15), int(self._height * 0.1), 25)
+            .set_background_color((224, 91, 93))
+            .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
         )
         column1.add_element(self._exit_button)
 
-        # column 2 elements
         row4 = Row().set_alignment(VerticalAlignment.CENTER)
         self.dimension_selector1 = DimensionSelector(
             default_grid_size[0],
@@ -118,12 +129,18 @@ class CreateScreen(Screen):
             int(self._width * 0.035),
         )
         self.x_dimension = (
-            Container(int(self._width * 0.1), int(self._height * 0.05))
-            .set_background_color((224, 99, 159))
-            .set_border((0, 0, 0, 0))
+            Container(int(self._width * 0.06), int(self._height * 0.075), 25)
+            .set_background_color((54, 169, 251))
             .set_child(self.dimension_selector1)
         )
         row4.add_element(self.x_dimension)
+
+        row4.add_element(Container(13, 0))
+
+        row4.add_element(Text("x", engine.big_font, (0, 0, 0)))
+
+        row4.add_element(Container(10, 0))
+
         self.dimension_selector2 = DimensionSelector(
             default_grid_size[1],
             engine.regular_font,
@@ -132,26 +149,27 @@ class CreateScreen(Screen):
             int(self._width * 0.035),
         )
         self.y_dimension = (
-            Container(int(self._width * 0.1), int(self._height * 0.05))
-            .set_background_color((224, 99, 159))
+            Container(int(self._width * 0.06), int(self._height * 0.075), 25)
+            .set_background_color((54, 169, 251))
             .set_border((0, 0, 0, 0))
             .set_child(self.dimension_selector2)
         )
         row4.add_element(self.y_dimension)
+
         row4.add_element(Container(20, 0))
+
         self._resize_button = (
-            Container(int(self._width * 0.1), int(self._height * 0.05))
-            .set_background_color((224, 99, 159))
-            .set_border((0, 0, 0, 0))
+            Container(int(self._width * 0.1), int(self._height * 0.075), 25)
+            .set_background_color((54, 169, 251))
             .set_child(Text("Resize", engine.regular_font, (0, 0, 0)))
         )
         row4.add_element(self._resize_button)
         self.column2.add_element(row4)
 
         self.board = CreateNanogram(*default_grid_size, 1, int(self._width * 0.4)).set_selected_color((255, 0, 0))
-        self.board_base = (Container(int(self._width * 0.4), int(self._width * 0.4)).set_child(self.board)
-                           .set_child_alignment(ChildAlignment.CENTER).set_border((0, 0, 0, 0))
-                           )
+        self.board_base = (Container(int(self._width * 0.4), int(self._width * 0.4))
+                           .set_child_alignment(ChildAlignment.CENTER)
+                           .set_child(self.board))
         self.column2.add_element(self.board_base)
 
         self.name_field = TextField(
@@ -162,9 +180,8 @@ class CreateScreen(Screen):
             int(self._width * 0.3),
         )
         self.nanogram_name = (
-            Container(int(self._width * 0.3), int(self._height * 0.08))
-            .set_background_color((224, 99, 159))
-            .set_border((0, 0, 0, 0))
+            Container(int(self._width * 0.3), int(self._height * 0.075), 25)
+            .set_background_color((54, 169, 251))
             .set_child(self.name_field)
         )
         self.column2.add_element(self.nanogram_name)
@@ -287,7 +304,7 @@ class CreateScreen(Screen):
             self._exit_time = time.time()
             return
 
-        if self._eraser_button.contains(mouse_pos):
+        if self._erase_all_button.contains(mouse_pos):
             self.board.clear()
             return
 
@@ -311,6 +328,7 @@ class CreateScreen(Screen):
             new_color = self.color_gradient.get_color()
             self.board.set_selected_color(new_color)
             self.lasts_colors.add_color(new_color)
+            self.lasts_colors.reset_color()
             return
 
         if self.colors.contains(mouse_pos):
@@ -325,7 +343,26 @@ class CreateScreen(Screen):
             return
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
-        pass
+        mouse_pos = pygame.mouse.get_pos()
+
+        self._show_upload_tooltip = False
+        self._show_randomizer_tooltip = False
+        self._show_erase_all_tooltip = False
+
+        if self._upload_button.contains(mouse_pos):
+            self._upload_tooltip.set_position(mouse_pos)
+            self._show_upload_tooltip = True
+            return
+
+        if self._randomizer_button.contains(mouse_pos):
+            self._randomizer_tooltip.set_position(mouse_pos)
+            self._show_randomizer_tooltip = True
+            return
+
+        if self._erase_all_button.contains(mouse_pos):
+            self._erase_all_tooltip.set_position(mouse_pos)
+            self._show_erase_all_tooltip = True
+            return
 
     def on_quit_event(self, key_event: QuitEvent) -> None:
         pass
@@ -336,6 +373,15 @@ class CreateScreen(Screen):
         self.x_dimension.update_child_position()
         self.y_dimension.update_child_position()
         self._base.render(window)
+
+        if self._show_upload_tooltip:
+            self._upload_tooltip.render(window)
+
+        if self._show_randomizer_tooltip:
+            self._randomizer_tooltip.render(window)
+
+        if self._show_erase_all_tooltip:
+            self._erase_all_tooltip.render(window)
 
         if self._waiting_exit_confirmation:
             self._exit_message_popup.render(window)
