@@ -10,11 +10,11 @@ from events import Event, EventType, MouseButton
 
 class RecentColors(Element):
     def __init__(self, block_size: int, padding: int) -> None:
-        super().__init__(block_size, block_size * 6 + padding * 5)
+        super().__init__(block_size, block_size * 10 + padding * 9)
         self._block_size = block_size
         self._padding = padding
         self._current_color = (255, 255, 255)
-        self._recent_colors = [(255, 255, 255) for _ in range(6)]
+        self._recent_colors = [(255, 255, 255) for _ in range(10)]
 
         self._column = Column()
         for color in self._recent_colors:
