@@ -1,6 +1,6 @@
 import pygame
 
-from components import ChildAlignment, Column, Container, Row, RowOfNonograms, Text
+from components import ChildAlignment, Container, Row, RowOfNonograms, Text
 from core import nonogram_type_t
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -18,7 +18,7 @@ class SelectGameScreen(Screen):
 
         self._base = (
             Container(self._width, self._height)
-            .set_child_alignment(ChildAlignment.TOP_CENTER)
+            .set_child_alignment(ChildAlignment.CENTER)
             .set_image("bg.jpg")
         )
 
@@ -37,7 +37,7 @@ class SelectGameScreen(Screen):
         row1.add_element(self._play_button)
         row1.set_padding(300)
 
-        container1 = Container(self._width, int(self._height * 0.2)).set_child(row1)
+        self._buttons_container = Container(self._width, int(self._height * 0.2)).set_child(row1)
 
         self._row_of_nonograms = RowOfNonograms(self._width, int(self._height * 0.3), nonogram_type)
 
@@ -47,14 +47,7 @@ class SelectGameScreen(Screen):
             .set_child(self._row_of_nonograms)
         )
 
-        column = (
-            Column()
-            .add_element(container1)
-            .add_element(Container(self._width, int(self._height * 0.1)))
-            .add_element(container2)
-        )
-
-        self._base.set_child(column)
+        self._base.set_child(container2)
 
     def on_any_event(self, event: Event) -> None:
         self._row_of_nonograms.on_any_event(event)
@@ -99,4 +92,6 @@ class SelectGameScreen(Screen):
 
     def render(self) -> None:
         window = pygame.display.get_surface()
+
         self._base.render(window)
+        self._buttons_container.render(window)
