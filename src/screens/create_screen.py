@@ -331,6 +331,7 @@ class CreateScreen(Screen):
             root = tk.Tk()
             root.iconify()
             root.attributes("-alpha", 0)
+            root.title("Select an image")
 
             file_path = filedialog.askopenfilename(
                 parent=root,
