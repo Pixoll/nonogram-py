@@ -10,7 +10,7 @@ from events import Event, EventType, MouseButton
 
 
 class RecentColors(Element):
-    def __init__(self, block_size: int, padding: int) -> None:
+    def __init__(self, block_size: int, padding: int, default_color: tuple[int, int, int]) -> None:
         super().__init__(block_size, 10 * (block_size + padding) - padding)
         self._block_size = block_size
         self._current_color = (255, 255, 255)
@@ -29,6 +29,8 @@ class RecentColors(Element):
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._surface.fill((255, 255, 255, 128))
 
+        self.add_color(default_color)
+
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
         self._row.set_position(position)
@@ -43,9 +45,16 @@ class RecentColors(Element):
             for i in range(len(self._column)):
                 self._column[i].set_color(self._recent_colors[i])
 
-    def reset_color(self) -> None:
+    def select_color(self, color: tuple[int, int, int] | None = None) -> None:
         self._selected_block.change_state()
-        self._selected_block = self._column[0]
+
+        index: int
+        try:
+            index = self._recent_colors.index(color)
+        except ValueError:
+            index = 0
+
+        self._selected_block = self._column[index]
         self._current_color = self._selected_block
         self._selected_block.change_state()
 

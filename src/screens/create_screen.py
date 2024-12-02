@@ -94,9 +94,11 @@ class CreateScreen(Screen):
         row3 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._height * 0.05))
 
         block_size = int(self._height * 0.04)
+        default_color = (255, 0, 0)
+
         self._colors = Colors(block_size // 5, 1)
-        self._color_gradient = GradientColor((255, 0, 0), block_size, 1)
-        self._lasts_colors = RecentColors(block_size, 1)
+        self._color_gradient = GradientColor(default_color, block_size, 1)
+        self._lasts_colors = RecentColors(block_size, 1, default_color)
 
         row3.add_element(self._color_gradient)
         row3.add_element(self._colors)
@@ -163,7 +165,8 @@ class CreateScreen(Screen):
         row4.add_element(self._resize_button)
         self._column2.add_element(row4)
 
-        self._board = CreateNanogram(*default_grid_size, 1, int(self._width * 0.4)).set_selected_color((255, 0, 0))
+        self._board = (CreateNanogram(*default_grid_size, 1, int(self._width * 0.4))
+                       .set_selected_color(default_color))
         self._board_base = (Container(int(self._width * 0.4), int(self._width * 0.4))
                             .set_child_alignment(ChildAlignment.CENTER)
                             .set_child(self._board))
@@ -352,7 +355,7 @@ class CreateScreen(Screen):
             new_color = self._color_gradient.get_color()
             self._board.set_selected_color(new_color)
             self._lasts_colors.add_color(new_color)
-            self._lasts_colors.reset_color()
+            self._lasts_colors.select_color(new_color)
             return
 
         if self._colors.contains(mouse_pos):
