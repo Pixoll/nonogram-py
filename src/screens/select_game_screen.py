@@ -44,7 +44,7 @@ class SelectGameScreen(Screen):
         }
 
         header_height = int(self._height * 0.1)
-        header_padding = int(self._width * 0.025)
+        header_padding = int(self._width * 0.02)
         arrow_size = int(header_height * 0.6)
 
         self._left_arrow = (
@@ -89,6 +89,20 @@ class SelectGameScreen(Screen):
 
         mouse_pos = pygame.mouse.get_pos()
 
+        if self._left_arrow.contains(mouse_pos):
+            if self._selected_size == NonogramSize.SMALL:
+                self._selected_size = NonogramSize.HUGE
+            else:
+                self._selected_size = NonogramSize(int(self._selected_size) - 1)
+            return
+
+        if self._right_arrow.contains(mouse_pos):
+            if self._selected_size == NonogramSize.HUGE:
+                self._selected_size = NonogramSize.SMALL
+            else:
+                self._selected_size = NonogramSize(int(self._selected_size) + 1)
+            return
+
         if self._play_button.contains(mouse_pos):
             from screens.play_screen import PlayScreen
             selected_nonogram = self._nonograms_rows[self._selected_size].get_selected_nonogram()
@@ -111,7 +125,9 @@ class SelectGameScreen(Screen):
         mouse_pos = pygame.mouse.get_pos()
 
         cursor_in_clickable = (self._play_button.contains(mouse_pos)
-                               or self._return_button.contains(mouse_pos))
+                               or self._return_button.contains(mouse_pos)
+                               or self._left_arrow.contains(mouse_pos)
+                               or self._right_arrow.contains(mouse_pos))
 
         pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)
 
