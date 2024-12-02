@@ -22,7 +22,7 @@ class Engine:
         width = self._window.get_width()
         self._big_font = FontManager.get_default(int(width * 0.0225))
         self._regular_font = FontManager.get_default(int(width * 0.015))
-        self._small_font = FontManager.get_default(int(width * 0.0075))
+        self._small_font = FontManager.get_default(int(width * 0.01))
         self._arrow_cursor = Cursor(pygame.SYSTEM_CURSOR_ARROW)
         self._hand_cursor = Cursor(pygame.SYSTEM_CURSOR_HAND)
 
