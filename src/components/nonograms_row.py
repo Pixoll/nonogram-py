@@ -26,8 +26,7 @@ class NonogramsRow(Element):
 
         for i in range(5):
             entry = self._nonogram_entries[i]
-            nonogram = NonogramLoader.load(nonograms_type, entry.nonogram_id)
-            info_nonogram = NonogramInfoPreview(nonogram, int(height * 0.3), int(height * 0.3))
+            info_nonogram = NonogramInfoPreview(entry.load(), int(height * 0.3), int(height * 0.3))
             self._row.add_element(info_nonogram)
 
         self._base = Container(width, height).set_child(self._row)
