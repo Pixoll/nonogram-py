@@ -24,20 +24,22 @@ class NonogramInfoPreview(Container):
         self._base = Column()
 
         size = f"{self._nonogram.size[0]}x{self._nonogram.size[1]}"
-        self._size = Text("Tamaño: "+size, FontManager.get_default(int(self._width * 0.1)), (99, 99, 224))
+        self._size = Text(size,font, (99, 99, 224))
 
         row_of_size = Row()
         container_of_size = (Container(int(self._width * 0.9), int(self._height * 0.2))).set_child(self._size)
         row_of_size.add_element(container_of_size).set_alignment(VerticalAlignment.CENTER)
 
         row_of_name_or_state = Row()
-        self._name = Text(nonogram.name, FontManager.get_default(height // 5), (99, 99, 224))
+        self._name = Text(nonogram.name,font, (99, 99, 224))
         container_of_name_or_state = Container(int(self._width * 0.9), int(self._height * 0.2))
 
         if nonogram.is_completed:
             container_of_name_or_state.set_child(self._name)
+        elif nonogram.is_in_progress:
+            container_of_name_or_state.set_child(Text("En progreso", font, (99, 99, 224)))
         else:
-            container_of_name_or_state.set_child(Text("Estado: Incompleto", FontManager.get_default(int(self._width * 0.1)), (99, 99, 224)))
+            container_of_name_or_state.set_child(Text("Incompleto", font, (99, 99, 224)))
         row_of_name_or_state.add_element(container_of_name_or_state).set_alignment(VerticalAlignment.CENTER)
 
         self._base.add_element(row_of_size).add_element(row_of_name_or_state).set_alignment(HorizontalAlignment.CENTER)
@@ -74,4 +76,5 @@ class NonogramInfoPreview(Container):
         super().render(window)
         self._size.render(window)
         pass
+    
 
