@@ -209,18 +209,26 @@ class CreateScreen(Screen):
         error_height = int(self._height * 0.1)
         error_y = (self._height - error_height) // 2
 
-        self._error_message_popup = Container(
-            self._width, int(self._height * 0.1)
-        ).set_background_color((255, 0, 0, 180)).set_child(
-            Text(
-                "Error occurred!",
-                engine.regular_font,
-                (255, 255, 255)
+        self._error_message_popup: Container[Container[Text]] = (
+            Container(self._width, self._height)
+            .set_child(
+                Container(0, 0, 25)
+                .set_position((0, error_y))
+                .set_background_color((255, 128, 128, 180))
             )
-        ).set_position((0, error_y))
+        )
 
     def show_error_message(self, message: str) -> None:
-        self._error_message_popup.set_child(Text(message, self._engine.regular_font, (255, 255, 255)))
+        text = Text(message, self._engine.regular_font, (0, 0, 0))
+        width = text.size[0] + int(self._width * 0.05)
+        height = int(text.size[1] * 2.5)
+
+        (self._error_message_popup.child
+         .set_size(width, height)
+         .set_child(text))
+
+        self._error_message_popup.update_child_position()
+
         self._showing_error_message = True
         self._error_start_time = time.time()
 
@@ -242,12 +250,17 @@ class CreateScreen(Screen):
         if self._waiting_exit_confirmation:
             return
 
-        if self._showing_error_message:
-            return
-
         self._board.on_any_event(event)
 
-        if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
+        if event.type != EventType.MOUSE_BUTTON_DOWN:
+            return
+
+        if self._showing_error_message:
+            self._showing_error_message = False
+            self._error_start_time = None
+            return
+
+        if event.button != MouseButton.LEFT:
             return
 
         mouse_pos = pygame.mouse.get_pos()
@@ -289,16 +302,16 @@ class CreateScreen(Screen):
             self._board.set_name(self._name_field.get_text())
 
             if self._board.is_empty():
-                self.show_error_message("ERROR: Board is empty")
+                self.show_error_message("Board is empty")
                 return
             if self._board.is_nameless():
-                self.show_error_message("ERROR: Board is nameless")
+                self.show_error_message("Board is nameless")
                 return
             if self._board.has_more_than_128_colors():
-                self.show_error_message("ERROR: Board has more than 128 colors")
+                self.show_error_message("Board has more than 128 colors")
                 return
             if self._board.has_empty_row_or_column_in_between():
-                self.show_error_message("ERROR: Board has empty rows or columns in between colored pixels")
+                self.show_error_message("Board has empty rows or columns in between colored pixels")
                 return
 
             self._board.save()
@@ -312,7 +325,7 @@ class CreateScreen(Screen):
 
         if self._randomizer_button.contains(mouse_pos):
             if self._board.is_empty():
-                self.show_error_message("ERROR: Board is empty")
+                self.show_error_message("Board is empty")
             else:
                 self._board.randomizer()
             return
@@ -408,6 +421,6 @@ class CreateScreen(Screen):
         if self._showing_error_message:
             self._error_message_popup.render(window)
 
-            if time.time() - self._error_start_time > 2:
+            if time.time() - self._error_start_time > 3:
                 self._showing_error_message = False
                 self._error_start_time = None
