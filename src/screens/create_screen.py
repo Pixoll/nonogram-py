@@ -265,6 +265,11 @@ class CreateScreen(Screen):
 
         mouse_pos = pygame.mouse.get_pos()
 
+        if self._board.contains(mouse_pos) and not self._lasts_colors.is_active:
+            color = self._color_gradient.get_color()
+            self._lasts_colors.add_color(color)
+            self._lasts_colors.select_color(color)
+
         self._dimension_selector1.set_active(self._x_dimension.contains(mouse_pos))
         self._dimension_selector2.set_active(self._y_dimension.contains(mouse_pos))
         self._name_field.set_active(self._nanogram_name.contains(mouse_pos))

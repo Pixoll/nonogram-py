@@ -53,6 +53,10 @@ class ColoredBlock(Element):
     def toggle_selected(self) -> None:
         self._selected = not self._selected
 
+    @property
+    def is_active(self) -> bool:
+        return self._active
+
     def set_active(self, active: bool) -> None:
         self._active = active
         self._last_blink = 0

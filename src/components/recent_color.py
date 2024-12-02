@@ -36,6 +36,10 @@ class RecentColors(Element):
         self._row.set_position(position)
         return self
 
+    @property
+    def is_active(self) -> bool:
+        return self._selected_block.is_active
+
     def set_active(self, active: bool) -> None:
         self._selected_block.set_active(active)
 
