@@ -16,29 +16,23 @@ class SelectGameScreen(Screen):
         self._nonogram_type = nonogram_type
         self._selected_size = NonogramSize.SMALL
 
-        self._base = (
-            Container(self._width, self._height)
-            .set_child_alignment(ChildAlignment.CENTER)
-            .set_image("bg.jpg")
-        )
+        self._background = Container(self._width, self._height).set_image("bg.jpg")
 
-        row1 = Row()
         self._play_button = (
-            Container(int(self._width * 0.15), int(self._height * 0.1), 25)
+            Container(int(self._width * 0.1), int(self._height * 0.1), 25)
+            .set_position((int(self._width * 0.45), int(self._height * 0.85)))
             .set_background_color((108, 224, 124))
             .set_child(Text("Play", engine.regular_font, (0, 0, 0)))
         )
+
         self._return_button = (
-            Container(int(self._width * 0.15), int(self._height * 0.1), 25)
+            Container(int(self._width * 0.1), int(self._height * 0.1), 25)
+            .set_position((20, 20))
             .set_background_color((224, 91, 93))
             .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
         )
-        row1.add_element(self._return_button)
-        row1.add_element(self._play_button)
-        row1.set_padding(300)
 
-        self._buttons_container = Container(self._width, int(self._height * 0.2)).set_child(row1)
-
+        row_pos = (0, int(self._height * 0.1))
         self._nonograms_rows = {
             size: NonogramsRow(
                 self._width,
@@ -46,10 +40,8 @@ class SelectGameScreen(Screen):
                 nonogram_type,
                 size,
                 engine.regular_font
-            ) for size in NonogramSize
+            ).set_position(row_pos) for size in NonogramSize
         }
-
-        self._base.set_child(self._nonograms_rows[self._selected_size])
 
     def on_any_event(self, event: Event) -> None:
         self._nonograms_rows[self._selected_size].on_any_event(event)
@@ -95,5 +87,7 @@ class SelectGameScreen(Screen):
     def render(self) -> None:
         window = pygame.display.get_surface()
 
-        self._base.render(window)
-        self._buttons_container.render(window)
+        self._background.render(window)
+        self._nonograms_rows[self._selected_size].render(window)
+        self._return_button.render(window)
+        self._play_button.render(window)
