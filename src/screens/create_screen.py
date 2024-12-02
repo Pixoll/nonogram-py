@@ -14,9 +14,6 @@ from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
 
-root = tk.Tk()
-root.withdraw()
-
 
 class CreateScreen(Screen):
     _engine: Engine
@@ -331,10 +328,21 @@ class CreateScreen(Screen):
             return
 
         if self._upload_button.contains(mouse_pos):
+            root = tk.Tk()
+            root.iconify()
+            root.attributes("-alpha", 0)
+
             file_path = filedialog.askopenfilename(
+                parent=root,
                 title="Select an image",
                 filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.bmp;*.gif")]
             )
+
+            try:
+                root.destroy()
+            except tk.TclError:
+                pass
+
             if file_path:
                 self._board.generate_from_image(file_path)
             return
