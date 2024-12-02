@@ -22,6 +22,7 @@ class NonogramsRow(Element):
         self._row = Row().set_alignment(VerticalAlignment.CENTER)
         self._nonogram_entries = NonogramLoader.get_by_size(nonograms_type, size)
         self._font = font
+        self._index = 0
 
         for i in range(5):
             entry = self._nonogram_entries[i]
