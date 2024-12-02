@@ -20,6 +20,7 @@ class Nonogram:
     _type: nonogram_type_t
     _id: int | None
     _name: str | None
+    _in_progress: bool
 
     def __init__(
             self,
@@ -38,6 +39,7 @@ class Nonogram:
         self._type = nonogram_type
         self._id = nonogram_id
         self._name = nonogram_name
+        self._in_progress = False
 
         used_colors: set[rgb_t] = set()
 
@@ -175,6 +177,10 @@ class Nonogram:
         return self._type
 
     @property
+    def is_in_progress(self) -> bool:
+        return self._in_progress
+
+    @property
     def is_completed(self) -> bool:
         return self._correct_cells == self._number_of_cells
 
@@ -197,6 +203,9 @@ class Nonogram:
         return self._player_grid[y][x]
 
     def __setitem__(self, index: tuple[int, int], new_value: rgb_t | Literal["x"] | None) -> None:
+        if new_value is not None:
+            self._in_progress = True
+
         x, y = index
         if self._player_grid[y][x] == new_value:
             return
