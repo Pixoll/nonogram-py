@@ -49,7 +49,7 @@ class ColorPicker(Element):
 
         self._selected_color_index = 0
         self._selected_block = self._color_blocks[0]
-        self._selected_block.change_state()
+        self._selected_block.toggle_selected()
 
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._surface.fill((0, 0, 0, 128))
@@ -73,9 +73,9 @@ class ColorPicker(Element):
             color = self._colors[self._selected_color_index]
             self._nonogram_element.set_selected_color(color)
 
-            self._selected_block.change_state()
+            self._selected_block.toggle_selected()
             self._selected_block = self._color_blocks[self._selected_color_index]
-            self._selected_block.change_state()
+            self._selected_block.toggle_selected()
 
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
@@ -83,10 +83,10 @@ class ColorPicker(Element):
         for column in self._row:
             for block in column:
                 if block.contains(pygame.mouse.get_pos()):
-                    self._selected_block.change_state()
+                    self._selected_block.toggle_selected()
                     self._selected_block = block
                     block_color = block.color
-                    block.change_state()
+                    block.toggle_selected()
                     self._nonogram_element.set_selected_color(block_color)
 
     def render(self, screen) -> None:

@@ -22,7 +22,7 @@ class Colors(Element):
             self._column.add_element(ColoredBlock(block_size * 5, block_size, color))
 
         self._selected_block = self._column[-1]
-        self._selected_block.change_state()
+        self._selected_block.toggle_selected()
 
         self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
         self._surface.fill((255, 255, 255, 128))
@@ -31,6 +31,9 @@ class Colors(Element):
         self._position = position
         self._column.set_position(position)
         return self
+
+    def set_active(self, active: bool) -> None:
+        self._selected_block.set_active(active)
 
     @staticmethod
     def _generate_colors() -> list[tuple[int, int, int]]:
@@ -54,10 +57,10 @@ class Colors(Element):
 
         for block in self._column:
             if block.contains(pygame.mouse.get_pos()):
-                self._selected_block.change_state()
+                self._selected_block.toggle_selected()
                 self._selected_block = block
                 self._selected_color = block.color
-                block.change_state()
+                block.toggle_selected()
                 break
 
     def get_selected_color(self) -> tuple[int, int, int]:

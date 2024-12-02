@@ -22,7 +22,7 @@ class RecentColors(Element):
             self._column.add_element(ColoredBlock(block_size, block_size, color))
 
         self._selected_block = self._column[0]
-        self._selected_block.change_state()
+        self._selected_block.toggle_selected()
 
         self._row: Row[Column] = Row().set_alignment(VerticalAlignment.TOP).add_element(self._column)
 
@@ -36,6 +36,9 @@ class RecentColors(Element):
         self._row.set_position(position)
         return self
 
+    def set_active(self, active: bool) -> None:
+        self._selected_block.set_active(active)
+
     def add_color(self, color: tuple[int, int, int]) -> None:
         if color not in self._recent_colors:
             self._recent_colors.insert(0, color)
@@ -46,7 +49,7 @@ class RecentColors(Element):
                 self._column[i].set_color(self._recent_colors[i])
 
     def select_color(self, color: tuple[int, int, int] | None = None) -> None:
-        self._selected_block.change_state()
+        self._selected_block.toggle_selected()
 
         index: int
         try:
@@ -56,7 +59,7 @@ class RecentColors(Element):
 
         self._selected_block = self._column[index]
         self._current_color = self._selected_block
-        self._selected_block.change_state()
+        self._selected_block.toggle_selected()
 
     def get_current_color(self) -> tuple[int, int, int]:
         return self._current_color
@@ -68,10 +71,10 @@ class RecentColors(Element):
         for i in range(0, self._number_of_colors):
             block = self._column[i]
             if block.contains(pygame.mouse.get_pos()):
-                self._selected_block.change_state()
+                self._selected_block.toggle_selected()
                 self._selected_block = block
                 self._current_color = block.color
-                block.change_state()
+                block.toggle_selected()
                 break
 
     def render(self, screen) -> None:

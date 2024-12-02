@@ -39,13 +39,15 @@ class GradientColor(Element):
                 block = ColoredBlock(self._block_size, self._block_size, darken_color(self._color, aux1))
                 if block.color == self._selected_color:
                     self._selected_block = block
-                    block.change_state()
+                    block.toggle_selected()
                 column.add_element(block)
                 aux1 += 1
             column.set_padding(self._padding)
             columns.append(column)
             self._color = lighten_color(self._color, aux2)
             aux2 += 1
+
+        self._selected_block.set_active(True)
 
         for column in reversed(columns):
             self._row.add_element(column)
@@ -59,6 +61,9 @@ class GradientColor(Element):
         self._position = position
         self._row.set_position(position)
         return self
+
+    def set_active(self, active: bool) -> None:
+        self._selected_block.set_active(active)
 
     def paint_gradient(self, color: tuple[int, int, int]) -> None:
         self._selected_color = color
@@ -82,10 +87,10 @@ class GradientColor(Element):
             for block in column:
                 if block.contains(pygame.mouse.get_pos()):
                     color = block.color
-                    self._selected_block.change_state()
+                    self._selected_block.toggle_selected()
                     self._selected_block = block
                     self._selected_color = color
-                    block.change_state()
+                    block.toggle_selected()
 
     def render(self, screen) -> None:
         screen.blit(self._surface, self._position)

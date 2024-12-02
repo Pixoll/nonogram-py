@@ -356,17 +356,32 @@ class CreateScreen(Screen):
             self._board.set_selected_color(new_color)
             self._lasts_colors.add_color(new_color)
             self._lasts_colors.select_color(new_color)
+
+            self._color_gradient.set_active(True)
+            self._colors.set_active(False)
+            self._lasts_colors.set_active(False)
+
             return
 
         if self._colors.contains(mouse_pos):
             self._colors.on_any_event(event)
             self._color_gradient.paint_gradient(self._colors.get_selected_color())
             self._board.set_selected_color(self._color_gradient.get_color())
+
+            self._color_gradient.set_active(False)
+            self._colors.set_active(True)
+            self._lasts_colors.set_active(False)
+
             return
 
         if self._lasts_colors.contains(mouse_pos):
             self._lasts_colors.on_any_event(event)
             self._board.set_selected_color(self._lasts_colors.get_current_color())
+
+            self._color_gradient.set_active(False)
+            self._colors.set_active(False)
+            self._lasts_colors.set_active(True)
+
             return
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
