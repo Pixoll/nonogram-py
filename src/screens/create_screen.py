@@ -44,8 +44,6 @@ class CreateScreen(Screen):
             .set_child(self._column2)
         )
 
-        tooltip_size = (int(self._width * 0.1), int(self._height * 0.05))
-
         row2 = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(self._width * 0.05))
         column1.add_element(row2)
 
@@ -56,10 +54,11 @@ class CreateScreen(Screen):
         )
         row2.add_element(self._upload_button)
 
+        upload_text = Text("Generate from image", engine.small_font, (0, 0, 0))
         self._upload_tooltip: Container = (
-            Container(*tooltip_size, 15)
+            Container(upload_text.size[0] + int(self._width * 0.025), upload_text.size[1] * 2, 15)
             .set_background_color((255, 255, 255, 128))
-            .set_child(Text("Generate from image", engine.small_font, (0, 0, 0)))
+            .set_child(upload_text)
         )
         self._show_upload_tooltip = False
 
@@ -70,10 +69,11 @@ class CreateScreen(Screen):
         )
         row2.add_element(self._randomizer_button)
 
+        randomizer_text = Text("Randomize board", engine.small_font, (0, 0, 0))
         self._randomizer_tooltip: Container = (
-            Container(*tooltip_size, 15)
+            Container(randomizer_text.size[0] + int(self._width * 0.025), randomizer_text.size[1] * 2, 15)
             .set_background_color((255, 255, 255, 128))
-            .set_child(Text("Randomize board", engine.small_font, (0, 0, 0)))
+            .set_child(randomizer_text)
         )
         self._show_randomizer_tooltip = False
 
@@ -84,10 +84,11 @@ class CreateScreen(Screen):
         )
         row2.add_element(self._erase_all_button)
 
+        erase_all_text = Text("Clear board", engine.small_font, (0, 0, 0))
         self._erase_all_tooltip: Container = (
-            Container(*tooltip_size, 15)
+            Container(erase_all_text.size[0] + int(self._width * 0.025), erase_all_text.size[1] * 2, 15)
             .set_background_color((255, 255, 255, 128))
-            .set_child(Text("Clear board", engine.small_font, (0, 0, 0)))
+            .set_child(erase_all_text)
         )
         self._show_erase_all_tooltip = False
 
