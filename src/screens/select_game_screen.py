@@ -1,6 +1,6 @@
 import pygame
 
-from components import ChildAlignment, Container, Row, NonogramsRow, Text
+from components import Container, Row, NonogramsRow, Text, VerticalAlignment
 from core import nonogram_type_t, NonogramSize
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
@@ -41,6 +41,40 @@ class SelectGameScreen(Screen):
                 size,
                 engine.regular_font
             ).set_position(row_pos) for size in NonogramSize
+        }
+
+        header_height = int(self._height * 0.1)
+        header_padding = int(self._width * 0.025)
+        arrow_size = int(header_height * 0.6)
+
+        self._left_arrow = (
+            Container(arrow_size, arrow_size)
+            .set_image("left_arrow.png", False)
+            .fit_to_image()
+        )
+        self._right_arrow = (
+            Container(arrow_size, arrow_size)
+            .set_image("right_arrow.png", False)
+            .fit_to_image()
+        )
+
+        self._size_header: dict[NonogramSize, Container] = {
+            size: (
+                Container(self._width, header_height)
+                .set_position((0, 20))
+                .set_child(
+                    Row()
+                    .set_alignment(VerticalAlignment.CENTER)
+                    .set_padding(header_padding)
+                    .add_element(self._left_arrow)
+                    .add_element(
+                        Container(int(self._width * 0.2), int(self._height * 0.1), 25)
+                        .set_background_color((255, 255, 128))
+                        .set_child(Text(size.name.capitalize(), engine.regular_font, (0, 0, 0)))
+                    )
+                    .add_element(self._right_arrow)
+                )
+            ) for size in NonogramSize
         }
 
     def on_any_event(self, event: Event) -> None:
@@ -88,6 +122,7 @@ class SelectGameScreen(Screen):
         window = pygame.display.get_surface()
 
         self._background.render(window)
+        self._size_header[self._selected_size].render(window)
         self._nonograms_rows[self._selected_size].render(window)
         self._return_button.render(window)
         self._play_button.render(window)
