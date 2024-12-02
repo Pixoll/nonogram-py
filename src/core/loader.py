@@ -1,24 +1,39 @@
 from collections import OrderedDict
 from os.path import exists
+from typing import Sequence
 
+from core.entry import NonogramSize, Entry
 from core.nonogram import Nonogram
 from core.types import nonogram_matrix_t, nonogram_type_t, rgb_t
 
 
 # noinspection PyProtectedMember
 class NonogramLoader:
-    _PRE_MADE: OrderedDict[int, Nonogram | None] = OrderedDict()
+    _PRE_MADE: OrderedDict[int, Entry] = OrderedDict()
     _PRE_MADE_BIN = bytearray()
     _PRE_MADE_BIN_INDEX: OrderedDict[int, tuple[int, int]] = OrderedDict()
 
-    _USER_MADE: OrderedDict[int, Nonogram | None] = OrderedDict()
+    _PRE_MADE_BY_SIZE: dict[NonogramSize, list[Entry]] = {
+        s: [] for s in NonogramSize
+    }
+
+    _USER_MADE: OrderedDict[int, Entry] = OrderedDict()
     _USER_MADE_BIN = bytearray()
     _USER_MADE_BIN_INDEX: OrderedDict[int, tuple[int, int]] = OrderedDict()
+
+    _USER_MADE_BY_SIZE: dict[NonogramSize, list[Entry]] = {
+        s: [] for s in NonogramSize
+    }
 
     @staticmethod
     def preload_nonograms() -> None:
         NonogramLoader._preload_nonograms_of_type("pre_made")
         NonogramLoader._preload_nonograms_of_type("user_made")
+
+    @staticmethod
+    def get_by_size(nonogram_type: nonogram_type_t, size: NonogramSize) -> Sequence[Entry]:
+        by_size = NonogramLoader._PRE_MADE_BY_SIZE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE_BY_SIZE
+        return by_size[size]
 
     @staticmethod
     def load(nonogram_type: nonogram_type_t, nonogram_id: int) -> Nonogram:
@@ -27,8 +42,10 @@ class NonogramLoader:
         if nonogram_id not in nonograms_dict:
             raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} does not exist.")
 
-        if nonograms_dict[nonogram_id] is not None:
-            return nonograms_dict[nonogram_id]
+        entry = nonograms_dict[nonogram_id]
+
+        if entry.nonogram is not None:
+            return entry.nonogram
 
         nonograms_bin = NonogramLoader._PRE_MADE_BIN if nonogram_type == "pre_made" else NonogramLoader._USER_MADE_BIN
         nonograms_bin_index = (NonogramLoader._PRE_MADE_BIN_INDEX if nonogram_type == "pre_made"
@@ -36,7 +53,7 @@ class NonogramLoader:
 
         index, size = nonograms_bin_index[nonogram_id]
         nonogram = NonogramLoader._deserialize(nonogram_type, nonograms_bin[index + 2: index + size + 2])
-        nonograms_dict[nonogram_id] = nonogram
+        entry._nonogram = nonogram
 
         return nonogram
 
@@ -50,15 +67,15 @@ class NonogramLoader:
         if nonogram_id not in nonograms_dict:
             raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} does not exist.")
 
-        nonogram = nonograms_dict[nonogram_id]
+        entry = nonograms_dict[nonogram_id]
 
-        if nonogram is None:
+        if entry is None:
             raise ValueError(f"Nonogram of type {nonogram_type} with id {nonogram_id} has not been loaded yet.")
 
         file_path = f"nonograms/{nonogram_type}.bin"
 
         index, size = nonograms_bin_index[nonogram_id]
-        serialized, new_size = NonogramLoader._serialize(nonogram)
+        serialized, new_size = NonogramLoader._serialize(entry.nonogram)
 
         nonograms_bin[index:index + size + 2] = serialized
         nonograms_bin_index[nonogram_id] = (index, new_size)
@@ -73,7 +90,7 @@ class NonogramLoader:
 
         serialized, size = NonogramLoader._serialize(nonogram)
 
-        NonogramLoader._USER_MADE[new_id] = nonogram
+        NonogramLoader._USER_MADE[new_id]._nonogram = nonogram
         NonogramLoader._USER_MADE_BIN.extend(serialized)
         NonogramLoader._USER_MADE_BIN_INDEX[new_id] = (len(NonogramLoader._USER_MADE_BIN), size)
 
@@ -85,6 +102,8 @@ class NonogramLoader:
     @staticmethod
     def _preload_nonograms_of_type(nonogram_type: nonogram_type_t) -> None:
         nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
+        nonograms_dict_by_size = (NonogramLoader._PRE_MADE_BY_SIZE if nonogram_type == "pre_made"
+                                  else NonogramLoader._USER_MADE_BY_SIZE)
         nonograms_bin = NonogramLoader._PRE_MADE_BIN if nonogram_type == "pre_made" else NonogramLoader._USER_MADE_BIN
         nonograms_bin_index = (NonogramLoader._PRE_MADE_BIN_INDEX if nonogram_type == "pre_made"
                                else NonogramLoader._USER_MADE_BIN_INDEX)
@@ -106,8 +125,14 @@ class NonogramLoader:
         while i < len(nonograms_bin):
             size = int.from_bytes(nonograms_bin[i:i + 2], byteorder="big", signed=False)
             nonogram_id = int.from_bytes(nonograms_bin[i + 2:i + 5], byteorder="big", signed=False)
+            width = nonograms_bin[i + 5]
+            height = nonograms_bin[i + 6]
+            colors_len = nonograms_bin[i + 7]
 
-            nonograms_dict[nonogram_id] = None
+            entry = Entry(width, height, colors_len)
+
+            nonograms_dict[nonogram_id] = entry
+            nonograms_dict_by_size[entry.size].append(entry)
             nonograms_bin_index[nonogram_id] = (i, size)
 
             i += size + 2
