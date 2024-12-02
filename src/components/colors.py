@@ -46,8 +46,6 @@ class Colors(Element):
                 color = (r + (rm * shift), g + (gm * shift), b + (bm * shift))
                 colors.append(color)
 
-        colors.append((255, 0, 0))
-
         return colors
 
     def on_any_event(self, event: Event) -> None:
