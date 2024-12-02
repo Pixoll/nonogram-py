@@ -13,11 +13,18 @@ from events import Event
 
 
 class NonogramsRow(Element):
-    def __init__(self, width: int, height: int, nonograms_type: nonogram_type_t, size: NonogramSize, font: Font):
+    def __init__(
+            self,
+            width: int,
+            height: int,
+            nonograms_type: nonogram_type_t,
+            size: NonogramSize,
+            regular_font: Font,
+            small_font: Font
+    ):
         super().__init__(width, height)
         self._row: Row[NonogramInfoPreview] = Row().set_alignment(VerticalAlignment.CENTER)
         self._nonogram_entries = NonogramLoader.get_by_size(nonograms_type, size)
-        self._font = font
         self._index = 0
         self._selected_nonogram = None
 
@@ -26,7 +33,7 @@ class NonogramsRow(Element):
         self._elements = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(width * 0.05))
 
         arrow_size = int(height * 0.1)
-        arrow_padding = arrow_size // 5
+        arrow_padding = arrow_size // 3
 
         self._left_arrow_double = (
             Container(arrow_size, arrow_size)
@@ -60,7 +67,7 @@ class NonogramsRow(Element):
 
         for i in range(4):
             entry = self._nonogram_entries[i]
-            info_nonogram = NonogramInfoPreview(entry.load(), int(height * 0.4), int(height * 0.6))
+            info_nonogram = NonogramInfoPreview(entry.load(), int(height * 0.4), int(height * 0.6), small_font)
             self._row.add_element(info_nonogram)
 
         self._elements.add_element(self._nonograms_container)
@@ -76,7 +83,7 @@ class NonogramsRow(Element):
             Container(int(width * 0.95), height).set_child(self._elements)
         )
 
-        nothing_here_text = Text("Nothing here but us chickens", font, (0, 0, 0))
+        nothing_here_text = Text("Nothing here but us chickens", regular_font, (0, 0, 0))
 
         self._nothing_here_but_us_chickens: Container = (
             Container(width, height)

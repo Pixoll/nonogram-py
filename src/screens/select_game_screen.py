@@ -39,7 +39,8 @@ class SelectGameScreen(Screen):
                 int(self._height * 0.8),
                 nonogram_type,
                 size,
-                engine.regular_font
+                engine.regular_font,
+                engine.small_font
             ).set_position(row_pos) for size in NonogramSize
         }
 

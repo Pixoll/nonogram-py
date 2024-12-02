@@ -1,5 +1,6 @@
 import pygame
 from pygame import Surface
+from pygame.font import Font
 
 from assets import FontManager
 from components.container import Container
@@ -16,7 +17,7 @@ class NonogramInfoPreview(Container):
     _size: Text
     _selected: bool
 
-    def __init__(self, nonogram: Nonogram, width: int, height: int) -> None:
+    def __init__(self, nonogram: Nonogram, width: int, height: int, font: Font) -> None:
         super().__init__(width, height)
         self._nonogram = nonogram
         self._background = Container(int(self._width*0.9), int(self._height*0.9)).set_background_color((37,218,147))
