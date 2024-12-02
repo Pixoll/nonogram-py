@@ -36,6 +36,11 @@ class NonogramLoader:
         return by_size[size]
 
     @staticmethod
+    def exists(nonogram_type: nonogram_type_t, nonogram_id: int) -> bool:
+        nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
+        return nonogram_id in nonograms_dict
+
+    @staticmethod
     def load(nonogram_type: nonogram_type_t, nonogram_id: int) -> Nonogram:
         nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
 

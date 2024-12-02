@@ -1,7 +1,7 @@
 import pygame
 
-from components import ChildAlignment, Container, Row, RowOfNonograms, Text
-from core import nonogram_type_t
+from components import ChildAlignment, Container, Row, NonogramsRow, Text
+from core import nonogram_type_t, NonogramSize
 from engine import Engine
 from events import Event, EventType, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
@@ -9,12 +9,12 @@ from screens.screen import Screen
 
 class SelectGameScreen(Screen):
     _engine: Engine
-    _row_of_nonograms: RowOfNonograms
 
     def __init__(self, engine: Engine, nonogram_type: nonogram_type_t):
         self._engine = engine
         self._width, self._height = engine.window_size
         self._nonogram_type = nonogram_type
+        self._selected_size = NonogramSize.SMALL
 
         self._base = (
             Container(self._width, self._height)
@@ -39,18 +39,20 @@ class SelectGameScreen(Screen):
 
         self._buttons_container = Container(self._width, int(self._height * 0.2)).set_child(row1)
 
-        self._row_of_nonograms = RowOfNonograms(self._width, int(self._height * 0.3), nonogram_type)
+        self._nonograms_rows = {
+            size: NonogramsRow(
+                self._width,
+                int(self._height * 0.8),
+                nonogram_type,
+                size,
+                engine.regular_font
+            ) for size in NonogramSize
+        }
 
-        container2 = (
-            Container(self._width, self._row_of_nonograms.size[1])
-            .set_background_color((0, 0, 0, 128))
-            .set_child(self._row_of_nonograms)
-        )
-
-        self._base.set_child(container2)
+        self._base.set_child(self._nonograms_rows[self._selected_size])
 
     def on_any_event(self, event: Event) -> None:
-        self._row_of_nonograms.on_any_event(event)
+        self._nonograms_rows[self._selected_size].on_any_event(event)
 
     def on_key_event(self, key_event: KeyEvent) -> None:
         pass
@@ -63,7 +65,7 @@ class SelectGameScreen(Screen):
 
         if self._play_button.contains(mouse_pos):
             from screens.play_screen import PlayScreen
-            selected_nonogram = self._row_of_nonograms.get_selected_nonogram()
+            selected_nonogram = self._nonograms_rows[self._selected_size].get_selected_nonogram()
             if selected_nonogram is not None:
                 self._engine.set_screen(PlayScreen(self._engine, selected_nonogram))
                 pygame.mouse.set_cursor(self._engine.arrow_cursor)

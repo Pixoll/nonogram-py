@@ -8,7 +8,7 @@ from core import Nonogram
 from events import Event, EventType, MouseButton
 
 
-# TODO should be implemented in row_of_nonograms.py
+# TODO should be implemented in nonograms_row.py
 class NonogramInfoPreview(Container):
     _nonogram: Nonogram
     _size: Text

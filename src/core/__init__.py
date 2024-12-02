@@ -1,3 +1,4 @@
+from core.entry import Entry, NonogramSize
 from core.hint import Hint
 from core.loader import NonogramLoader
 from core.nonogram import Nonogram
