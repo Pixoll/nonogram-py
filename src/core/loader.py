@@ -134,7 +134,7 @@ class NonogramLoader:
             height = nonograms_bin[i + 6]
             colors_len = nonograms_bin[i + 7]
 
-            entry = Entry(width, height, colors_len)
+            entry = Entry(nonogram_id, width, height, colors_len)
 
             nonograms_dict[nonogram_id] = entry
             nonograms_dict_by_size[entry.size].append(entry)

@@ -23,11 +23,9 @@ class NonogramsRow(Element):
         self._nonogram_entries = NonogramLoader.get_by_size(nonograms_type, size)
         self._font = font
 
-        for i in range(1, 6):
-            if not NonogramLoader.exists(nonograms_type, i):
-                continue
-
-            nonogram = NonogramLoader.load(nonograms_type, i)
+        for i in range(5):
+            entry = self._nonogram_entries[i]
+            nonogram = NonogramLoader.load(nonograms_type, entry.nonogram_id)
             info_nonogram = NonogramInfoPreview(nonogram, int(height * 0.3), int(height * 0.3))
             self._row.add_element(info_nonogram)
 

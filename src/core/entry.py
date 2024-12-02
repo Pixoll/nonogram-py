@@ -11,18 +11,24 @@ class NonogramSize(IntEnum):
 
 
 class Entry:
+    _nonogram_id: int
     _width: int
     _height: int
     _colors: int
     _size: NonogramSize
     _nonogram: Nonogram | None
 
-    def __init__(self, width: int, height: int, colors: int):
+    def __init__(self, nonogram_id: int, width: int, height: int, colors: int):
+        self._nonogram_id = nonogram_id
         self._width = width
         self._height = height
         self._colors = colors
         self._size = NonogramSize(min(width * height, 2000) // 501)
         self._nonogram = None
+
+    @property
+    def nonogram_id(self) -> int:
+        return self._nonogram_id
 
     @property
     def width(self) -> int:
