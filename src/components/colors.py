@@ -32,9 +32,6 @@ class Colors(Element):
         self._column.set_position(position)
         return self
 
-    def set_active(self, active: bool) -> None:
-        self._selected_block.set_active(active)
-
     @staticmethod
     def _generate_colors() -> list[tuple[int, int, int]]:
         colors: list[tuple[int, int, int]] = [(255, 0, 0)]
