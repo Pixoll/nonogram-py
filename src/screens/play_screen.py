@@ -29,11 +29,20 @@ class PlayScreen(Screen):
         columns = nonogram.size[0] + max([len(row) for row in nonogram.horizontal_hints])
         rows = nonogram.size[1] + max([len(column) for column in nonogram.vertical_hints])
 
+        self._return_button = (
+            Container(int(self._width * 0.1), int(self._height * 0.1), 25)
+            .set_position((20, 20))
+            .set_background_color((224, 91, 93))
+            .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
+        )
+
+        max_nonogram_width = self._width - self._return_button.size[0] * 2
+
         grid_ratio = columns / rows
-        window_ratio = self._width / self._height
+        window_ratio = max_nonogram_width / self._height
 
         limiting_grid_side = columns if grid_ratio > window_ratio else rows
-        limiting_window_side = self._width if grid_ratio > window_ratio else self._height
+        limiting_window_side = max_nonogram_width if grid_ratio > window_ratio else self._height
         block_size = floor(limiting_window_side * 0.9 / limiting_grid_side)
 
         self._nonogram_element = NonogramElement(nonogram, block_size, 1)
@@ -62,13 +71,6 @@ class PlayScreen(Screen):
                     .set_child(self._color_picker)
                 )
             )
-
-        self._return_button = (
-            Container(int(self._width * 0.1), int(self._height * 0.1), 25)
-            .set_position((20, 20))
-            .set_background_color((224, 91, 93))
-            .set_child(Text("Return", engine.regular_font, (0, 0, 0)))
-        )
 
         self._completed_popup: Container = (
             Container(self._width, self._height)

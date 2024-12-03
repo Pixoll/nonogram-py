@@ -1,5 +1,4 @@
 from math import ceil
-from typing import Self
 
 import pygame
 from pygame.font import Font
