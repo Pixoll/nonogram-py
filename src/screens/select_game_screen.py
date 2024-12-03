@@ -10,11 +10,17 @@ from screens.screen import Screen
 class SelectGameScreen(Screen):
     _engine: Engine
 
-    def __init__(self, engine: Engine, nonogram_type: nonogram_type_t):
+    def __init__(
+            self,
+            engine: Engine,
+            nonogram_type: nonogram_type_t,
+            selected_size: NonogramSize = NonogramSize.SMALL,
+            page: int = 0
+    ):
         self._engine = engine
         self._width, self._height = engine.window_size
         self._nonogram_type = nonogram_type
-        self._selected_size = NonogramSize.SMALL
+        self._selected_size = selected_size
 
         self._background = Container(self._width, self._height).set_image("bg.jpg")
 
@@ -40,7 +46,8 @@ class SelectGameScreen(Screen):
                 nonogram_type,
                 size,
                 engine.regular_font,
-                engine.small_font
+                engine.small_font,
+                page if size == selected_size else 0
             ).set_position(row_pos) for size in NonogramSize
         }
 
@@ -108,10 +115,13 @@ class SelectGameScreen(Screen):
             return
 
         if self._play_button.contains(mouse_pos):
-            from screens.play_screen import PlayScreen
-            selected_nonogram = self._nonograms_rows[self._selected_size].selected_nonogram
+            row = self._nonograms_rows[self._selected_size]
+            selected_nonogram = row.selected_nonogram
             if selected_nonogram is not None:
-                self._engine.set_screen(PlayScreen(self._engine, selected_nonogram))
+                from screens.play_screen import PlayScreen
+                self._engine.set_screen(
+                    PlayScreen(self._engine, selected_nonogram, self._selected_size, row.current_page)
+                )
                 pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 

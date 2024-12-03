@@ -20,7 +20,8 @@ class NonogramsRow(Element):
             nonograms_type: nonogram_type_t,
             size: NonogramSize,
             regular_font: Font,
-            small_font: Font
+            small_font: Font,
+            starting_page: int
     ):
         super().__init__(width, height)
 
@@ -35,8 +36,8 @@ class NonogramsRow(Element):
         )
 
         self._nonogram_entries = NonogramLoader.get_by_size(nonograms_type, size)
-        self._index = 0
         self._previews_per_page = 3
+        self._index = starting_page * self._previews_per_page
         self._has_multiple_pages = len(self._nonogram_entries) > self._previews_per_page
         self._selected_nonogram: NonogramInfoPreview | None = None
 
@@ -45,6 +46,10 @@ class NonogramsRow(Element):
 
         self._preview_width = int(width * 0.2)
         self._preview_height = self._preview_width * 4 // 3
+
+        for _ in range(self._previews_per_page):
+            # noinspection PyTypeChecker
+            self._nonogram_previews.add_element(Container(self._preview_width, self._preview_height))  # <- placeholder
 
         self._nonograms_container: Container = Container(
             (self._preview_width + row_padding) * self._previews_per_page - row_padding,
@@ -77,7 +82,7 @@ class NonogramsRow(Element):
             .add_element(self._left_arrow_triple)
             .add_element(self._left_arrow_double)
             .add_element(self._left_arrow)
-            .set_hidden(True)
+            .set_hidden(starting_page == 0)
         )
 
         self._right_arrow = (
@@ -108,16 +113,8 @@ class NonogramsRow(Element):
             .add_element(self._right_arrow_triple)
         )
 
-        for i in range(min(self._previews_per_page, len(self._nonogram_entries))):
-            entry = self._nonogram_entries[i]
-            info_nonogram = NonogramInfoPreview(
-                entry.load(),
-                self._preview_width,
-                self._preview_height,
-                regular_font,
-                small_font
-            )
-            self._nonogram_previews.add_element(info_nonogram)
+        for i in self._index_range:
+            self._replace_preview(i, i - self._index)
 
         self._base: Container = Container(width, height).set_child(
             Container(int(width * 0.95), height).set_child(
@@ -170,6 +167,10 @@ class NonogramsRow(Element):
         if self._selected_nonogram is not None:
             return self._selected_nonogram.get_nonogram()
         return None
+
+    @property
+    def current_page(self) -> int:
+        return self._index // self._previews_per_page
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position

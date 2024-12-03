@@ -3,7 +3,7 @@ from math import floor
 import pygame
 
 from components import ChildAlignment, ColorPicker, Container, NonogramElement, Text
-from core import Nonogram
+from core import Nonogram, NonogramSize
 from engine import Engine
 from events import Event, EventType, Key, KeyEvent, MouseButton, MouseButtonEvent, MouseMotionEvent, QuitEvent
 from screens.screen import Screen
@@ -16,11 +16,13 @@ class PlayScreen(Screen):
     _has_color_picker: bool
     _color_picker: ColorPicker
 
-    def __init__(self, engine: Engine, nonogram: Nonogram):
+    def __init__(self, engine: Engine, nonogram: Nonogram, size: NonogramSize, page: int):
         self._engine = engine
         self._width, self._height = engine.window_size
         self._nonogram = nonogram
         self._has_color_picker = len(nonogram.used_colors) > 1
+        self._size = size
+        self._page = page
 
         self._background = Container(self._width, self._height).set_image("bg.jpg")
 
@@ -79,7 +81,7 @@ class PlayScreen(Screen):
     def on_key_event(self, key_event: KeyEvent) -> None:
         if key_event.key == Key.ESCAPE:
             from screens.select_game_screen import SelectGameScreen
-            self._engine.set_screen(SelectGameScreen(self._engine, self._nonogram.type))
+            self._engine.set_screen(SelectGameScreen(self._engine, self._nonogram.type, self._size, self._page))
 
     def on_mouse_button_event(self, event: MouseButtonEvent) -> None:
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
@@ -89,7 +91,7 @@ class PlayScreen(Screen):
 
         if self._return_button.contains(mouse_pos):
             from screens.select_game_screen import SelectGameScreen
-            self._engine.set_screen(SelectGameScreen(self._engine, self._nonogram.type))
+            self._engine.set_screen(SelectGameScreen(self._engine, self._nonogram.type, self._size, self._page))
             pygame.mouse.set_cursor(self._engine.arrow_cursor)
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
