@@ -75,13 +75,11 @@ class NonogramInfoPreview(Container):
                 (255, 255, 255)
             ))
             .add_element(nonogram_name_container)
-            .add_element(Text(
-                "Completed" if nonogram.is_completed
-                else "In progress" if nonogram.is_in_progress
-                else "Not played",
-                regular_font,
-                (255, 255, 255)
-            ))
+            .add_element(
+                Text("Completed", regular_font, (128, 255, 128)) if nonogram.is_completed
+                else Text("In progress", regular_font, (255, 255, 128)) if nonogram.is_in_progress
+                else Text("Not played", regular_font, (255, 255, 255)),
+            )
         )
 
     def set_position(self, position: tuple[int, int]) -> Self:
