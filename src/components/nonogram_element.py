@@ -6,6 +6,7 @@ from pygame import Surface
 from components.block import Block
 from components.colored_block import ColoredBlock
 from components.column import Column
+from components.container import Container
 from components.element import Element
 from components.hints_element import HintsElement
 from components.row import Row
@@ -66,6 +67,16 @@ class NonogramElement(Element):
         self._surface = Surface((self.size[0] + padding * 2, self.size[1] + padding * 2), pygame.SRCALPHA)
         self._surface.fill(self._background_color)
 
+        self._highlight_center: tuple[int, int] | None = None
+        self._vertical_highlights: list[Container] = [
+            Container(block_size + 2, self._height + 2).set_background_color((255, 255, 0, 64))
+            for _ in range(nonogram.size[0])
+        ]
+        self._horizontal_highlights: list[Container] = [
+            Container(self._width + 2, block_size + 2).set_background_color((255, 255, 0, 64))
+            for _ in range(nonogram.size[1])
+        ]
+
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
 
@@ -76,6 +87,12 @@ class NonogramElement(Element):
         self._vertical_hints.set_position(vertical_hint_position)
         self._horizontal_hints.set_position(horizontal_hint_position)
         self._grid.set_position(self._grid_position)
+
+        for i in range(self._nonogram.size[0]):
+            self._vertical_highlights[i].set_position((self._grid[i].position[0] - 1, position[1] - 1))
+
+        for j in range(self._nonogram.size[1]):
+            self._horizontal_highlights[j].set_position((position[0] - 1, self._grid[0][j].position[1] - 1))
 
         return self
 
@@ -98,6 +115,11 @@ class NonogramElement(Element):
         self._horizontal_hints.render(window)
         self._grid.render(window)
 
+        if self._highlight_center is not None:
+            col, row = self._highlight_center
+            self._vertical_highlights[col].render(window)
+            self._horizontal_highlights[row].render(window)
+
     def on_any_event(self, event: Event) -> None:
         is_motion = event.type == EventType.MOUSE_MOTION
 
@@ -105,6 +127,15 @@ class NonogramElement(Element):
             return
 
         mouse_pos = pygame.mouse.get_pos()
+
+        if is_motion:
+            if self._grid.contains(mouse_pos):
+                self._highlight_center = (
+                    min((mouse_pos[0] - self._grid.position[0]) // self._block_size, self._nonogram.size[0] - 1),
+                    min((mouse_pos[1] - self._grid.position[1]) // self._block_size, self._nonogram.size[1] - 1)
+                )
+            else:
+                self._highlight_center = None
 
         if len(self._nonogram.used_colors) > 1:
             is_left_click = event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT
