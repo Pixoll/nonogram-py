@@ -47,7 +47,7 @@ class NonogramsRow(Element):
         self._preview_width = int(width * 0.2)
         self._preview_height = self._preview_width * 4 // 3
 
-        for _ in range(self._previews_per_page):
+        for _ in range(min(self._previews_per_page, len(self._nonogram_entries))):
             # noinspection PyTypeChecker
             self._nonogram_previews.add_element(Container(self._preview_width, self._preview_height))  # <- placeholder
 
@@ -89,19 +89,16 @@ class NonogramsRow(Element):
             Container(arrow_size, arrow_size)
             .set_image("right_arrow.png", False)
             .fit_to_image()
-            .set_hidden(not self._has_multiple_pages)
         )
         self._right_arrow_double = (
             Container(arrow_size, arrow_size)
             .set_image("right_arrow_double.png", False)
             .fit_to_image()
-            .set_hidden(not self._has_multiple_pages)
         )
         self._right_arrow_triple = (
             Container(arrow_size, arrow_size)
             .set_image("right_arrow_triple.png", False)
             .fit_to_image()
-            .set_hidden(not self._has_multiple_pages)
         )
 
         self._right_arrows = (
@@ -111,6 +108,7 @@ class NonogramsRow(Element):
             .add_element(self._right_arrow)
             .add_element(self._right_arrow_double)
             .add_element(self._right_arrow_triple)
+            .set_hidden(not self._has_multiple_pages)
         )
 
         for i in self._index_range:
