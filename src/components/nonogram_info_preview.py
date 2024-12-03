@@ -49,7 +49,7 @@ class NonogramInfoPreview(Container):
 
             first_space = i
             for l in range(i, last_space - 1, -1):
-                if name_slice[l] == " ":
+                if nonogram_name[l] == " ":
                     first_space = l
                     break
 
