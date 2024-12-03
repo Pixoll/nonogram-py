@@ -95,7 +95,11 @@ class NonogramLoader:
 
         serialized, size = NonogramLoader._serialize(nonogram)
 
-        NonogramLoader._USER_MADE[new_id]._nonogram = nonogram
+        new_entry = Entry(nonogram.type, new_id, *nonogram.size, len(nonogram.used_colors))
+        new_entry._nonogram = nonogram
+
+        NonogramLoader._USER_MADE[new_id] = new_entry
+        NonogramLoader._USER_MADE_BY_SIZE[new_entry.size].append(new_entry)
         NonogramLoader._USER_MADE_BIN.extend(serialized)
         NonogramLoader._USER_MADE_BIN_INDEX[new_id] = (len(NonogramLoader._USER_MADE_BIN), size)
 
