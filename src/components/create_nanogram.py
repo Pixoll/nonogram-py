@@ -148,7 +148,7 @@ class CreateNanogram(Element):
         for y in range(self._cheight):
             for x in range(self._cwidth):
                 color = image_matrix[y][x]
-                if color != (255, 255, 255):
+                if color is not None and color != (255, 255, 255):
                     self._grid[y][x].set_background_color(color)
                 else:
                     self._grid[y][x].set_background_color((255, 255, 255))
