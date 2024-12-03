@@ -42,6 +42,9 @@ class NonogramElement(Element):
         self._vertical_hints = HintsElement(nonogram.vertical_hints, block_size, padding, False)
         self._hovering_color: tuple[int, int, int] | None = None
         self._selected_color = nonogram.used_colors[0]
+        self._is_emptying = False
+        self._holding_left = False
+        self._holding_right = False
 
         self._all_hint_elements: list[ColoredBlock] = []
 
@@ -121,6 +124,11 @@ class NonogramElement(Element):
             self._horizontal_highlights[row].render(window)
 
     def on_any_event(self, event: Event) -> None:
+        if event.type == EventType.MOUSE_BUTTON_UP:
+            self._holding_left = False
+            self._holding_right = False
+            return
+
         is_motion = event.type == EventType.MOUSE_MOTION
 
         if event.type != EventType.MOUSE_BUTTON_DOWN and not is_motion:
@@ -130,10 +138,7 @@ class NonogramElement(Element):
 
         if is_motion:
             if self._grid.contains(mouse_pos):
-                self._highlight_center = (
-                    min((mouse_pos[0] - self._grid.position[0]) // self._block_size, self._nonogram.size[0] - 1),
-                    min((mouse_pos[1] - self._grid.position[1]) // self._block_size, self._nonogram.size[1] - 1)
-                )
+                self._highlight_center = self._get_grid_position(mouse_pos)
             else:
                 self._highlight_center = None
 
@@ -169,33 +174,63 @@ class NonogramElement(Element):
                 self._hovering_color = None
 
         if is_motion:
+            if not self._grid.contains(mouse_pos):
+                return
+
+            if not self._holding_left and not self._holding_right:
+                return
+
+            x, y = self._get_grid_position(mouse_pos)
+            block = self._grid[x][y]
+
+            if self._is_emptying:
+                block.set_state(Block.State.EMPTY, None)
+            elif self._holding_left:
+                block.set_state(Block.State.COLORED, self._selected_color)
+            else:
+                block.set_state(Block.State.CROSSED, None)
+
+            match block.state:
+                case Block.State.EMPTY:
+                    self._nonogram[x, y] = None
+                case Block.State.CROSSED:
+                    self._nonogram[x, y] = "x"
+                case Block.State.COLORED:
+                    self._nonogram[x, y] = block.color
+
             return
 
-        if event.button != MouseButton.LEFT and event.button != MouseButton.RIGHT:
+        is_left_click = event.button == MouseButton.LEFT
+        is_right_click = event.button == MouseButton.RIGHT
+
+        if not is_left_click and not is_right_click:
             return
 
-        for column in self._grid:
-            for block in column:
-                if not block.contains(mouse_pos):
-                    continue
+        if not self._grid.contains(mouse_pos):
+            return
 
-                new_state = (
-                    Block.State.COLORED if event.button == MouseButton.LEFT
-                    else Block.State.CROSSED if block.state != Block.State.CROSSED
-                    else Block.State.EMPTY
-                )
-                block.set_state(new_state, self._selected_color)
+        self._holding_left = is_left_click
+        self._holding_right = is_right_click
 
-                x = (mouse_pos[0] - self._grid_position[0]) // (self._block_size + self._padding)
-                y = (mouse_pos[1] - self._grid_position[1]) // (self._block_size + self._padding)
+        x, y = self._get_grid_position(mouse_pos)
+        block = self._grid[x][y]
 
-                match block.state:
-                    case Block.State.EMPTY:
-                        self._nonogram[x, y] = None
-                    case Block.State.CROSSED:
-                        self._nonogram[x, y] = "x"
-                    case Block.State.COLORED:
-                        self._nonogram[x, y] = block.color
+        if is_left_click:
+            new_state = Block.State.COLORED if block.state != Block.State.COLORED else Block.State.EMPTY
+            block.set_state(new_state, self._selected_color)
+        else:
+            new_state = Block.State.CROSSED if block.state != Block.State.CROSSED else Block.State.EMPTY
+            block.set_state(new_state, self._selected_color)
+
+        self._is_emptying = new_state == Block.State.EMPTY
+
+        match block.state:
+            case Block.State.EMPTY:
+                self._nonogram[x, y] = None
+            case Block.State.CROSSED:
+                self._nonogram[x, y] = "x"
+            case Block.State.COLORED:
+                self._nonogram[x, y] = block.color
 
     def _deselect_blocks(self):
         for b in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
@@ -206,3 +241,11 @@ class NonogramElement(Element):
             for b in column:
                 if b.highlighted:
                     b.toggle_highlighted()
+
+    def _get_grid_position(self, mouse_pos: tuple[int, int]) -> tuple[int, int]:
+        return (
+            min((mouse_pos[0] - self._grid.position[0]) // (self._block_size + self._padding),
+                self._nonogram.size[0] - 1),
+            min((mouse_pos[1] - self._grid.position[1]) // (self._block_size + self._padding),
+                self._nonogram.size[1] - 1)
+        )

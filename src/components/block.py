@@ -49,11 +49,8 @@ class Block(ElementWithChild):
         self._surface.fill(self._background_color)
 
         self._x_image = TextureManager.get("x.gif", self.size)
-
-        if self._x_mark_visible:
-            self.toggle_x_mark()
-            self.toggle_x_mark()
-        pass
+        self.set_x_mark_visible(not self._x_mark_visible)
+        self.set_x_mark_visible(not self._x_mark_visible)
 
     @property
     def highlighted(self) -> bool:
@@ -63,29 +60,19 @@ class Block(ElementWithChild):
         self._highlighted = not self._highlighted
 
     def set_state(self, new_state: State, color: tuple[int, int, int] | None) -> None:
-        if new_state == Block.State.COLORED:
-            if self._state == Block.State.COLORED:
-                if color is not None and self._background_color != color:
-                    self.set_background_color(color)
-                else:
-                    self._state = Block.State.EMPTY
-                    self.set_background_color((255, 255, 255))
-            else:
-                if self._state == Block.State.CROSSED:
-                    self.toggle_x_mark()
+        match new_state:
+            case Block.State.COLORED:
+                self.set_x_mark_visible(False)
                 self._state = Block.State.COLORED
                 self.set_background_color(color)
-
-            return
-
-        if new_state == Block.State.CROSSED:
-            self._state = Block.State.CROSSED
-            self.set_background_color((255, 255, 255))
-            self.toggle_x_mark()
-        else:
-            self.toggle_x_mark()
-            self._state = Block.State.EMPTY
-            self.set_background_color((255, 255, 255))
+            case Block.State.CROSSED:
+                self._state = Block.State.CROSSED
+                self.set_background_color((255, 255, 255))
+                self.set_x_mark_visible(True)
+            case Block.State.EMPTY:
+                self.set_x_mark_visible(False)
+                self._state = Block.State.EMPTY
+                self.set_background_color((255, 255, 255))
 
     @property
     def color(self) -> tuple[int, int, int]:
@@ -111,13 +98,13 @@ class Block(ElementWithChild):
                 2
             )
 
-    def toggle_x_mark(self) -> None:
-        if self._x_mark_visible:
+    def set_x_mark_visible(self, visible: True) -> None:
+        self._x_mark_visible = visible
+
+        if not visible:
             self._surface.fill(self._background_color)
-            self._x_mark_visible = False
             return
 
         x_center = (self._surface.get_width() - self._x_image.get_width()) // 2
         y_center = (self._surface.get_height() - self._x_image.get_height()) // 2
         self._surface.blit(self._x_image, (x_center, y_center))
-        self._x_mark_visible = True
