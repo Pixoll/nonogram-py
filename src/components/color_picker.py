@@ -2,21 +2,19 @@ from math import ceil
 from typing import Self
 
 import pygame
+from pygame.font import Font
 
 from components.colored_block import ColoredBlock
 from components.column import Column
-from components.element import Element
+from components.container import Container
 from components.nonogram_element import NonogramElement
 from components.row import Row, VerticalAlignment
+from components.text import Text
 from events import Event, EventType, MouseButton, MouseWheelEvent
 
 
-class ColorPicker(Element):
-    _surface: pygame.Surface
-    _row: Row[Column[ColoredBlock]]
-    _padding: int
-    _position: tuple[int, int]
-    _block_size: int
+class ColorPicker(Container):
+    _blocks: Row[Column[ColoredBlock]]
     _selected_color_index: int
     _nonogram_element: NonogramElement
 
@@ -25,39 +23,49 @@ class ColorPicker(Element):
             nonogram_element: NonogramElement,
             colors: tuple[tuple[int, int, int], ...],
             block_size: int,
-            padding: int
+            font: Font
     ) -> None:
-        cols = min(ceil(len(colors) ** 0.5), 16)
+        cols = min(ceil(len(colors) ** 0.5), 5)
         rows = ceil(len(colors) / cols)
+        width = cols * (block_size + 1) - 1
+        height = rows * (block_size + 1) - 1
 
-        super().__init__(cols * (block_size + padding) - padding, rows * (block_size + padding) - padding)
+        colors_text = Text("Colors", font, (255, 255, 255))
+        column_padding = colors_text.size[1] // 2
+
+        super().__init__(
+            max(width, colors_text.size[0]) + block_size,
+            height + colors_text.size[1] + column_padding + block_size,
+            25
+        )
+        self.set_background_color((0, 0, 0, 128))
 
         self._nonogram_element = nonogram_element
         self._colors = colors
-        self._block_size = block_size
-        self._padding = padding
         self._color_blocks = [ColoredBlock(block_size, block_size, colors[index]) for index in range(len(colors))]
-        self._row = Row().set_alignment(VerticalAlignment.TOP).set_padding(padding)
+        self._blocks = Row().set_alignment(VerticalAlignment.TOP).set_padding(1)
 
         for i in range(cols):
-            column: Column[ColoredBlock] = Column().set_padding(padding)
+            column: Column[ColoredBlock] = Column().set_padding(1)
             for j in range(rows):
                 index = i + j * cols
                 if index < len(colors):
                     column.add_element(self._color_blocks[index])
-            self._row.add_element(column)
+            self._blocks.add_element(column)
 
         self._selected_color_index = 0
         self._selected_block = self._color_blocks[0]
         self._selected_block.toggle_selected()
 
-        self._surface = pygame.Surface(self.size, pygame.SRCALPHA)
-        self._surface.fill((0, 0, 0, 128))
-
-    def set_position(self, position: tuple[int, int]) -> Self:
-        self._position = position
-        self._row.set_position(position)
-        return self
+        self.set_child(
+            Container(self._width - block_size, self._height - block_size)
+            .set_child(
+                Column()
+                .set_padding(column_padding)
+                .add_element(colors_text)
+                .add_element(self._blocks)
+            )
+        )
 
     def on_any_event(self, event: Event) -> None:
         if event.type == EventType.MOUSE_WHEEL:
@@ -80,7 +88,7 @@ class ColorPicker(Element):
         if event.type != EventType.MOUSE_BUTTON_DOWN or event.button != MouseButton.LEFT:
             return
 
-        for column in self._row:
+        for column in self._blocks:
             for block in column:
                 if block.contains(pygame.mouse.get_pos()):
                     self._selected_block.toggle_selected()
@@ -88,7 +96,3 @@ class ColorPicker(Element):
                     block_color = block.color
                     block.toggle_selected()
                     self._nonogram_element.set_selected_color(block_color)
-
-    def render(self, screen) -> None:
-        screen.blit(self._surface, self._position)
-        self._row.render(screen)

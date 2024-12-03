@@ -44,14 +44,20 @@ class PlayScreen(Screen):
         )
 
         if self._has_color_picker:
-            self._color_picker = ColorPicker(self._nonogram_element, nonogram.used_colors, int(self._height * 0.05), 1)
+            color_picker_block_size = int(self._height * 0.04)
+            self._color_picker = ColorPicker(
+                self._nonogram_element,
+                nonogram.used_colors,
+                color_picker_block_size,
+                engine.regular_font
+            )
             self._color_picker_container = (
                 Container(self._width, self._height)
                 .set_child_alignment(ChildAlignment.CENTER_RIGHT)
                 .set_child(
                     Container(
-                        self._color_picker.size[0] + int(self._height * 0.05),
-                        self._color_picker.size[1] + int(self._height * 0.05)
+                        self._color_picker.size[0] + color_picker_block_size,
+                        self._color_picker.size[1] + color_picker_block_size
                     )
                     .set_child(self._color_picker)
                 )
