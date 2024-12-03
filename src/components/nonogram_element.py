@@ -69,11 +69,11 @@ class NonogramElement(Element):
 
         self._highlight_center: tuple[int, int] | None = None
         self._vertical_highlights: list[Container] = [
-            Container(block_size + 2, self._height + 2).set_background_color((255, 255, 0, 64))
+            Container(block_size + 2, self._height + 2).set_background_color((255, 255, 0, 32))
             for _ in range(nonogram.size[0])
         ]
         self._horizontal_highlights: list[Container] = [
-            Container(self._width + 2, block_size + 2).set_background_color((255, 255, 0, 64))
+            Container(self._width + 2, block_size + 2).set_background_color((255, 255, 0, 32))
             for _ in range(nonogram.size[1])
         ]
 
