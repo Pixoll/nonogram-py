@@ -20,11 +20,20 @@ class ColorPicker(Container):
     def __init__(
             self,
             nonogram_element: NonogramElement,
+            window_width: int,
+            window_height: int,
             colors: tuple[tuple[int, int, int], ...],
             block_size: int,
             font: Font
     ) -> None:
-        cols = min(ceil(len(colors) ** 0.5), 5)
+        cols = ((window_width - nonogram_element.size[0]) // 2 - block_size * 2) // block_size
+        rows = ceil(len(colors) / cols)
+        height = rows * (block_size + 1) - 1
+
+        if height > window_height:
+            block_size -= (height - window_height + block_size) // block_size
+
+        cols = ((window_width - nonogram_element.size[0]) // 2 - block_size * 2) // block_size
         rows = ceil(len(colors) / cols)
         width = cols * (block_size + 1) - 1
         height = rows * (block_size + 1) - 1

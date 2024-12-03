@@ -56,6 +56,8 @@ class PlayScreen(Screen):
             color_picker_block_size = int(self._height * 0.04)
             self._color_picker = ColorPicker(
                 self._nonogram_element,
+                self._width,
+                self._height,
                 nonogram.used_colors,
                 color_picker_block_size,
                 engine.regular_font
