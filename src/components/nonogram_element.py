@@ -99,7 +99,9 @@ class NonogramElement(Element):
         self._grid.render(window)
 
     def on_any_event(self, event: Event) -> None:
-        if event.type != EventType.MOUSE_BUTTON_DOWN and event.type != EventType.MOUSE_MOTION:
+        is_motion = event.type == EventType.MOUSE_MOTION
+
+        if event.type != EventType.MOUSE_BUTTON_DOWN and not is_motion:
             return
 
         mouse_pos = pygame.mouse.get_pos()
@@ -111,33 +113,31 @@ class NonogramElement(Element):
                 if block.contains(mouse_pos):
                     color = block.color
 
-                    if self._hovering_color != color:
+                    if is_motion and self._hovering_color != color:
                         if self._hovering_color is not None:
-                            for b in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
-                                b.toggle_selected()
-                            for b in self._vertical_hints.get_grouped_blocks(self._hovering_color):
-                                b.toggle_selected()
+                            self._deselect_blocks()
 
                         self._hovering_color = color
 
-                        for b in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
-                            b.toggle_selected()
-                        for b in self._vertical_hints.get_grouped_blocks(self._hovering_color):
-                            b.toggle_selected()
+                        for cb in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
+                            cb.toggle_selected()
+                        for cb in self._vertical_hints.get_grouped_blocks(self._hovering_color):
+                            cb.toggle_selected()
+                        for column in self._grid:
+                            for b in column:
+                                if b.color == color:
+                                    b.toggle_highlighted()
 
                     if is_left_click:
                         self._selected_color = color
+
                     return
 
-            if self._hovering_color is not None:
-                for b in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
-                    b.toggle_selected()
-                for b in self._vertical_hints.get_grouped_blocks(self._hovering_color):
-                    b.toggle_selected()
-
+            if is_motion and self._hovering_color is not None:
+                self._deselect_blocks()
                 self._hovering_color = None
 
-        if event.type != EventType.MOUSE_BUTTON_DOWN:
+        if is_motion:
             return
 
         if event.button != MouseButton.LEFT and event.button != MouseButton.RIGHT:
@@ -165,3 +165,13 @@ class NonogramElement(Element):
                         self._nonogram[x, y] = "x"
                     case Block.State.COLORED:
                         self._nonogram[x, y] = block.color
+
+    def _deselect_blocks(self):
+        for b in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
+            b.toggle_selected()
+        for b in self._vertical_hints.get_grouped_blocks(self._hovering_color):
+            b.toggle_selected()
+        for column in self._grid:
+            for b in column:
+                if b.highlighted:
+                    b.toggle_highlighted()

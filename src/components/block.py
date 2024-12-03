@@ -31,6 +31,7 @@ class Block(ElementWithChild):
         self._state = Block.State.EMPTY
         self._x_mark_visible = color == "x"
         self._x_image = TextureManager.get("x.png", self.size)
+        self._highlighted = False
 
     def set_background_color(self, color: tuple[int, int, int] | tuple[int, int, int, int]) -> Self:
         self._background_color = color
@@ -53,6 +54,13 @@ class Block(ElementWithChild):
             self.toggle_x_mark()
             self.toggle_x_mark()
         pass
+
+    @property
+    def highlighted(self) -> bool:
+        return self._highlighted
+
+    def toggle_highlighted(self) -> None:
+        self._highlighted = not self._highlighted
 
     def set_state(self, new_state: State, color: tuple[int, int, int] | None) -> None:
         if new_state == Block.State.COLORED:
@@ -90,10 +98,18 @@ class Block(ElementWithChild):
     def on_any_event(self, event: Event) -> None:
         pass
 
-    def render(self, window: pygame.Surface) -> None:
-        window.blit(self._surface, self.position)
+    def render(self, screen: pygame.Surface) -> None:
+        screen.blit(self._surface, self.position)
         if self._child:
-            self._child.render(window)
+            self._child.render(screen)
+
+        if self._highlighted:
+            pygame.draw.rect(
+                screen,
+                (255, 255, 255),
+                (self._position[0], self._position[1], self.size[0], self.size[1]),
+                2
+            )
 
     def toggle_x_mark(self) -> None:
         if self._x_mark_visible:
