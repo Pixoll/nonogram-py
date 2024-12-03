@@ -182,6 +182,9 @@ class NonogramsRow(Element):
                         self._replace_preview(i, i - self._index)
 
                     self._nonogram_previews.update_positions()
+                    if self._selected_nonogram is not None:
+                        self._selected_nonogram.set_selected(False)
+                        self._selected_nonogram = None
 
                     return
 
@@ -208,6 +211,9 @@ class NonogramsRow(Element):
                         self._replace_preview(i, i - self._index)
 
                     self._nonogram_previews.update_positions()
+                    if self._selected_nonogram is not None:
+                        self._selected_nonogram.set_selected(False)
+                        self._selected_nonogram = None
 
                     return
 
