@@ -109,7 +109,7 @@ class SelectGameScreen(Screen):
 
         if self._play_button.contains(mouse_pos):
             from screens.play_screen import PlayScreen
-            selected_nonogram = self._nonograms_rows[self._selected_size].get_selected_nonogram()
+            selected_nonogram = self._nonograms_rows[self._selected_size].selected_nonogram
             if selected_nonogram is not None:
                 self._engine.set_screen(PlayScreen(self._engine, selected_nonogram))
                 pygame.mouse.set_cursor(self._engine.arrow_cursor)
@@ -126,12 +126,19 @@ class SelectGameScreen(Screen):
             return
 
     def on_mouse_motion_event(self, event: MouseMotionEvent) -> None:
+        row = self._nonograms_rows[self._selected_size]
         mouse_pos = pygame.mouse.get_pos()
 
-        cursor_in_clickable = (self._play_button.contains(mouse_pos)
-                               or self._return_button.contains(mouse_pos)
-                               or (self._selected_size != NonogramSize.SMALL and self._left_arrow.contains(mouse_pos))
-                               or (self._selected_size != NonogramSize.HUGE and self._right_arrow.contains(mouse_pos)))
+        cursor_in_clickable = (
+                self._play_button.contains(mouse_pos)
+                or self._return_button.contains(mouse_pos)
+                or (not self._left_arrow.hidden and self._left_arrow.contains(mouse_pos))
+                or (not self._right_arrow.hidden and self._right_arrow.contains(mouse_pos))
+                or (not row.left_arrow.hidden and row.left_arrow.contains(mouse_pos))
+                or (not row.left_arrow_double.hidden and row.left_arrow_double.contains(mouse_pos))
+                or (not row.right_arrow.hidden and row.right_arrow.contains(mouse_pos))
+                or (not row.right_arrow_double.hidden and row.right_arrow_double.contains(mouse_pos))
+        )
 
         pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)
 
