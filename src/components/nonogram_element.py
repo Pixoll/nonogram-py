@@ -4,6 +4,7 @@ import pygame
 from pygame import Surface
 
 from components.block import Block
+from components.colored_block import ColoredBlock
 from components.column import Column
 from components.element import Element
 from components.hints_element import HintsElement
@@ -40,6 +41,15 @@ class NonogramElement(Element):
         self._vertical_hints = HintsElement(nonogram.vertical_hints, block_size, padding, False)
         self._selected_color = nonogram.used_colors[0]
 
+        self._all_hint_elements: list[ColoredBlock] = []
+
+        for bundle in self._horizontal_hints.hint_elements:
+            for block in bundle:
+                self._all_hint_elements.append(block)
+        for bundle in self._vertical_hints.hint_elements:
+            for block in bundle:
+                self._all_hint_elements.append(block)
+
         for i in range(nonogram.size[0]):
             column: Column[Block] = Column()
             for j in range(nonogram.size[1]):
@@ -55,24 +65,8 @@ class NonogramElement(Element):
         self._surface = Surface((self.size[0] + padding * 2, self.size[1] + padding * 2), pygame.SRCALPHA)
         self._surface.fill(self._background_color)
 
-    def set_zoom(self, zoom_factor: float) -> None:
-        new_block_size = int(self._block_size * zoom_factor)
-        self._block_size = new_block_size
-
-        self._horizontal_hints.update_size(new_block_size)
-        self._vertical_hints.update_size(new_block_size)
-
-        for column in self._grid:
-            column.set_element_sizes(new_block_size, new_block_size)
-
-        self._width = self._horizontal_hints.size[0] + self._padding + self._grid.size[0]
-        self._height = self._vertical_hints.size[1] + self._padding + self._grid.size[1]
-
-        self.set_size(self._width, self._height)
-        self._surface = Surface((self.size[0] + self._padding * 2, self.size[1] + self._padding * 2), pygame.SRCALPHA)
-        self._surface.fill(self._background_color)
-
-        self.set_position(self._position)
+        self._hovering_color: tuple[int, int, int] | None = None
+        self._selected_color: tuple[int, int, int] | None = None
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
@@ -103,17 +97,49 @@ class NonogramElement(Element):
         self._grid.render(window)
 
     def on_any_event(self, event: Event) -> None:
-        # if event.type == EventType.MOUSE_WHEEL:
-        #     zoom_factor = 1.1 if event.y > 0 else 0.9
-        #     self.set_zoom(zoom_factor)
+        if event.type != EventType.MOUSE_BUTTON_DOWN and event.type != EventType.MOUSE_MOTION:
+            return
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        if len(self._nonogram.used_colors) > 1:
+            is_left_click = event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT
+
+            for block in self._all_hint_elements:
+                if block.contains(mouse_pos):
+                    color = block.color
+
+                    if self._hovering_color != color:
+                        if self._hovering_color is not None:
+                            for b in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
+                                b.toggle_selected()
+                            for b in self._vertical_hints.get_grouped_blocks(self._hovering_color):
+                                b.toggle_selected()
+
+                        self._hovering_color = color
+
+                        for b in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
+                            b.toggle_selected()
+                        for b in self._vertical_hints.get_grouped_blocks(self._hovering_color):
+                            b.toggle_selected()
+
+                    if is_left_click:
+                        self._selected_color = color
+                    return
+
+            if self._hovering_color is not None:
+                for b in self._horizontal_hints.get_grouped_blocks(self._hovering_color):
+                    b.toggle_selected()
+                for b in self._vertical_hints.get_grouped_blocks(self._hovering_color):
+                    b.toggle_selected()
+
+                self._hovering_color = None
 
         if event.type != EventType.MOUSE_BUTTON_DOWN:
             return
 
         if event.button != MouseButton.LEFT and event.button != MouseButton.RIGHT:
             return
-
-        mouse_pos = pygame.mouse.get_pos()
 
         for column in self._grid:
             for block in column:
