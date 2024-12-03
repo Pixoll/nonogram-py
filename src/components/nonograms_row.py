@@ -266,7 +266,7 @@ class NonogramsRow(Element):
 
     @property
     def _index_range(self) -> range:
-        return range(self._index, max(self._index + self._previews_per_page, len(self._nonogram_previews)))
+        return range(self._index, min(self._index + self._previews_per_page, len(self._nonogram_entries)))
 
     def _replace_preview(self, entry_index: int, preview_index: int) -> None:
         entry = self._nonogram_entries[entry_index]
