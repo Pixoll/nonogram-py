@@ -13,6 +13,9 @@ from events import Event, EventType, MouseButton
 
 
 class NonogramsRow(Element):
+    _DOUBLE_SHIFT = 10
+    _TRIPLE_SHIFT = 100
+
     def __init__(
             self,
             width: int,
@@ -48,30 +51,33 @@ class NonogramsRow(Element):
             height
         ).set_child(self._nonogram_previews)
 
-        self._elements = Row().set_alignment(VerticalAlignment.CENTER).set_padding(int(width * 0.05))
-
         arrow_size = int(height * 0.1)
         arrow_padding = arrow_size // 3
 
+        self._left_arrow_triple = (
+            Container(arrow_size, arrow_size)
+            .set_image("left_arrow_triple.png", False)
+            .fit_to_image()
+        )
         self._left_arrow_double = (
             Container(arrow_size, arrow_size)
             .set_image("left_arrow_double.png", False)
             .fit_to_image()
-            .set_hidden(True)
         )
         self._left_arrow = (
             Container(arrow_size, arrow_size)
             .set_image("left_arrow.png", False)
             .fit_to_image()
-            .set_hidden(True)
         )
 
-        self._elements.add_element(
+        self._left_arrows = (
             Row()
             .set_alignment(VerticalAlignment.CENTER)
             .set_padding(arrow_padding)
+            .add_element(self._left_arrow_triple)
             .add_element(self._left_arrow_double)
             .add_element(self._left_arrow)
+            .set_hidden(True)
         )
 
         self._right_arrow = (
@@ -86,6 +92,21 @@ class NonogramsRow(Element):
             .fit_to_image()
             .set_hidden(not self._has_multiple_pages)
         )
+        self._right_arrow_triple = (
+            Container(arrow_size, arrow_size)
+            .set_image("right_arrow_triple.png", False)
+            .fit_to_image()
+            .set_hidden(not self._has_multiple_pages)
+        )
+
+        self._right_arrows = (
+            Row()
+            .set_alignment(VerticalAlignment.CENTER)
+            .set_padding(arrow_padding)
+            .add_element(self._right_arrow)
+            .add_element(self._right_arrow_double)
+            .add_element(self._right_arrow_triple)
+        )
 
         for i in range(min(self._previews_per_page, len(self._nonogram_entries))):
             entry = self._nonogram_entries[i]
@@ -98,18 +119,15 @@ class NonogramsRow(Element):
             )
             self._nonogram_previews.add_element(info_nonogram)
 
-        self._elements.add_element(self._nonograms_container)
-
-        self._elements.add_element(
-            Row()
-            .set_alignment(VerticalAlignment.CENTER)
-            .set_padding(arrow_padding)
-            .add_element(self._right_arrow)
-            .add_element(self._right_arrow_double)
-        )
-
         self._base: Container = Container(width, height).set_child(
-            Container(int(width * 0.95), height).set_child(self._elements)
+            Container(int(width * 0.95), height).set_child(
+                Row()
+                .set_alignment(VerticalAlignment.CENTER)
+                .set_padding(int(width * 0.025))
+                .add_element(self._left_arrows)
+                .add_element(self._nonograms_container)
+                .add_element(self._right_arrows)
+            )
         )
 
         nothing_here_text = Text("Nothing here but us chickens", regular_font, (0, 0, 0))
@@ -132,12 +150,20 @@ class NonogramsRow(Element):
         return self._left_arrow_double
 
     @property
+    def left_arrow_triple(self) -> Container:
+        return self._left_arrow_triple
+
+    @property
     def right_arrow(self) -> Container:
         return self._right_arrow
 
     @property
     def right_arrow_double(self) -> Container:
         return self._right_arrow_double
+
+    @property
+    def right_arrow_triple(self) -> Container:
+        return self._right_arrow_triple
 
     @property
     def selected_nonogram(self) -> Nonogram | None:
@@ -168,16 +194,18 @@ class NonogramsRow(Element):
                     clicked = True
 
                 elif not self._left_arrow_double.hidden and self._left_arrow_double.contains(mouse_pos):
-                    self._index -= self._previews_per_page * 2
-                    self._index = max(self._index, 0)
+                    self._index -= self._previews_per_page * NonogramsRow._DOUBLE_SHIFT
+                    clicked = True
+
+                elif not self._left_arrow_triple.hidden and self._left_arrow_triple.contains(mouse_pos):
+                    self._index -= self._previews_per_page * NonogramsRow._TRIPLE_SHIFT
                     clicked = True
 
                 if clicked:
-                    self._right_arrow.set_hidden(False)
-                    self._right_arrow_double.set_hidden(False)
+                    self._index = max(self._index, 0)
+                    self._right_arrows.set_hidden(False)
                     if self._index == 0:
-                        self._left_arrow.set_hidden(True)
-                        self._left_arrow_double.set_hidden(True)
+                        self._left_arrows.set_hidden(True)
 
                     for i in self._index_range:
                         self._replace_preview(i, i - self._index)
@@ -197,16 +225,18 @@ class NonogramsRow(Element):
                     clicked = True
 
                 elif not self._right_arrow_double.hidden and self._right_arrow_double.contains(mouse_pos):
-                    self._index += self._previews_per_page * 2
-                    self._index = min(self._index, len(self._nonogram_entries) - self._previews_per_page)
+                    self._index += self._previews_per_page * NonogramsRow._DOUBLE_SHIFT
+                    clicked = True
+
+                elif not self._right_arrow_triple.hidden and self._right_arrow_triple.contains(mouse_pos):
+                    self._index += self._previews_per_page * NonogramsRow._TRIPLE_SHIFT
                     clicked = True
 
                 if clicked:
-                    self._left_arrow.set_hidden(False)
-                    self._left_arrow_double.set_hidden(False)
+                    self._index = min(self._index, len(self._nonogram_entries) - self._previews_per_page)
+                    self._left_arrows.set_hidden(False)
                     if self._index + self._previews_per_page >= len(self._nonogram_entries):
-                        self._right_arrow.set_hidden(True)
-                        self._right_arrow_double.set_hidden(True)
+                        self._right_arrows.set_hidden(True)
 
                     for i in self._index_range:
                         self._replace_preview(i, i - self._index)

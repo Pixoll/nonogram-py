@@ -136,8 +136,10 @@ class SelectGameScreen(Screen):
                 or (not self._right_arrow.hidden and self._right_arrow.contains(mouse_pos))
                 or (not row.left_arrow.hidden and row.left_arrow.contains(mouse_pos))
                 or (not row.left_arrow_double.hidden and row.left_arrow_double.contains(mouse_pos))
+                or (not row.left_arrow_triple.hidden and row.left_arrow_triple.contains(mouse_pos))
                 or (not row.right_arrow.hidden and row.right_arrow.contains(mouse_pos))
                 or (not row.right_arrow_double.hidden and row.right_arrow_double.contains(mouse_pos))
+                or (not row.right_arrow_triple.hidden and row.right_arrow_triple.contains(mouse_pos))
         )
 
         pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)

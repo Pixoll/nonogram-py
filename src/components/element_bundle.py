@@ -21,6 +21,7 @@ class ElementBundle(Element, ABC, Generic[T]):
 
     def add_element(self: S, element: T) -> S:
         self._elements.append(element)
+        element.set_hidden(self._hidden)
         self._update_size()
         self.update_positions()
         return self
@@ -34,6 +35,12 @@ class ElementBundle(Element, ABC, Generic[T]):
         self._padding = padding
         self.update_positions()
         self._update_size()
+        return self
+
+    def set_hidden(self: S, hidden: bool) -> S:
+        self._hidden = hidden
+        for element in self._elements:
+            element.set_hidden(hidden)
         return self
 
     def __iter__(self):
