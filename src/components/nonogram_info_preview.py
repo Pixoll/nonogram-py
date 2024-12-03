@@ -71,8 +71,8 @@ class NonogramInfoPreview(Container):
         return self._nonogram
 
     def render(self, window: Surface) -> None:
-        if self._selected and time() - self._last_blink > 0.5:
-            self._last_blink = time()
+        if self._selected and (now := time()) - self._last_blink > 0.5:
+            self._last_blink = now
             self.set_border(
                 (236, 36, 138, 128) if self._border_color == (255, 255, 255, 128) else (255, 255, 255, 128)
             )

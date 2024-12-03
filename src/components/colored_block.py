@@ -82,8 +82,8 @@ class ColoredBlock(Element):
         screen.blit(self._surface, self._position)
 
         if self._selected:
-            if self._active and time() - self._last_blink > 0.5:
-                self._last_blink = time()
+            if self._active and (now := time()) - self._last_blink > 0.5:
+                self._last_blink = now
                 self._border_color = (0, 0, 0) if self._border_color == (255, 255, 255) else (255, 255, 255)
 
             pygame.draw.rect(
