@@ -22,17 +22,17 @@ class ElementBundle(Element, ABC, Generic[T]):
     def add_element(self: S, element: T) -> S:
         self._elements.append(element)
         self._update_size()
-        self._update_positions()
+        self.update_positions()
         return self
 
     def set_position(self: S, position: tuple[int, int]) -> S:
         self._position = position
-        self._update_positions()
+        self.update_positions()
         return self
 
     def set_padding(self: S, padding: int) -> S:
         self._padding = padding
-        self._update_positions()
+        self.update_positions()
         self._update_size()
         return self
 
@@ -58,5 +58,5 @@ class ElementBundle(Element, ABC, Generic[T]):
         pass
 
     @abstractmethod
-    def _update_positions(self) -> None:
+    def update_positions(self) -> None:
         pass

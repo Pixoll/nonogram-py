@@ -26,7 +26,7 @@ class Column(ElementBundle[T]):
 
     def set_alignment(self, alignment: HorizontalAlignment) -> Self:
         self._alignment = alignment
-        self._update_positions()
+        self.update_positions()
         return self
 
     def on_any_event(self, event: Event) -> None:
@@ -36,7 +36,7 @@ class Column(ElementBundle[T]):
         for element in self._elements:
             element.set_size(width, height)
         self._update_size()
-        self._update_positions()
+        self.update_positions()
         return self
 
     def _update_size(self) -> None:
@@ -49,7 +49,7 @@ class Column(ElementBundle[T]):
         self._width = max(element._width for element in self._elements)
         self._max_width = self._width
 
-    def _update_positions(self) -> None:
+    def update_positions(self) -> None:
         y_offset = 0
 
         for element in self._elements:

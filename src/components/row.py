@@ -26,7 +26,7 @@ class Row(ElementBundle[T]):
 
     def set_alignment(self, alignment: VerticalAlignment) -> Self:
         self._alignment = alignment
-        self._update_positions()
+        self.update_positions()
         return self
 
     def on_any_event(self, event: Event) -> None:
@@ -36,7 +36,7 @@ class Row(ElementBundle[T]):
         for element in self._elements:
             element.set_size(width, height)
         self._update_size()
-        self._update_positions()
+        self.update_positions()
         return self
 
     def _update_size(self) -> None:
@@ -49,7 +49,7 @@ class Row(ElementBundle[T]):
         self._height = max(element._height for element in self._elements)
         self._max_height = self._height
 
-    def _update_positions(self) -> None:
+    def update_positions(self) -> None:
         x_offset = 0
 
         for element in self._elements:
