@@ -52,6 +52,7 @@ class SelectGameScreen(Screen):
             Container(arrow_size, arrow_size)
             .set_image("left_arrow.png", False)
             .fit_to_image()
+            .set_hidden(True)
         )
         self._right_arrow = (
             Container(arrow_size, arrow_size)
@@ -90,18 +91,20 @@ class SelectGameScreen(Screen):
 
         mouse_pos = pygame.mouse.get_pos()
 
-        if self._left_arrow.contains(mouse_pos):
+        if not self._left_arrow.hidden and self._left_arrow.contains(mouse_pos):
+            self._right_arrow.set_hidden(False)
+            self._selected_size = NonogramSize(int(self._selected_size) - 1)
             if self._selected_size == NonogramSize.SMALL:
-                self._selected_size = NonogramSize.HUGE
-            else:
-                self._selected_size = NonogramSize(int(self._selected_size) - 1)
+                self._left_arrow.set_hidden(True)
+                pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
-        if self._right_arrow.contains(mouse_pos):
+        if not self._right_arrow.hidden and self._right_arrow.contains(mouse_pos):
+            self._left_arrow.set_hidden(False)
+            self._selected_size = NonogramSize(int(self._selected_size) + 1)
             if self._selected_size == NonogramSize.HUGE:
-                self._selected_size = NonogramSize.SMALL
-            else:
-                self._selected_size = NonogramSize(int(self._selected_size) + 1)
+                self._right_arrow.set_hidden(True)
+                pygame.mouse.set_cursor(self._engine.arrow_cursor)
             return
 
         if self._play_button.contains(mouse_pos):
@@ -127,8 +130,8 @@ class SelectGameScreen(Screen):
 
         cursor_in_clickable = (self._play_button.contains(mouse_pos)
                                or self._return_button.contains(mouse_pos)
-                               or self._left_arrow.contains(mouse_pos)
-                               or self._right_arrow.contains(mouse_pos))
+                               or (self._selected_size != NonogramSize.SMALL and self._left_arrow.contains(mouse_pos))
+                               or (self._selected_size != NonogramSize.HUGE and self._right_arrow.contains(mouse_pos)))
 
         pygame.mouse.set_cursor(self._engine.hand_cursor if cursor_in_clickable else self._engine.arrow_cursor)
 

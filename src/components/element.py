@@ -10,11 +10,13 @@ class Element(ABC):
     _width: int
     _height: int
     _position: tuple[int, int]
+    _hidden: bool
 
     def __init__(self, width: int, height: int):
         self._width = width
         self._height = height
         self._position = (0, 0)
+        self._hidden = False
 
     @property
     def size(self) -> tuple[int, int]:
@@ -23,6 +25,14 @@ class Element(ABC):
     @property
     def position(self) -> tuple[int, int]:
         return self._position
+
+    @property
+    def hidden(self) -> bool:
+        return self._hidden
+
+    def set_hidden(self, hidden: bool) -> Self:
+        self._hidden = hidden
+        return self
 
     def set_size(self, width: int, height: int):
         self._width = width

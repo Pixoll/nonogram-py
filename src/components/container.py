@@ -96,6 +96,9 @@ class Container(ElementWithChild[T], Generic[T]):
             self._child.on_any_event(event)
 
     def render(self, window: pygame.Surface) -> None:
+        if self.hidden:
+            return
+
         if self._image:
             self._surface.blit(self._image, (0, 0))
 
