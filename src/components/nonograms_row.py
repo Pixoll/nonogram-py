@@ -94,6 +94,7 @@ class NonogramsRow(Element):
                 self._preview_width,
                 self._preview_height,
                 regular_font,
+                small_font
             )
             self._nonogram_previews.add_element(info_nonogram)
 
@@ -238,5 +239,11 @@ class NonogramsRow(Element):
 
     def _replace_preview(self, entry_index: int, preview_index: int) -> None:
         entry = self._nonogram_entries[entry_index]
-        info_nonogram = NonogramInfoPreview(entry.load(), self._preview_width, self._preview_height, self._regular_font)
+        info_nonogram = NonogramInfoPreview(
+            entry.load(),
+            self._preview_width,
+            self._preview_height,
+            self._regular_font,
+            self._small_font
+        )
         self._nonogram_previews[preview_index] = info_nonogram
