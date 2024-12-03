@@ -42,6 +42,11 @@ class ElementBundle(Element, ABC, Generic[T]):
             element.set_hidden(hidden)
         return self
 
+    def clear(self: S) -> None:
+        self._elements.clear()
+        self.update_positions()
+        self._update_size()
+
     def __iter__(self):
         for element in self._elements:
             yield element

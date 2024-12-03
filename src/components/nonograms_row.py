@@ -47,14 +47,12 @@ class NonogramsRow(Element):
         self._preview_width = int(width * 0.2)
         self._preview_height = self._preview_width * 4 // 3
 
-        for _ in range(min(self._previews_per_page, len(self._nonogram_entries))):
-            # noinspection PyTypeChecker
-            self._nonogram_previews.add_element(Container(self._preview_width, self._preview_height))  # <- placeholder
-
         self._nonograms_container: Container = Container(
             (self._preview_width + row_padding) * self._previews_per_page - row_padding,
             height
         ).set_child(self._nonogram_previews)
+
+        self._make_previews()
 
         arrow_size = int(height * 0.1)
         arrow_padding = arrow_size // 3
@@ -110,9 +108,6 @@ class NonogramsRow(Element):
             .add_element(self._right_arrow_triple)
             .set_hidden(not self._has_multiple_pages)
         )
-
-        for i in self._index_range:
-            self._replace_preview(i, i - self._index)
 
         self._base: Container = Container(width, height).set_child(
             Container(int(width * 0.95), height).set_child(
@@ -206,8 +201,7 @@ class NonogramsRow(Element):
                     if self._index == 0:
                         self._left_arrows.set_hidden(True)
 
-                    for i in self._index_range:
-                        self._replace_preview(i, i - self._index)
+                    self._make_previews()
 
                     self._nonogram_previews.update_positions()
                     if self._selected_nonogram is not None:
@@ -232,13 +226,15 @@ class NonogramsRow(Element):
                     clicked = True
 
                 if clicked:
-                    self._index = min(self._index, len(self._nonogram_entries) - self._previews_per_page)
+                    self._index = min(
+                        self._index,
+                        len(self._nonogram_entries) - len(self._nonogram_entries) % self._previews_per_page
+                    )
                     self._left_arrows.set_hidden(False)
                     if self._index + self._previews_per_page >= len(self._nonogram_entries):
                         self._right_arrows.set_hidden(True)
 
-                    for i in self._index_range:
-                        self._replace_preview(i, i - self._index)
+                    self._make_previews()
 
                     self._nonogram_previews.update_positions()
                     if self._selected_nonogram is not None:
@@ -247,8 +243,7 @@ class NonogramsRow(Element):
 
                     return
 
-        for i in range(min(self._previews_per_page, len(self._nonogram_entries))):
-            nonogram_preview = self._nonogram_previews[i]
+        for nonogram_preview in self._nonogram_previews:
             nonogram_preview.on_any_event(event)
 
             if nonogram_preview.is_selected():
@@ -262,17 +257,16 @@ class NonogramsRow(Element):
         if len(self._nonogram_entries) == 0:
             self._nothing_here_but_us_chickens.render(window)
 
-    @property
-    def _index_range(self) -> range:
-        return range(self._index, min(self._index + self._previews_per_page, len(self._nonogram_entries)))
-
-    def _replace_preview(self, entry_index: int, preview_index: int) -> None:
-        entry = self._nonogram_entries[entry_index]
-        info_nonogram = NonogramInfoPreview(
-            entry.load(),
-            self._preview_width,
-            self._preview_height,
-            self._regular_font,
-            self._small_font
-        )
-        self._nonogram_previews[preview_index] = info_nonogram
+    def _make_previews(self) -> None:
+        self._nonogram_previews.clear()
+        for i in range(self._index, min(self._index + self._previews_per_page, len(self._nonogram_entries))):
+            entry = self._nonogram_entries[i]
+            info_nonogram = NonogramInfoPreview(
+                entry.load(),
+                self._preview_width,
+                self._preview_height,
+                self._regular_font,
+                self._small_font
+            )
+            self._nonogram_previews.add_element(info_nonogram)
+        self._nonograms_container.update_child_position()
