@@ -21,7 +21,6 @@ class ElementBundle(Element, ABC, Generic[T]):
 
     def add_element(self: S, element: T) -> S:
         self._elements.append(element)
-        element.set_hidden(self._hidden)
         self._update_size()
         self.update_positions()
         return self
@@ -57,6 +56,9 @@ class ElementBundle(Element, ABC, Generic[T]):
         return len(self._elements)
 
     def render(self, window: Surface) -> None:
+        if self.hidden:
+            return
+
         for element in self._elements:
             element.render(window)
 
