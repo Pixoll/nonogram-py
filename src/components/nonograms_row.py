@@ -39,11 +39,12 @@ class NonogramsRow(Element):
         self._nonogram_entries = NonogramLoader.get_by_size(nonograms_type, size)
         self._previews_per_page = 3
         self._index = starting_page * self._previews_per_page
+        self._current_page = starting_page
         self._pages_amount = ceil(len(self._nonogram_entries) / self._previews_per_page)
         self._selected_nonogram: NonogramInfoPreview | None = None
 
-        self._double_shift = max(3, len(self._nonogram_entries) // self._previews_per_page // 101)
-        self._triple_shift = max(10, len(self._nonogram_entries) // self._previews_per_page // 11)
+        self._double_shift = max(3, len(self._nonogram_entries) // self._previews_per_page // 100)
+        self._triple_shift = max(10, len(self._nonogram_entries) // self._previews_per_page // 10)
 
         self._preview_width = int(width * 0.2)
         self._preview_height = self._preview_width * 4 // 3
@@ -166,7 +167,7 @@ class NonogramsRow(Element):
 
     @property
     def current_page(self) -> int:
-        return self._index // self._previews_per_page
+        return self._current_page
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
@@ -184,25 +185,30 @@ class NonogramsRow(Element):
         if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT and self._pages_amount > 0:
             mouse_pos = pygame.mouse.get_pos()
 
-            if self._index > 0:
+            if self._current_page > 0:
                 clicked = False
 
                 if not self._left_arrow.hidden and self._left_arrow.contains(mouse_pos):
                     self._index -= self._previews_per_page
+                    self._current_page -= 1
                     clicked = True
 
                 elif not self._left_arrow_double.hidden and self._left_arrow_double.contains(mouse_pos):
                     self._index -= self._previews_per_page * self._double_shift
+                    self._current_page -= self._double_shift
                     clicked = True
 
                 elif not self._left_arrow_triple.hidden and self._left_arrow_triple.contains(mouse_pos):
                     self._index -= self._previews_per_page * self._triple_shift
+                    self._current_page -= self._triple_shift
                     clicked = True
 
                 if clicked:
                     self._index = max(self._index, 0)
+                    self._current_page = max(self._current_page, 0)
+
                     self._right_arrows.set_hidden(False)
-                    if self._index == 0:
+                    if self._current_page == 0:
                         self._left_arrows.set_hidden(True)
 
                     self._make_previews()
@@ -215,28 +221,30 @@ class NonogramsRow(Element):
 
                     return
 
-            if self._index + self._previews_per_page < len(self._nonogram_entries):
+            if self._current_page + 1 < self._pages_amount:
                 clicked = False
 
                 if not self._right_arrow.hidden and self._right_arrow.contains(mouse_pos):
                     self._index += self._previews_per_page
+                    self._current_page += 1
                     clicked = True
 
                 elif not self._right_arrow_double.hidden and self._right_arrow_double.contains(mouse_pos):
                     self._index += self._previews_per_page * self._double_shift
+                    self._current_page += self._double_shift
                     clicked = True
 
                 elif not self._right_arrow_triple.hidden and self._right_arrow_triple.contains(mouse_pos):
                     self._index += self._previews_per_page * self._triple_shift
+                    self._current_page += self._triple_shift
                     clicked = True
 
                 if clicked:
-                    self._index = min(
-                        self._index,
-                        len(self._nonogram_entries) - len(self._nonogram_entries) % self._previews_per_page
-                    )
+                    self._current_page = min(self._current_page, self._pages_amount - 1)
+                    self._index = self._previews_per_page * self._current_page
+
                     self._left_arrows.set_hidden(False)
-                    if self._index + self._previews_per_page >= len(self._nonogram_entries):
+                    if self._current_page + 1 >= self._pages_amount:
                         self._right_arrows.set_hidden(True)
 
                     self._make_previews()
@@ -286,6 +294,5 @@ class NonogramsRow(Element):
         ))
 
     def _update_page_text(self) -> None:
-        page = self._index // self._previews_per_page + 1
-        self._page_text = Text(f"Page {page} of {self._pages_amount}", self._small_font, (0, 0, 0))
+        self._page_text = Text(f"Page {self._current_page + 1} of {self._pages_amount}", self._small_font, (0, 0, 0))
         self._update_page_text_position()
