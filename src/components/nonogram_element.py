@@ -88,6 +88,10 @@ class NonogramElement(Element):
         self._selected_color = color
         return self
 
+    @property
+    def selected_color(self) -> tuple[int, int, int]:
+        return self._selected_color
+
     def render(self, window: Surface):
         window.blit(self._surface, (self.position[0] - self._padding, self._position[1] - self._padding))
         self._vertical_hints.render(window)

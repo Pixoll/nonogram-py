@@ -82,6 +82,12 @@ class ColorPicker(Container):
         )
 
     def on_any_event(self, event: Event) -> None:
+        if (nonogram_selected_color := self._nonogram_element.selected_color) != self._selected_block:
+            self._selected_color_index = self._colors.index(nonogram_selected_color)
+            self._selected_block.toggle_selected()
+            self._selected_block = self._color_blocks[self._selected_color_index]
+            self._selected_block.toggle_selected()
+
         if event.type == EventType.MOUSE_WHEEL:
             wheel_event: MouseWheelEvent = event
             down = wheel_event.precise_y < 0 if wheel_event.flipped else wheel_event.precise_y > 0
