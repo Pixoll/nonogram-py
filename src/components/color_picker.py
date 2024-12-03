@@ -26,17 +26,23 @@ class ColorPicker(Container):
             block_size: int,
             font: Font
     ) -> None:
-        cols = ((window_width - nonogram_element.size[0]) // 2 - block_size * 2) // block_size
+        cols = min(
+            ceil(len(colors) ** 0.5),
+            ((window_width - nonogram_element.size[0]) // 2 - block_size * 2) // block_size
+        )
         rows = ceil(len(colors) / cols)
+        width = cols * (block_size + 1) - 1
         height = rows * (block_size + 1) - 1
 
         if height > window_height:
             block_size -= (height - window_height + block_size) // block_size
-
-        cols = ((window_width - nonogram_element.size[0]) // 2 - block_size * 2) // block_size
-        rows = ceil(len(colors) / cols)
-        width = cols * (block_size + 1) - 1
-        height = rows * (block_size + 1) - 1
+            cols = min(
+                ceil(len(colors) ** 0.5),
+                ((window_width - nonogram_element.size[0]) // 2 - block_size * 2) // block_size
+            )
+            rows = ceil(len(colors) / cols)
+            width = cols * (block_size + 1) - 1
+            height = rows * (block_size + 1) - 1
 
         colors_text = Text("Colors", font, (255, 255, 255))
         column_padding = colors_text.size[1] // 2
