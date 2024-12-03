@@ -13,9 +13,6 @@ from events import Event, EventType, MouseButton
 
 
 class NonogramsRow(Element):
-    _DOUBLE_SHIFT = 10
-    _TRIPLE_SHIFT = 100
-
     def __init__(
             self,
             width: int,
@@ -42,6 +39,9 @@ class NonogramsRow(Element):
         self._previews_per_page = 3
         self._has_multiple_pages = len(self._nonogram_entries) > self._previews_per_page
         self._selected_nonogram: NonogramInfoPreview | None = None
+
+        self._double_shift = max(3, len(self._nonogram_entries) // self._previews_per_page // 101)
+        self._triple_shift = max(10, len(self._nonogram_entries) // self._previews_per_page // 11)
 
         self._preview_width = int(width * 0.2)
         self._preview_height = self._preview_width * 4 // 3
@@ -194,11 +194,11 @@ class NonogramsRow(Element):
                     clicked = True
 
                 elif not self._left_arrow_double.hidden and self._left_arrow_double.contains(mouse_pos):
-                    self._index -= self._previews_per_page * NonogramsRow._DOUBLE_SHIFT
+                    self._index -= self._previews_per_page * self._double_shift
                     clicked = True
 
                 elif not self._left_arrow_triple.hidden and self._left_arrow_triple.contains(mouse_pos):
-                    self._index -= self._previews_per_page * NonogramsRow._TRIPLE_SHIFT
+                    self._index -= self._previews_per_page * self._triple_shift
                     clicked = True
 
                 if clicked:
@@ -225,11 +225,11 @@ class NonogramsRow(Element):
                     clicked = True
 
                 elif not self._right_arrow_double.hidden and self._right_arrow_double.contains(mouse_pos):
-                    self._index += self._previews_per_page * NonogramsRow._DOUBLE_SHIFT
+                    self._index += self._previews_per_page * self._double_shift
                     clicked = True
 
                 elif not self._right_arrow_triple.hidden and self._right_arrow_triple.contains(mouse_pos):
-                    self._index += self._previews_per_page * NonogramsRow._TRIPLE_SHIFT
+                    self._index += self._previews_per_page * self._triple_shift
                     clicked = True
 
                 if clicked:
