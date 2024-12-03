@@ -39,6 +39,7 @@ class NonogramElement(Element):
         self._block_size = block_size
         self._horizontal_hints = HintsElement(nonogram.horizontal_hints, block_size, padding, True)
         self._vertical_hints = HintsElement(nonogram.vertical_hints, block_size, padding, False)
+        self._hovering_color: tuple[int, int, int] | None = None
         self._selected_color = nonogram.used_colors[0]
 
         self._all_hint_elements: list[ColoredBlock] = []
@@ -64,9 +65,6 @@ class NonogramElement(Element):
 
         self._surface = Surface((self.size[0] + padding * 2, self.size[1] + padding * 2), pygame.SRCALPHA)
         self._surface.fill(self._background_color)
-
-        self._hovering_color: tuple[int, int, int] | None = None
-        self._selected_color: tuple[int, int, int] | None = None
 
     def set_position(self, position: tuple[int, int]) -> Self:
         self._position = position
