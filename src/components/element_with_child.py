@@ -31,7 +31,7 @@ class ElementWithChild(Element, ABC, Generic[T]):
         self._child = None
         self._child_alignment = alignment
 
-    def set_child(self, child: T) -> S:
+    def set_child(self: S, child: T) -> S:
         self._child = child
         self.update_child_position()
         return self
@@ -40,7 +40,7 @@ class ElementWithChild(Element, ABC, Generic[T]):
     def child(self) -> T:
         return self._child
 
-    def set_child_alignment(self, alignment: ChildAlignment) -> S:
+    def set_child_alignment(self: S, alignment: ChildAlignment) -> S:
         self._child_alignment = alignment
         self.update_child_position()
         return self
