@@ -1,3 +1,4 @@
+from math import ceil
 from typing import Self
 
 import pygame
@@ -38,7 +39,7 @@ class NonogramsRow(Element):
         self._nonogram_entries = NonogramLoader.get_by_size(nonograms_type, size)
         self._previews_per_page = 3
         self._index = starting_page * self._previews_per_page
-        self._has_multiple_pages = len(self._nonogram_entries) > self._previews_per_page
+        self._pages_amount = ceil(len(self._nonogram_entries) / self._previews_per_page)
         self._selected_nonogram: NonogramInfoPreview | None = None
 
         self._double_shift = max(3, len(self._nonogram_entries) // self._previews_per_page // 101)
@@ -106,7 +107,7 @@ class NonogramsRow(Element):
             .add_element(self._right_arrow)
             .add_element(self._right_arrow_double)
             .add_element(self._right_arrow_triple)
-            .set_hidden(not self._has_multiple_pages)
+            .set_hidden(self._pages_amount < 2)
         )
 
         self._base: Container = Container(width, height).set_child(
@@ -119,6 +120,8 @@ class NonogramsRow(Element):
                 .add_element(self._right_arrows)
             )
         )
+
+        self._page_text = Text(f"Page {starting_page + 1} of {self._pages_amount}", small_font, (0, 0, 0))
 
         nothing_here_text = Text("Nothing here but us chickens", regular_font, (0, 0, 0))
 
@@ -169,6 +172,7 @@ class NonogramsRow(Element):
         self._position = position
         self._base.set_position(position)
         self._nothing_here_but_us_chickens.set_position(position)
+        self._update_page_text_position()
         return self
 
     def deselect(self) -> None:
@@ -177,7 +181,7 @@ class NonogramsRow(Element):
             self._selected_nonogram = None
 
     def on_any_event(self, event: Event) -> None:
-        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT and self._has_multiple_pages:
+        if event.type == EventType.MOUSE_BUTTON_DOWN and event.button == MouseButton.LEFT and self._pages_amount > 0:
             mouse_pos = pygame.mouse.get_pos()
 
             if self._index > 0:
@@ -202,6 +206,7 @@ class NonogramsRow(Element):
                         self._left_arrows.set_hidden(True)
 
                     self._make_previews()
+                    self._update_page_text()
 
                     self._nonogram_previews.update_positions()
                     if self._selected_nonogram is not None:
@@ -235,6 +240,7 @@ class NonogramsRow(Element):
                         self._right_arrows.set_hidden(True)
 
                     self._make_previews()
+                    self._update_page_text()
 
                     self._nonogram_previews.update_positions()
                     if self._selected_nonogram is not None:
@@ -256,6 +262,8 @@ class NonogramsRow(Element):
 
         if len(self._nonogram_entries) == 0:
             self._nothing_here_but_us_chickens.render(window)
+        else:
+            self._page_text.render(window)
 
     def _make_previews(self) -> None:
         self._nonogram_previews.clear()
@@ -270,3 +278,14 @@ class NonogramsRow(Element):
             )
             self._nonogram_previews.add_element(info_nonogram)
         self._nonograms_container.update_child_position()
+
+    def _update_page_text_position(self) -> None:
+        self._page_text.set_position((
+            self._nonograms_container.position[0] + (self._nonograms_container.size[0] - self._page_text.size[0]) // 2,
+            self._nonogram_previews.position[1] + self._nonogram_previews.size[1] + self._page_text.size[1]
+        ))
+
+    def _update_page_text(self) -> None:
+        page = self._index // self._previews_per_page + 1
+        self._page_text = Text(f"Page {page} of {self._pages_amount}", self._small_font, (0, 0, 0))
+        self._update_page_text_position()
