@@ -63,7 +63,10 @@ class NonogramLoader:
         return nonogram
 
     @staticmethod
-    def save(nonogram_type: nonogram_type_t, nonogram_id: int) -> None:
+    def save(nonogram: Nonogram) -> None:
+        nonogram_type = nonogram.type
+        nonogram_id = nonogram.id
+
         nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
         nonograms_bin = NonogramLoader._PRE_MADE_BIN if nonogram_type == "pre_made" else NonogramLoader._USER_MADE_BIN
         nonograms_bin_index = (NonogramLoader._PRE_MADE_BIN_INDEX if nonogram_type == "pre_made"

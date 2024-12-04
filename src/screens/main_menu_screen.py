@@ -74,16 +74,14 @@ class MainMenuScreen(Screen):
         )
 
         self._cancel_exit_button: Container = (
-            Container(int(self._width * 0.075), int(self._width * 0.025), 25)
-            .set_border((64, 128, 64))
-            .set_border_width(2)
-            .set_child(Text("no", engine.regular_font, (0, 0, 0)))
+            Container(int(self._width * 0.0625), int(self._width * 0.0325), 25)
+            .set_background_color((108, 224, 124))
+            .set_child(Text("No", engine.regular_font, (0, 0, 0)))
         )
         self._confirm_exit_button: Container = (
-            Container(int(self._width * 0.075), int(self._width * 0.025), 25)
-            .set_border((128, 64, 64))
-            .set_border_width(2)
-            .set_child(Text("yes", engine.regular_font, (0, 0, 0)))
+            Container(int(self._width * 0.0625), int(self._width * 0.0325), 25)
+            .set_background_color((224, 91, 93))
+            .set_child(Text("Yes", engine.regular_font, (0, 0, 0)))
         )
 
         self._exit_confirmation_popup: Container = (
@@ -105,7 +103,7 @@ class MainMenuScreen(Screen):
                     )
                     .add_element(
                         Row()
-                        .set_padding(15)
+                        .set_padding(20)
                         .add_element(self._cancel_exit_button)
                         .add_element(self._confirm_exit_button)
                     )
