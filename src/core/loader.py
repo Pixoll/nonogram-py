@@ -154,7 +154,7 @@ class NonogramLoader:
         if nonogram._id is None or nonogram._name is None:
             raise ValueError("Nonogram id and name must be present when serializing.")
 
-        inverse_palette: dict[rgb_t, int] = {v: int(k) + 1 for k, v in nonogram._palette.items()}
+        inverse_palette: dict[rgb_t, int] = {v: int(k) for k, v in nonogram._palette.items()}
         binary = len(inverse_palette) == 1
 
         original_mask: list[int] = []
@@ -284,6 +284,7 @@ class NonogramLoader:
             for x in range(width):
                 cell = data[i]
                 nonogram[x, y] = None if cell == 0 else "x" if cell == 1 else palette[cell]
+                i += 1
 
         return nonogram
 

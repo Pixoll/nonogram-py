@@ -188,7 +188,7 @@ class PlayScreen(Screen):
                     break
 
             if not self._nothing_to_save:
-                # NonogramLoader.save(self._nonogram)
+                NonogramLoader.save(self._nonogram)
             else:
                 self._nonogram._in_progress = False
             return
