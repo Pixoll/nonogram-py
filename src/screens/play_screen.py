@@ -248,8 +248,8 @@ class PlayScreen(Screen):
             else:
                 self._saved_progress_popup.render(window)
 
-        if self._waiting_return_confirmation:
-            self._return_confirmation_popup.render(window)
-
         if self._nonogram.is_completed:
             self._completed_popup.render(window)
+
+        if self._waiting_return_confirmation:
+            self._return_confirmation_popup.render(window)
