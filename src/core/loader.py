@@ -286,9 +286,6 @@ class NonogramLoader:
 
             return nonogram
 
-        if binary:
-            i += 1
-
         for y in range(height):
             for x in range(width):
                 cell = data[i]
