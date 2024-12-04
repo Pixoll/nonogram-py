@@ -67,9 +67,21 @@ class CreateNanogram(Element):
         self._surface.fill(self._background_color)
         return self
 
+    @property
+    def selected_color(self) -> tuple[int, int, int]:
+        return self._selected_color
+
     def set_selected_color(self, color: tuple[int, int, int]) -> Self:
         self._selected_color = color
         return self
+
+    @property
+    def grid_size(self) -> tuple[int, int]:
+        return self._cwidth, self._cheight
+
+    def get_block(self, mouse_position: tuple[int, int]) -> Block:
+        x, y = self._get_grid_position(mouse_position)
+        return self._grid[x][y]
 
     def render(self, window: Surface):
         window.blit(self._surface, (self.position[0] - self._padding, self._position[1] - self._padding))
@@ -84,17 +96,23 @@ class CreateNanogram(Element):
         if event.type != EventType.MOUSE_BUTTON_DOWN:
             return
 
-        if event.button != MouseButton.LEFT and event.button != MouseButton.RIGHT:
+        is_left_click = event.button == MouseButton.LEFT
+        is_right_click = event.button == MouseButton.RIGHT
+
+        if not is_left_click and not is_right_click:
             return
 
         mouse_pos = pygame.mouse.get_pos()
 
-        for column in self._grid:
-            for block in column:
-                if not block.contains(mouse_pos):
-                    continue
+        if not self._grid.contains(mouse_pos):
+            return
 
-                block.set_state(Block.State(int(event.button == MouseButton.LEFT)), self._selected_color)
+        x, y = self._get_grid_position(mouse_pos)
+        block = self._grid[x][y]
+
+        new_state = (Block.State.EMPTY if is_right_click or (is_left_click and block.state == Block.State.COLORED)
+                     else Block.State.COLORED)
+        block.set_state(new_state, self._selected_color)
 
     def set_name(self, name: str) -> None:
         self._name = name
@@ -190,3 +208,9 @@ class CreateNanogram(Element):
                     right = max(right, j)
 
         return [row[left:right + 1] for row in matrix[top:bottom + 1]]
+
+    def _get_grid_position(self, mouse_pos: tuple[int, int]) -> tuple[int, int]:
+        return (
+            min((mouse_pos[1] - self._grid.position[1]) // (self._block_size + self._padding), self._cwidth - 1),
+            min((mouse_pos[0] - self._grid.position[0]) // (self._block_size + self._padding), self._cheight - 1)
+        )

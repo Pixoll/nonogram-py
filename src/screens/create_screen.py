@@ -4,7 +4,8 @@ from tkinter import filedialog
 
 import pygame
 
-from components import ChildAlignment, Column, Container, DimensionSelector, HorizontalAlignment, RecentColors, Row, \
+from components import Block, ChildAlignment, Column, Container, DimensionSelector, HorizontalAlignment, RecentColors, \
+    Row, \
     Text, VerticalAlignment
 from components.colors import Colors
 from components.create_nanogram import CreateNanogram
@@ -29,6 +30,9 @@ class CreateScreen(Screen):
             .set_child_alignment(ChildAlignment.CENTER_LEFT)
             .set_image("bg.jpg")
         )
+
+        self._is_emptying = False
+        self._holding = False
 
         column1 = Column().set_alignment(HorizontalAlignment.CENTER).set_padding(int(self._height * 0.05))
         self._column2 = Column().set_alignment(HorizontalAlignment.CENTER).set_padding(int(self._height * 0.03))
@@ -253,8 +257,18 @@ class CreateScreen(Screen):
 
         self._board.on_any_event(event)
 
+        if event.type == EventType.MOUSE_BUTTON_UP:
+            self._holding = False
+            return
+
         if event.type != EventType.MOUSE_BUTTON_DOWN:
             return
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        if self._board.contains(mouse_pos):
+            self._holding = event.button == MouseButton.LEFT or event.button == MouseButton.RIGHT
+            self._is_emptying = self._board.get_block(mouse_pos).state != Block.State.COLORED
 
         if self._showing_error_message:
             self._showing_error_message = False
@@ -263,8 +277,6 @@ class CreateScreen(Screen):
 
         if event.button != MouseButton.LEFT:
             return
-
-        mouse_pos = pygame.mouse.get_pos()
 
         if self._board.contains(mouse_pos) and not self._lasts_colors.is_active:
             color = self._color_gradient.get_color()
@@ -405,6 +417,16 @@ class CreateScreen(Screen):
         self._show_upload_tooltip = False
         self._show_randomizer_tooltip = False
         self._show_erase_all_tooltip = False
+
+        if self._holding and self._board.contains(mouse_pos):
+            block = self._board.get_block(mouse_pos)
+
+            if self._is_emptying:
+                block.set_state(Block.State.EMPTY, None)
+            else:
+                block.set_state(Block.State.COLORED, self._board.selected_color)
+
+            return
 
         if self._upload_button.contains(mouse_pos):
             self._upload_tooltip.set_position(mouse_pos)
