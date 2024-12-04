@@ -199,6 +199,8 @@ class PlayScreen(Screen):
                 return
 
             if self._confirm_return_button.contains(mouse_pos):
+                NonogramLoader.restore(self._nonogram)
+
                 from screens.select_game_screen import SelectGameScreen
                 self._engine.set_screen(SelectGameScreen(self._engine, self._nonogram.type, self._size, self._page))
                 pygame.mouse.set_cursor(self._engine.arrow_cursor)

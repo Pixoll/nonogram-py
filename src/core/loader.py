@@ -36,12 +36,16 @@ class NonogramLoader:
         return by_size[size]
 
     @staticmethod
+    def restore(nonogram: Nonogram) -> None:
+        NonogramLoader.load(nonogram.type, nonogram.id, True)
+
+    @staticmethod
     def exists(nonogram_type: nonogram_type_t, nonogram_id: int) -> bool:
         nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
         return nonogram_id in nonograms_dict
 
     @staticmethod
-    def load(nonogram_type: nonogram_type_t, nonogram_id: int) -> Nonogram:
+    def load(nonogram_type: nonogram_type_t, nonogram_id: int, force: bool = False) -> Nonogram:
         nonograms_dict = NonogramLoader._PRE_MADE if nonogram_type == "pre_made" else NonogramLoader._USER_MADE
 
         if nonogram_id not in nonograms_dict:
@@ -49,7 +53,7 @@ class NonogramLoader:
 
         entry = nonograms_dict[nonogram_id]
 
-        if entry.nonogram is not None:
+        if not force and entry.nonogram is not None:
             return entry.nonogram
 
         nonograms_bin = NonogramLoader._PRE_MADE_BIN if nonogram_type == "pre_made" else NonogramLoader._USER_MADE_BIN
