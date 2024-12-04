@@ -19,8 +19,17 @@ class Entry:
     _colors: int
     _size: NonogramSize
     _nonogram: Nonogram | None
+    _in_progress: bool
 
-    def __init__(self, nonogram_type: nonogram_type_t, nonogram_id: int, width: int, height: int, colors: int):
+    def __init__(
+            self,
+            nonogram_type: nonogram_type_t,
+            nonogram_id: int,
+            width: int,
+            height: int,
+            colors: int,
+            in_progress: bool
+    ):
         self._nonogram_type = nonogram_type
         self._nonogram_id = nonogram_id
         self._width = width
@@ -28,6 +37,7 @@ class Entry:
         self._colors = colors
         self._size = NonogramSize(min(width * height, 2000) // 501)
         self._nonogram = None
+        self._in_progress = in_progress
 
     @property
     def nonogram_type(self) -> nonogram_type_t:
@@ -57,9 +67,9 @@ class Entry:
     def nonogram(self) -> Nonogram | None:
         return self._nonogram
 
-    def load(self) -> Nonogram:
-        from core.loader import NonogramLoader
-        return NonogramLoader.load(self._nonogram_type, self._nonogram_id)
+    @property
+    def in_progress(self) -> bool:
+        return self._in_progress
 
     def __repr__(self) -> str:
         return f"{self._size.name} ({self._width}x{self._height}) {self._colors}"

@@ -8,7 +8,7 @@ from pygame.font import Font
 from components.column import Column, HorizontalAlignment
 from components.container import Container
 from components.text import Text
-from core import Nonogram
+from core import Entry, Nonogram
 from events import Event, EventType, MouseButton
 
 
@@ -17,12 +17,13 @@ class NonogramInfoPreview(Container):
     _size_text: Text
     _selected: bool
 
-    def __init__(self, nonogram: Nonogram, width: int, height: int, regular_font: Font, small_font: Font) -> None:
+    def __init__(self, entry: Entry, width: int, height: int, regular_font: Font, small_font: Font) -> None:
         super().__init__(width, height, 25)
         self.set_background_color((0, 0, 0, 128))
         self.set_border((255, 255, 255, 128))
         self.set_border_width(int(width * 0.025))
 
+        nonogram = entry.nonogram
         self._last_blink = 0
         self._nonogram = nonogram
         self._selected = False
@@ -77,7 +78,7 @@ class NonogramInfoPreview(Container):
             .add_element(nonogram_name_container)
             .add_element(
                 Text("Completed", regular_font, (128, 255, 128)) if nonogram.is_completed
-                else Text("In progress", regular_font, (255, 255, 128)) if nonogram.is_in_progress
+                else Text("In progress", regular_font, (255, 255, 128)) if entry.in_progress
                 else Text("Not played", regular_font, (255, 255, 255)),
             )
         )

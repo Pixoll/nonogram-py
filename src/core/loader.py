@@ -84,6 +84,7 @@ class NonogramLoader:
 
         index, size = nonograms_bin_index[nonogram_id]
         serialized, new_size = NonogramLoader._serialize(entry.nonogram)
+        entry._in_progress = not bool(serialized[8])
 
         nonograms_bin[index:index + size + 2] = serialized
         nonograms_bin_index[nonogram_id] = (index, new_size)
@@ -140,8 +141,9 @@ class NonogramLoader:
             width = nonograms_bin[i + 5]
             height = nonograms_bin[i + 6]
             colors_len = nonograms_bin[i + 7]
+            in_progress = not bool(nonograms_bin[i + 8])
 
-            entry = Entry(nonogram_type, nonogram_id, width, height, colors_len)
+            entry = Entry(nonogram_type, nonogram_id, width, height, colors_len, in_progress)
 
             nonograms_dict[nonogram_id] = entry
             nonograms_dict_by_size[entry.size].append(entry)

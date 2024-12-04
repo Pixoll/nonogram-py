@@ -277,8 +277,9 @@ class NonogramsRow(Element):
         self._nonogram_previews.clear()
         for i in range(self._index, min(self._index + self._previews_per_page, len(self._nonogram_entries))):
             entry = self._nonogram_entries[i]
+            NonogramLoader.load(entry.nonogram_type, entry.nonogram_id)
             info_nonogram = NonogramInfoPreview(
-                entry.load(),
+                entry,
                 self._preview_width,
                 self._preview_height,
                 self._regular_font,
